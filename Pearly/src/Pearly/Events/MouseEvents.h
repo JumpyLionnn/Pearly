@@ -2,8 +2,6 @@
 
 #include "Event.h"
 
-#include <sstream>
-
 namespace Pearly {
 	class MouseMovedEvent : public Event
 	{

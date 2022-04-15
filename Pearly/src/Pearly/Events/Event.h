@@ -2,9 +2,6 @@
 
 #include "Pearly/Core.h"
 
-#include <string>
-#include <functional>
-
 namespace Pearly {
 
 

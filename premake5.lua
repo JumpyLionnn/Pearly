@@ -17,6 +17,9 @@ project "Pearly"
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin/" .. outputdir .. "/%{prj.name}")
 
+	pchheader "prpch.h"
+	pchsource "Pearly/src/prpch.cpp"
+
 	files
 	{
 		"%{prj.name}/src/**.h",

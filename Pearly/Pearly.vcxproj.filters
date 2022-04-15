@@ -22,12 +22,19 @@
     <ClInclude Include="src\Pearly\Events\Event.h">
       <Filter>Pearly\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\Pearly\Events\KeyEvents.h">
+      <Filter>Pearly\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Pearly\Events\MouseEvents.h">
+      <Filter>Pearly\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Pearly\Events\WindowEvents.h">
+      <Filter>Pearly\Events</Filter>
+    </ClInclude>
     <ClInclude Include="src\Pearly\Log.h">
       <Filter>Pearly</Filter>
     </ClInclude>
-    <ClInclude Include="src\Pearly\Events\KeyEvents.h" />
-    <ClInclude Include="src\Pearly\Events\MouseEvents.h" />
-    <ClInclude Include="src\Pearly\Events\WindowEvents.h" />
+    <ClInclude Include="src\prpch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pearly\Application.cpp">
@@ -36,5 +43,6 @@
     <ClCompile Include="src\Pearly\Log.cpp">
       <Filter>Pearly</Filter>
     </ClCompile>
+    <ClCompile Include="src\prpch.cpp" />
   </ItemGroup>
 </Project>

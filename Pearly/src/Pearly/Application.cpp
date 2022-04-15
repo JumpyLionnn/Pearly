@@ -1,3 +1,4 @@
+#include "prpch.h"
 #include "Application.h"
 
 #include "Pearly/Events/WindowEvents.h"

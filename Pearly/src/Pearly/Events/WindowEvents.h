@@ -2,7 +2,6 @@
 
 #include "Event.h"
 
-#include <sstream>
 
 namespace Pearly {
 	class WindowResizeEvent : public Event
