@@ -25,7 +25,8 @@ project "Pearly"
 
 	includedirs
 	{
-		"%{prj.name}/vendor/spdlog/include"
+		"%{prj.name}/vendor/spdlog/include",
+		"Pearly/src"
 	}
 
 	filter "system:windows"

@@ -5,4 +5,3 @@ bin/
 bin-int/
 
 *.vcxproj.user
-*.vcxproj.filters

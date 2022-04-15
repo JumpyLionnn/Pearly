@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Pearly">
+      <UniqueIdentifier>{1286D6C9-FE27-01A0-E7E2-14F4D32388F0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pearly\Events">
+      <UniqueIdentifier>{B6699A7A-222A-16B1-EB64-5F2E57E45A8D}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Pearly.h" />
+    <ClInclude Include="src\Pearly\Application.h">
+      <Filter>Pearly</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Pearly\Core.h">
+      <Filter>Pearly</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Pearly\EntryPoint.h">
+      <Filter>Pearly</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Pearly\Events\Event.h">
+      <Filter>Pearly\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Pearly\Log.h">
+      <Filter>Pearly</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Pearly\Events\KeyEvents.h" />
+    <ClInclude Include="src\Pearly\Events\MouseEvents.h" />
+    <ClInclude Include="src\Pearly\Events\WindowEvents.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Pearly\Application.cpp">
+      <Filter>Pearly</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Pearly\Log.cpp">
+      <Filter>Pearly</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
