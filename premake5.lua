@@ -9,6 +9,11 @@ workspace "Pearly"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
+IncludeDirs = {}
+IncludeDirs["GLFW"] = "Pearly/vendor/GLFW/include"
+
+include "Pearly/vendor/GLFW"
+
 project "Pearly"
 	location "Pearly"
 	kind "StaticLib"
@@ -29,7 +34,14 @@ project "Pearly"
 	includedirs
 	{
 		"%{prj.name}/vendor/spdlog/include",
-		"Pearly/src"
+		"Pearly/src",
+		"%{IncludeDirs.GLFW}"
+	}
+
+	links
+	{
+		"GLFW",
+		"opengl32.lib"
 	}
 
 	filter "system:windows"
@@ -40,7 +52,11 @@ project "Pearly"
 		defines "PR_PLATFORM_WINDOWS"
 
 	filter "configurations:Debug"
-		defines "PR_DEBUG"
+		defines 
+		{
+			"PR_DEBUG",
+			"PR_ENABLE_ASSERTS"
+		}
 		symbols "On"
 
 	filter "configurations:Release"

@@ -1,5 +1,5 @@
 #pragma once
-
+#include "Window.h"
 
 namespace Pearly {
 	class Application
@@ -9,6 +9,9 @@ namespace Pearly {
 		virtual ~Application();
 
 		void Run();
+	private:
+		bool m_Running = true;
+		std::unique_ptr<Window> m_Window;
 	};
 	
 	// to be defined in a client

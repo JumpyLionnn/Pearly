@@ -1,3 +1,6 @@
 [submodule "Pearly/vendor/spdlog"]
 	path = Pearly/vendor/spdlog
 	url = https://github.com/gabime/spdlog.git
+[submodule "Pearly/vendor/GLFW"]
+	path = Pearly/vendor/GLFW
+	url = https://github.com/JumpyLionnn/glfw

@@ -11,7 +11,6 @@ int main(int argc, char** argv)
 {
 	Pearly::Log::Init();
 	PR_CORE_WARN("Initialized log!");
-	PR_INFO("Hello 5+5={0}", 10);
 
 	Pearly::Application* application = Pearly::CreateApplication();
 	application->Run();
