@@ -1,6 +1,8 @@
 #pragma once
 #include "Window.h"
 
+#include "Events/WindowEvents.h"
+
 namespace Pearly {
 	class Application
 	{
@@ -9,6 +11,10 @@ namespace Pearly {
 		virtual ~Application();
 
 		void Run();
+
+		void OnEvent(Event& e);
+	private:
+		bool OnWindowClose(WindowCloseEvent& event);
 	private:
 		bool m_Running = true;
 		std::unique_ptr<Window> m_Window;
