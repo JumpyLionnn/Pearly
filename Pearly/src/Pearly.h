@@ -4,6 +4,7 @@
 
 #include "Pearly/Core.h"
 #include "Pearly/Application.h"
+#include "Pearly/Layer.h"
 #include "Pearly/Log.h"
 
 #include "Pearly/EntryPoint.h"

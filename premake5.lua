@@ -11,8 +11,10 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 IncludeDirs = {}
 IncludeDirs["GLFW"] = "Pearly/vendor/GLFW/include"
+IncludeDirs["Glad"] = "Pearly/vendor/GLAD/include"
 
 include "Pearly/vendor/GLFW"
+include "Pearly/vendor/Glad"
 
 project "Pearly"
 	location "Pearly"
@@ -35,12 +37,14 @@ project "Pearly"
 	{
 		"%{prj.name}/vendor/spdlog/include",
 		"Pearly/src",
-		"%{IncludeDirs.GLFW}"
+		"%{IncludeDirs.GLFW}",
+		"%{IncludeDirs.Glad}"
 	}
 
 	links
 	{
 		"GLFW",
+		"Glad",
 		"opengl32.lib"
 	}
 
@@ -49,7 +53,11 @@ project "Pearly"
 		staticruntime "On"
 		systemversion "latest"
 
-		defines "PR_PLATFORM_WINDOWS"
+		defines 
+		{
+			"PR_PLATFORM_WINDOWS",
+			"GLFW_INCLUDE_NONE"
+		}
 
 	filter "configurations:Debug"
 		defines 

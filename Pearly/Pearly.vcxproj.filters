@@ -37,6 +37,12 @@
     <ClInclude Include="src\Pearly\Events\WindowEvents.h">
       <Filter>Pearly\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\Pearly\Layer.h">
+      <Filter>Pearly</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Pearly\LayerStack.h">
+      <Filter>Pearly</Filter>
+    </ClInclude>
     <ClInclude Include="src\Pearly\Log.h">
       <Filter>Pearly</Filter>
     </ClInclude>
@@ -50,6 +56,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pearly\Application.cpp">
+      <Filter>Pearly</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Pearly\Layer.cpp">
+      <Filter>Pearly</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Pearly\LayerStack.cpp">
       <Filter>Pearly</Filter>
     </ClCompile>
     <ClCompile Include="src\Pearly\Log.cpp">

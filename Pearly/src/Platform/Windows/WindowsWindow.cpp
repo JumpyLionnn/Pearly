@@ -5,6 +5,8 @@
 #include "Pearly/Events/KeyEvents.h"
 #include "Pearly/Events/MouseEvents.h"
 
+#include <Glad/glad.h>
+
 namespace Pearly {
 	static bool s_GLFWInitialized = false;
 
@@ -47,6 +49,8 @@ namespace Pearly {
 
 		m_Window = glfwCreateWindow((int)properties.Width, (int)properties.Height, properties.Title.c_str(), nullptr, nullptr);
 		glfwMakeContextCurrent(m_Window);
+		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+		PR_CORE_ASSERT(status, "Faild to initialize Glad!");
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		SetVSync(true);
 
