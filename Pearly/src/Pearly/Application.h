@@ -2,6 +2,7 @@
 #include "Window.h"
 #include "Events/WindowEvents.h"
 #include "LayerStack.h"
+#include "Debug/ImGuiLayer.h"
 
 namespace Pearly {
 	class Application
@@ -26,6 +27,7 @@ namespace Pearly {
 	private:
 		bool m_Running = true;
 		std::unique_ptr<Window> m_Window;
+		ImGuiLayer* m_ImGuiLayer;
 		LayerStack m_LayerStack;
 	private:
 		static Application* s_Instance;

@@ -1,5 +1,7 @@
 #include <Pearly.h>
 
+#include "imgui/imgui.h"
+
 class ExampleLayer : public Pearly::Layer
 {
 public:
@@ -10,6 +12,13 @@ public:
 	void OnUpdate() override
 	{
 	//	PR_INFO("example layer update");
+	}
+
+	virtual void OnImGuiRender() override
+	{
+		ImGui::Begin("Test: ");
+		ImGui::Text("Hello World!");
+		ImGui::End();
 	}
 
 	virtual void OnEvent(Pearly::Event& event) override
@@ -24,7 +33,6 @@ public:
 	Sandbox()
 	{
 		PushLayer(new ExampleLayer());
-		PushOverlay(new Pearly::ImGuiLayer());
 	}
 	~Sandbox()
 	{

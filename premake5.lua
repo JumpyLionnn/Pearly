@@ -12,7 +12,7 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 IncludeDirs = {}
 IncludeDirs["GLFW"] = "Pearly/vendor/GLFW/include"
 IncludeDirs["Glad"] = "Pearly/vendor/GLAD/include"
-IncludeDirs["imgui"] = "Pearly/vendor/imgui"
+IncludeDirs["imgui"] = "Pearly/vendor/imgui/"
 IncludeDirs["glm"] = "Pearly/vendor/glm/"
 
 startproject "Sandbox"
@@ -108,7 +108,8 @@ project "Sandbox"
 	{
 		"Pearly/vendor/spdlog/include",
 		"Pearly/src",
-		"%{IncludeDirs.glm}"
+		"%{IncludeDirs.glm}",
+		"Pearly/vendor"
 	}
 
 	links
