@@ -7,12 +7,15 @@
 
 namespace Pearly {
 
-#define BIND_EVENT_FN(x) std::bind(&x, this, std::placeholders::_1)
+	Application* Application::s_Instance = nullptr;
 
 	Application::Application()
 	{
+		PR_CORE_ASSERT(!s_Instance, "Application already exists!");
+		s_Instance = this;
+
 		m_Window = std::unique_ptr<Window>(Window::Create());
-		m_Window->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
+		m_Window->SetEventCallback(PR_BIND_EVENT_FN(Application::OnEvent));
 	}
 
 	Application::~Application()
@@ -36,7 +39,7 @@ namespace Pearly {
 	void Application::OnEvent(Event& e)
 	{
 		EventDispacher dispacher(e);
-		dispacher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(Application::OnWindowClose));
+		dispacher.Dispatch<WindowCloseEvent>(PR_BIND_EVENT_FN(Application::OnWindowClose));
 
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
 		{
@@ -50,9 +53,17 @@ namespace Pearly {
 	{
 		m_LayerStack.PushLayer(layer);
 	}
+	void Application::PushOverlay(Layer* overlay)
+	{
+		m_LayerStack.PushOverlay(overlay);
+	}
 	void Application::PopLayer(Layer* layer)
 	{
 		m_LayerStack.PopLayer(layer);
+	}
+	void Application::PopOverlay(Layer* overlay)
+	{
+		m_LayerStack.PopOverlay(overlay);
 	}
 
 	bool Application::OnWindowClose(WindowCloseEvent& event)

@@ -9,12 +9,12 @@ public:
 
 	void OnUpdate() override
 	{
-		PR_INFO("example layer update");
+	//	PR_INFO("example layer update");
 	}
 
 	virtual void OnEvent(Pearly::Event& event) override
 	{
-		PR_INFO("event {0}", event);
+		//PR_INFO("event {0}", event);
 	}
 };
 
@@ -24,6 +24,7 @@ public:
 	Sandbox()
 	{
 		PushLayer(new ExampleLayer());
+		PushOverlay(new Pearly::ImGuiLayer());
 	}
 	~Sandbox()
 	{

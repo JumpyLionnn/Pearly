@@ -4,3 +4,6 @@
 [submodule "Pearly/vendor/GLFW"]
 	path = Pearly/vendor/GLFW
 	url = https://github.com/JumpyLionnn/glfw
+[submodule "Pearly/vendor/imgui"]
+	path = Pearly/vendor/imgui
+	url = https://github.com/JumpyLionnn/imgui

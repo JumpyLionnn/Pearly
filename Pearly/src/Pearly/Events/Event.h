@@ -16,6 +16,7 @@ namespace Pearly {
 
 		KeyPressed,
 		KeyReleased,
+		KeyTyped,
 
 		MouseButtonPressed,
 		MouseButtonReleased,

@@ -76,8 +76,8 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>prpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>PR_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;PR_DEBUG;PR_ENABLE_ASSERTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>vendor\spdlog\include;src;vendor\GLFW\include;vendor\GLAD\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>IMGUI_IMPL_OPENGL_LOADER_CUSTOM;PR_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;PR_DEBUG;PR_ENABLE_ASSERTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>vendor\spdlog\include;src;vendor\GLFW\include;vendor\GLAD\include;vendor\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -96,8 +96,8 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>prpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>PR_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;PR_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>vendor\spdlog\include;src;vendor\GLFW\include;vendor\GLAD\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>IMGUI_IMPL_OPENGL_LOADER_CUSTOM;PR_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;PR_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>vendor\spdlog\include;src;vendor\GLFW\include;vendor\GLAD\include;vendor\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -120,8 +120,8 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>prpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>PR_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;PR_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>vendor\spdlog\include;src;vendor\GLFW\include;vendor\GLAD\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>IMGUI_IMPL_OPENGL_LOADER_CUSTOM;PR_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;PR_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>vendor\spdlog\include;src;vendor\GLFW\include;vendor\GLAD\include;vendor\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -143,6 +143,7 @@
     <ClInclude Include="src\Pearly.h" />
     <ClInclude Include="src\Pearly\Application.h" />
     <ClInclude Include="src\Pearly\Core.h" />
+    <ClInclude Include="src\Pearly\Debug\ImGuiLayer.h" />
     <ClInclude Include="src\Pearly\EntryPoint.h" />
     <ClInclude Include="src\Pearly\Events\Event.h" />
     <ClInclude Include="src\Pearly\Events\KeyEvents.h" />
@@ -152,14 +153,17 @@
     <ClInclude Include="src\Pearly\LayerStack.h" />
     <ClInclude Include="src\Pearly\Log.h" />
     <ClInclude Include="src\Pearly\Window.h" />
+    <ClInclude Include="src\Platform\OpenGL\ImGuiOpenGLRenderer.h" />
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\prpch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pearly\Application.cpp" />
+    <ClCompile Include="src\Pearly\Debug\ImGuiLayer.cpp" />
     <ClCompile Include="src\Pearly\Layer.cpp" />
     <ClCompile Include="src\Pearly\LayerStack.cpp" />
     <ClCompile Include="src\Pearly\Log.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\ImGuiOpenGLRenderer.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
     <ClCompile Include="src\prpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
@@ -171,6 +175,9 @@
     </ProjectReference>
     <ProjectReference Include="vendor\Glad\Glad.vcxproj">
       <Project>{BDD6857C-A90D-870D-52FA-6C103E10030F}</Project>
+    </ProjectReference>
+    <ProjectReference Include="vendor\imgui\ImGui.vcxproj">
+      <Project>{C0FF640D-2C14-8DBE-F595-301E616989EF}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

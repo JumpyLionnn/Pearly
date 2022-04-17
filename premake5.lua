@@ -12,9 +12,13 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 IncludeDirs = {}
 IncludeDirs["GLFW"] = "Pearly/vendor/GLFW/include"
 IncludeDirs["Glad"] = "Pearly/vendor/GLAD/include"
+IncludeDirs["imgui"] = "Pearly/vendor/imgui"
+
+startproject "Sandbox"
 
 include "Pearly/vendor/GLFW"
 include "Pearly/vendor/Glad"
+include "Pearly/vendor/imgui"
 
 project "Pearly"
 	location "Pearly"
@@ -38,14 +42,21 @@ project "Pearly"
 		"%{prj.name}/vendor/spdlog/include",
 		"Pearly/src",
 		"%{IncludeDirs.GLFW}",
-		"%{IncludeDirs.Glad}"
+		"%{IncludeDirs.Glad}",
+		"%{IncludeDirs.imgui}"
 	}
 
 	links
 	{
 		"GLFW",
 		"Glad",
+		"imgui",
 		"opengl32.lib"
+	}
+
+	defines
+	{
+		"IMGUI_IMPL_OPENGL_LOADER_CUSTOM"
 	}
 
 	filter "system:windows"

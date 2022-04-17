@@ -16,11 +16,13 @@ namespace Pearly {
 	void LayerStack::PushLayer(Layer* layer)
 	{
 		m_LayerInsert = m_Layers.emplace(m_LayerInsert, layer);
+		layer->OnAttach();
 	}
 
 	void LayerStack::PushOverlay(Layer* overlay)
 	{
 		m_Layers.emplace_back(overlay);
+		overlay->OnAttach();
 	}
 	void LayerStack::PopLayer(Layer* layer)
 	{
@@ -30,6 +32,7 @@ namespace Pearly {
 			m_Layers.erase(it);
 			m_LayerInsert--;
 		}
+		(*it)->OnDetach();
 	}
 
 	void LayerStack::PopOverlay(Layer* overlay)
@@ -39,6 +42,7 @@ namespace Pearly {
 		{
 			m_Layers.erase(it);
 		}
+		(*it)->OnDetach();
 	}
 
 }

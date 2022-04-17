@@ -7,4 +7,6 @@
 #include "Pearly/Layer.h"
 #include "Pearly/Log.h"
 
+#include "Pearly/Debug/ImGuiLayer.h"
+
 #include "Pearly/EntryPoint.h"

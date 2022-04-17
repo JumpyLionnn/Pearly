@@ -18,6 +18,8 @@ namespace Pearly {
 		virtual void SetEventCallback(const EventCallbackFn& callback) override;
 		virtual void SetVSync(bool enabled) override;
 		virtual bool IsVSync() const override;
+
+		virtual void* GetNativeWindow() const override;
 	private:
 		void Init(const WindowProperties& poroperties);
 		void Shutdown();
