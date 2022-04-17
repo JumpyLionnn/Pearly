@@ -7,3 +7,6 @@
 [submodule "Pearly/vendor/imgui"]
 	path = Pearly/vendor/imgui
 	url = https://github.com/JumpyLionnn/imgui
+[submodule "Pearly/vendor/glm"]
+	path = Pearly/vendor/glm
+	url = https://github.com/g-truc/glm

@@ -13,12 +13,15 @@ IncludeDirs = {}
 IncludeDirs["GLFW"] = "Pearly/vendor/GLFW/include"
 IncludeDirs["Glad"] = "Pearly/vendor/GLAD/include"
 IncludeDirs["imgui"] = "Pearly/vendor/imgui"
+IncludeDirs["glm"] = "Pearly/vendor/glm/"
 
 startproject "Sandbox"
 
-include "Pearly/vendor/GLFW"
-include "Pearly/vendor/Glad"
-include "Pearly/vendor/imgui"
+group "Dependencies"
+	include "Pearly/vendor/GLFW"
+	include "Pearly/vendor/Glad"
+	include "Pearly/vendor/imgui"
+group ""
 
 project "Pearly"
 	location "Pearly"
@@ -43,7 +46,8 @@ project "Pearly"
 		"Pearly/src",
 		"%{IncludeDirs.GLFW}",
 		"%{IncludeDirs.Glad}",
-		"%{IncludeDirs.imgui}"
+		"%{IncludeDirs.imgui}",
+		"%{IncludeDirs.glm}"
 	}
 
 	links
@@ -103,7 +107,8 @@ project "Sandbox"
 	includedirs
 	{
 		"Pearly/vendor/spdlog/include",
-		"Pearly/src"
+		"Pearly/src",
+		"%{IncludeDirs.glm}"
 	}
 
 	links

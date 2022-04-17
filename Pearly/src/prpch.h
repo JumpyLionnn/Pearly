@@ -5,6 +5,7 @@
 #include <sstream>
 #include <functional>
 #include <vector>
+#include <utility>
 
 #include "Pearly/Log.h"
 

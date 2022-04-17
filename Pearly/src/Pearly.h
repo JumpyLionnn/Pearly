@@ -7,6 +7,10 @@
 #include "Pearly/Layer.h"
 #include "Pearly/Log.h"
 
+#include "Pearly/Input.h"
+#include "Pearly/KeyCodes.h"
+#include "Pearly/MouseButtonCodes.h"
+
 #include "Pearly/Debug/ImGuiLayer.h"
 
 #include "Pearly/EntryPoint.h"
