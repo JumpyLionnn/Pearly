@@ -31,7 +31,7 @@ namespace Pearly {
 	{
 		while (m_Running)
 		{
-			glClearColor(0.32, 0.42, 0.52, 1);
+			glClearColor(0.32f, 0.42f, 0.52f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT);
 
 			for (Layer* layer : m_LayerStack)

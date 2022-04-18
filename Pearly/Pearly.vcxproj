@@ -76,7 +76,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>prpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>IMGUI_IMPL_OPENGL_LOADER_CUSTOM;PR_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;PR_DEBUG;PR_ENABLE_ASSERTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>IMGUI_IMPL_OPENGL_LOADER_CUSTOM;_CRT_SECURE_NO_WARNINGS;PR_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;PR_DEBUG;PR_ENABLE_ASSERTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>vendor\spdlog\include;src;vendor\GLFW\include;vendor\GLAD\include;vendor\imgui;vendor\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
@@ -96,7 +96,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>prpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>IMGUI_IMPL_OPENGL_LOADER_CUSTOM;PR_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;PR_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>IMGUI_IMPL_OPENGL_LOADER_CUSTOM;_CRT_SECURE_NO_WARNINGS;PR_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;PR_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>vendor\spdlog\include;src;vendor\GLFW\include;vendor\GLAD\include;vendor\imgui;vendor\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -120,7 +120,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>prpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>IMGUI_IMPL_OPENGL_LOADER_CUSTOM;PR_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;PR_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>IMGUI_IMPL_OPENGL_LOADER_CUSTOM;_CRT_SECURE_NO_WARNINGS;PR_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;PR_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>vendor\spdlog\include;src;vendor\GLFW\include;vendor\GLAD\include;vendor\imgui;vendor\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>

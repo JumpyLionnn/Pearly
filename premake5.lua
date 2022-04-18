@@ -60,7 +60,8 @@ project "Pearly"
 
 	defines
 	{
-		"IMGUI_IMPL_OPENGL_LOADER_CUSTOM"
+		"IMGUI_IMPL_OPENGL_LOADER_CUSTOM",
+		"_CRT_SECURE_NO_WARNINGS"
 	}
 
 	filter "system:windows"

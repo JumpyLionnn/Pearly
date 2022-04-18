@@ -19,7 +19,7 @@ public:
 		ImGui::Begin("Test: ");
 		ImGui::Text("Hello World!");
 		ImGui::End();
-	}
+	}	
 
 	virtual void OnEvent(Pearly::Event& event) override
 	{
