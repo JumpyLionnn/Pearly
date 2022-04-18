@@ -1,11 +1,10 @@
 #include "prpch.h"
 #include "WindowsWindow.h"
 
+#include "Platform/OpenGL/OpenGLContext.h"
 #include "Pearly/Events/WindowEvents.h"
 #include "Pearly/Events/KeyEvents.h"
 #include "Pearly/Events/MouseEvents.h"
-
-#include <Glad/glad.h>
 
 namespace Pearly {
 	static bool s_GLFWInitialized = false;
@@ -38,6 +37,7 @@ namespace Pearly {
 
 		PR_CORE_INFO("Creating a window {0}, ({1}, {2})", properties.Title, properties.Width, properties.Height);
 
+
 		if (!s_GLFWInitialized)
 		{
 			// TODO: glfwTerminate on system shutdown
@@ -48,9 +48,11 @@ namespace Pearly {
 		}
 
 		m_Window = glfwCreateWindow((int)properties.Width, (int)properties.Height, properties.Title.c_str(), nullptr, nullptr);
-		glfwMakeContextCurrent(m_Window);
-		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-		PR_CORE_ASSERT(status, "Faild to initialize Glad!");
+		m_Context = new OpenGLContext(m_Window);
+
+		m_Context->Init();
+
+		
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		SetVSync(true);
 
@@ -171,7 +173,7 @@ namespace Pearly {
 	void WindowsWindow::OnUpdate() const
 	{
 		glfwPollEvents();
-		glfwSwapBuffers(m_Window);
+		m_Context->SwapBuffers();
 	}
 
 	void WindowsWindow::SetEventCallback(const EventCallbackFn& callback)

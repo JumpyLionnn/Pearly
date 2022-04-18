@@ -155,7 +155,9 @@
     <ClInclude Include="src\Pearly\LayerStack.h" />
     <ClInclude Include="src\Pearly\Log.h" />
     <ClInclude Include="src\Pearly\MouseButtonCodes.h" />
+    <ClInclude Include="src\Pearly\Renderer\GraphicsContext.h" />
     <ClInclude Include="src\Pearly\Window.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h" />
     <ClInclude Include="src\Platform\Windows\WindowsInput.h" />
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\prpch.h" />
@@ -167,6 +169,7 @@
     <ClCompile Include="src\Pearly\Layer.cpp" />
     <ClCompile Include="src\Pearly\LayerStack.cpp" />
     <ClCompile Include="src\Pearly\Log.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsInput.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
     <ClCompile Include="src\prpch.cpp">

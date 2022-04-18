@@ -1,5 +1,6 @@
 #pragma once
 #include "Pearly/Window.h"
+#include "Pearly/Renderer/GraphicsContext.h"
 
 #include <GLFW/glfw3.h>
 
@@ -25,6 +26,7 @@ namespace Pearly {
 		void Shutdown();
 	private:
 		GLFWwindow* m_Window;
+		GraphicsContext* m_Context;
 
 		struct WindowData 
 		{
