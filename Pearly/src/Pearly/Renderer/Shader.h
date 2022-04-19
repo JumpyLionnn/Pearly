@@ -1,5 +1,7 @@
 #pragma once
 
+#include <glm/glm.hpp>
+
 namespace Pearly {
 
 	class Shader
@@ -10,6 +12,8 @@ namespace Pearly {
 
 		void Bind() const;
 		void Unbind() const;
+
+		void UploadUnifromMat4(const std::string& name, const glm::mat4& matrix);
 	private:
 		unsigned int m_RendererID = 0;
 	};

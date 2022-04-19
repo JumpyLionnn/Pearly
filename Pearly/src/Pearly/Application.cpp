@@ -5,7 +5,6 @@
 
 #include "Input.h"
 
-#include <Glad/glad.h>
 #include "Renderer/Renderer.h"
 
 namespace Pearly {
@@ -13,6 +12,7 @@ namespace Pearly {
 	Application* Application::s_Instance = nullptr;
 
 	Application::Application()
+		: m_Camera(-1.0f, 1.0f, -1.0f, 1.0f)
 	{
 		PR_CORE_ASSERT(!s_Instance, "Application already exists!");
 		s_Instance = this;
@@ -53,12 +53,14 @@ namespace Pearly {
 			layout(location = 0) in vec3 a_Postion;
 			layout(location = 1) in vec4 a_Color;
 
+			uniform mat4 u_ViewProjection;
+
 			out vec4 v_Color;
 			
 			void main()
 			{
 				v_Color = a_Color;
-				gl_Position = vec4(a_Postion, 1.0);
+				gl_Position = u_ViewProjection * vec4(a_Postion, 1.0);
 			}
 
 		)";
@@ -90,13 +92,14 @@ namespace Pearly {
 			RenderCommand::SetClearColor(glm::vec4(0.32f, 0.42f, 0.52f, 1.0f));
 			RenderCommand::Clear();
 
-			Renderer::BeginScene();
+			//m_Camera.SetPosition({0.5f, 0.5f, 0});
+			m_Camera.SetRotation(45.0f);
 
-			m_Shader->Bind();
-			Renderer::Submit(m_VertexArray);
+			Renderer::BeginScene(m_Camera);
+
+			Renderer::Submit(m_VertexArray, m_Shader);
 
 			Renderer::EndScene();
-			//glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
 
 			for (Layer* layer : m_LayerStack)
 				layer->OnUpdate();

@@ -157,6 +157,7 @@
     <ClInclude Include="src\Pearly\MouseButtonCodes.h" />
     <ClInclude Include="src\Pearly\Renderer\Buffer.h" />
     <ClInclude Include="src\Pearly\Renderer\GraphicsContext.h" />
+    <ClInclude Include="src\Pearly\Renderer\OrthographicCamera.h" />
     <ClInclude Include="src\Pearly\Renderer\RenderCommand.h" />
     <ClInclude Include="src\Pearly\Renderer\Renderer.h" />
     <ClInclude Include="src\Pearly\Renderer\RendererAPI.h" />
@@ -179,6 +180,7 @@
     <ClCompile Include="src\Pearly\LayerStack.cpp" />
     <ClCompile Include="src\Pearly\Log.cpp" />
     <ClCompile Include="src\Pearly\Renderer\Buffer.cpp" />
+    <ClCompile Include="src\Pearly\Renderer\OrthographicCamera.cpp" />
     <ClCompile Include="src\Pearly\Renderer\RenderCommand.cpp" />
     <ClCompile Include="src\Pearly\Renderer\Renderer.cpp" />
     <ClCompile Include="src\Pearly\Renderer\RendererAPI.cpp" />

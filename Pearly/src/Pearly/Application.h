@@ -7,6 +7,7 @@
 #include "Renderer/Shader.h"
 #include "Renderer/Buffer.h"
 #include "Renderer/VertexArray.h"
+#include "Renderer/OrthographicCamera.h"
 
 namespace Pearly {
 	class Application
@@ -38,6 +39,8 @@ namespace Pearly {
 		std::shared_ptr<VertexBuffer> m_VertexBuffer;
 		std::shared_ptr<IndexBuffer> m_IndexBuffer;
 		std::shared_ptr<Shader> m_Shader;
+
+		OrthographicCamera m_Camera;
 	private:
 		static Application* s_Instance;
 	};
