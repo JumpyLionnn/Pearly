@@ -31,7 +31,7 @@ namespace Pearly {
 	}
 	OpenGLVertexArray::~OpenGLVertexArray() 
 	{
-		glDeleteVertexArrays(m_RendererID);
+		glDeleteVertexArrays(1, &m_RendererID);
 	}
 
 	void OpenGLVertexArray::Bind() const
@@ -73,5 +73,10 @@ namespace Pearly {
 		glBindVertexArray(m_RendererID);
 		indexBuffer->Bind();
 		m_IndexBuffer = indexBuffer;
+	}
+
+	const std::shared_ptr<IndexBuffer>& OpenGLVertexArray::GetIndexBuffer() const
+	{
+		return m_IndexBuffer;
 	}
 }

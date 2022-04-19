@@ -10,8 +10,8 @@ namespace Pearly {
 	{
 		switch (Renderer::GetAPI())
 		{
-		case RendererAPI::None: PR_CORE_ASSERT(false, "Renderer API None is currently not supported!"); return nullptr;
-		case RendererAPI::OpenGL: return new OpenGLVertexBuffer(vertices, size);
+		case RendererAPI::API::None: PR_CORE_ASSERT(false, "Renderer API None is currently not supported!"); return nullptr;
+		case RendererAPI::API::OpenGL: return new OpenGLVertexBuffer(vertices, size);
 		}
 
 		PR_CORE_ASSERT(false, "Unknown Renderer API!");
@@ -22,8 +22,8 @@ namespace Pearly {
 	{
 		switch (Renderer::GetAPI())
 		{
-		case RendererAPI::None: PR_CORE_ASSERT(false, "Renderer API None is currently not supported!"); return nullptr;
-		case RendererAPI::OpenGL: return new OpenGLIndexBuffer(indices, count);
+		case RendererAPI::API::None: PR_CORE_ASSERT(false, "Renderer API None is currently not supported!"); return nullptr;
+		case RendererAPI::API::OpenGL: return new OpenGLIndexBuffer(indices, count);
 		}
 
 		PR_CORE_ASSERT(false, "Unknown Renderer API!");

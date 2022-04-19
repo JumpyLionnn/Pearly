@@ -9,8 +9,8 @@ namespace Pearly {
 	{
 		switch (Renderer::GetAPI())
 		{
-		case RendererAPI::None: PR_CORE_ASSERT(false, "Renderer API None is currently not supported!"); return nullptr;
-		case RendererAPI::OpenGL: return new OpenGLVertexArray();
+		case RendererAPI::API::None: PR_CORE_ASSERT(false, "Renderer API None is currently not supported!"); return nullptr;
+		case RendererAPI::API::OpenGL: return new OpenGLVertexArray();
 		}
 
 		PR_CORE_ASSERT(false, "Unknown Renderer API!");

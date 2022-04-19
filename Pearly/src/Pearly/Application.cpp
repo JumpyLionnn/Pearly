@@ -5,7 +5,8 @@
 
 #include "Input.h"
 
-#include "Glad/glad.h"
+#include <Glad/glad.h>
+#include "Renderer/Renderer.h"
 
 namespace Pearly {
 
@@ -86,12 +87,16 @@ namespace Pearly {
 	{
 		while (m_Running)
 		{
-			glClearColor(0.32f, 0.42f, 0.52f, 1.0f);
-			glClear(GL_COLOR_BUFFER_BIT);
+			RenderCommand::SetClearColor(glm::vec4(0.32f, 0.42f, 0.52f, 1.0f));
+			RenderCommand::Clear();
+
+			Renderer::BeginScene();
 
 			m_Shader->Bind();
-			m_VertexArray->Bind();
-			glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
+			Renderer::Submit(m_VertexArray);
+
+			Renderer::EndScene();
+			//glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
 
 			for (Layer* layer : m_LayerStack)
 				layer->OnUpdate();
