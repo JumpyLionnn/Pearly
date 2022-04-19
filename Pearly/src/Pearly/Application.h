@@ -4,6 +4,10 @@
 #include "LayerStack.h"
 #include "Debug/ImGuiLayer.h"
 
+#include "Renderer/Shader.h"
+#include "Renderer/Buffer.h"
+#include "Renderer/VertexArray.h"
+
 namespace Pearly {
 	class Application
 	{
@@ -29,6 +33,11 @@ namespace Pearly {
 		std::unique_ptr<Window> m_Window;
 		ImGuiLayer* m_ImGuiLayer;
 		LayerStack m_LayerStack;
+
+		std::shared_ptr<VertexArray> m_VertexArray;
+		std::shared_ptr<VertexBuffer> m_VertexBuffer;
+		std::shared_ptr<IndexBuffer> m_IndexBuffer;
+		std::shared_ptr<Shader> m_Shader;
 	private:
 		static Application* s_Instance;
 	};

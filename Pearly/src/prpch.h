@@ -6,6 +6,8 @@
 #include <functional>
 #include <vector>
 #include <utility>
+#include <initializer_list>
+
 
 #include "Pearly/Log.h"
 
