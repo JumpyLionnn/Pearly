@@ -122,4 +122,7 @@
     <ClCompile Include="src\Platform\OpenGL\OpenGLRendererAPI.cpp" />
     <ClCompile Include="src\Pearly\Renderer\OrthographicCamera.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="src\Pearly\Core\Timestep.h" />
+  </ItemGroup>
 </Project>

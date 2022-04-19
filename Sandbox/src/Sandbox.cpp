@@ -1,31 +1,127 @@
 #include <Pearly.h>
 
-#include "imgui/imgui.h"
+#include <imgui/imgui.h>
 
 class ExampleLayer : public Pearly::Layer
 {
 public:
 	ExampleLayer()
-		: Layer("Example")
-	{}
-
-	void OnUpdate() override
+		: Layer("Example"), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f)
 	{
-	//	PR_INFO("example layer update");
+		m_VertexArray.reset(Pearly::VertexArray::Create());
+
+		float vertices[3 * 7] = {
+			-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+			0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+			0.0f, 0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
+		};
+
+		m_VertexBuffer.reset(Pearly::VertexBuffer::Create(vertices, sizeof(vertices)));
+
+		Pearly::BufferLayout layout = {
+			{Pearly::ShaderDataType::Vec3f, "a_Position"},
+			{Pearly::ShaderDataType::Vec4f, "a_Color"},
+		};
+		m_VertexBuffer->SetLayout(layout);
+
+		m_VertexArray->AddVertexBuffer(m_VertexBuffer);
+
+
+		unsigned int indices[3] = { 0, 1, 2 };
+		m_IndexBuffer.reset(Pearly::IndexBuffer::Create(indices, sizeof(indices) / sizeof(unsigned int)));
+
+		m_VertexArray->SetIndexBuffer(m_IndexBuffer);
+
+		std::string vertexSource = R"(
+			#version 330 core
+
+			layout(location = 0) in vec3 a_Postion;
+			layout(location = 1) in vec4 a_Color;
+
+			uniform mat4 u_ViewProjection;
+
+			out vec4 v_Color;
+			
+			void main()
+			{
+				v_Color = a_Color;
+				gl_Position = u_ViewProjection * vec4(a_Postion, 1.0);
+			}
+
+		)";
+		std::string fragmentSource = R"(
+			#version 330 core
+
+			layout(location = 0) out vec4 Color;
+			
+			in vec4 v_Color;
+
+			void main()
+			{
+				Color = v_Color;
+			}
+		)";
+
+		m_Shader.reset(new Pearly::Shader(vertexSource, fragmentSource));
+	}
+
+	void OnUpdate(Pearly::Timestep ts) override
+	{
+		PR_TRACE("Delta time: {0}, ({1}ms)", ts, ts.GetMiliseconds());
+
+		if (Pearly::Input::IsKeyPressed(PR_KEY_A))
+			m_CameraPosition.x -= m_CameraMovementSpeed * ts;
+		if (Pearly::Input::IsKeyPressed(PR_KEY_D))
+			m_CameraPosition.x += m_CameraMovementSpeed * ts;
+		if (Pearly::Input::IsKeyPressed(PR_KEY_W))
+			m_CameraPosition.y += m_CameraMovementSpeed * ts;
+		if (Pearly::Input::IsKeyPressed(PR_KEY_S))
+			m_CameraPosition.y -= m_CameraMovementSpeed * ts;
+
+		if (Pearly::Input::IsKeyPressed(PR_KEY_LEFT))
+			m_CameraRotation += m_CameraRotationSpeed * ts;
+		if (Pearly::Input::IsKeyPressed(PR_KEY_RIGHT))
+			m_CameraRotation -= m_CameraRotationSpeed * ts;
+
+
+		Pearly::RenderCommand::SetClearColor(glm::vec4(0.32f, 0.42f, 0.52f, 1.0f));
+		Pearly::RenderCommand::Clear();
+
+		m_Camera.SetPosition(m_CameraPosition);
+		m_Camera.SetRotation(m_CameraRotation);
+
+		Pearly::Renderer::BeginScene(m_Camera);
+
+		Pearly::Renderer::Submit(m_VertexArray, m_Shader);
+
+		Pearly::Renderer::EndScene();
 	}
 
 	virtual void OnImGuiRender() override
-	{
-		ImGui::Begin("Test: ");
-		ImGui::Text("Hello World!");
-		ImGui::End();
-	}	
+	{}	
 
 	virtual void OnEvent(Pearly::Event& event) override
 	{
-		//PR_INFO("event {0}", event);
+		Pearly::EventDispacher dispacher(event);
+		
 	}
+private:
+	std::shared_ptr<Pearly::VertexArray> m_VertexArray;
+	std::shared_ptr<Pearly::VertexBuffer> m_VertexBuffer;
+	std::shared_ptr<Pearly::IndexBuffer> m_IndexBuffer;
+	std::shared_ptr<Pearly::Shader> m_Shader;
+
+	Pearly::OrthographicCamera m_Camera;
+	glm::vec3 m_CameraPosition = {0.0f, 0.0f, 0.0f};
+	float m_CameraRotation = 0.0f;
+
+	float m_CameraMovementSpeed = 1.0f;
+	float m_CameraRotationSpeed = 135.0f;
 };
+
+
+
+
 
 class Sandbox : public Pearly::Application
 {
@@ -42,8 +138,6 @@ public:
 private:
 
 };
-
-
 Pearly::Application* Pearly::CreateApplication()
 {
 	return new Sandbox();

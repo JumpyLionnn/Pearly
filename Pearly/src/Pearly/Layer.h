@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Pearly/Events/Event.h"
+#include "Core/Timestep.h"
 
 namespace Pearly {
 	class Layer
@@ -11,7 +12,7 @@ namespace Pearly {
 
 		virtual void OnAttach() {}
 		virtual void OnDetach() {}
-		virtual void OnUpdate() {}
+		virtual void OnUpdate(Timestep ts) {}
 		virtual void OnEvent(Event& event) {}
 		virtual void OnImGuiRender() {};
 
