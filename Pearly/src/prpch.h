@@ -7,6 +7,7 @@
 #include <vector>
 #include <utility>
 #include <initializer_list>
+#include <unordered_map>
 
 
 #include "Pearly/Log.h"
