@@ -175,15 +175,15 @@ public:
 		
 	}
 private:
-	std::shared_ptr<Pearly::VertexArray> m_VertexArray;
-	std::shared_ptr<Pearly::VertexBuffer> m_VertexBuffer;
-	std::shared_ptr<Pearly::IndexBuffer> m_IndexBuffer;
-	std::shared_ptr<Pearly::Shader> m_Shader;
-	std::shared_ptr<Pearly::Shader> m_FlatColorShader;
+	Pearly::Ref<Pearly::VertexArray> m_VertexArray;
+	Pearly::Ref<Pearly::VertexBuffer> m_VertexBuffer;
+	Pearly::Ref<Pearly::IndexBuffer> m_IndexBuffer;
+	Pearly::Ref<Pearly::Shader> m_Shader;
+	Pearly::Ref<Pearly::Shader> m_FlatColorShader;
 
-	std::shared_ptr<Pearly::VertexArray> m_SquareVertexArray;
-	std::shared_ptr<Pearly::VertexBuffer> m_SquareVertexBuffer;
-	std::shared_ptr<Pearly::IndexBuffer> m_SquareIndexBuffer;
+	Pearly::Ref<Pearly::VertexArray> m_SquareVertexArray;
+	Pearly::Ref<Pearly::VertexBuffer> m_SquareVertexBuffer;
+	Pearly::Ref<Pearly::IndexBuffer> m_SquareIndexBuffer;
 
 	Pearly::OrthographicCamera m_Camera;
 	glm::vec3 m_CameraPosition = {0.0f, 0.0f, 0.0f};

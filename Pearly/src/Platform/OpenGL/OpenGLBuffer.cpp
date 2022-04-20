@@ -9,7 +9,7 @@ namespace Pearly {
 	// Vertex Buffer
 	/////////////////////////////////
 
-	OpenGLVertexBuffer::OpenGLVertexBuffer(float* vertices, unsigned int size)
+	OpenGLVertexBuffer::OpenGLVertexBuffer(float* vertices, uint32 size)
 	{
 		glCreateBuffers(1, &m_RendererID);
 		glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
@@ -36,12 +36,12 @@ namespace Pearly {
 	// Index Buffer
 	/////////////////////////////////
 
-	OpenGLIndexBuffer::OpenGLIndexBuffer(unsigned int* indices, unsigned int count)
+	OpenGLIndexBuffer::OpenGLIndexBuffer(uint32* indices, uint32 count)
 		: m_Count(count)
 	{
 		glCreateBuffers(1, &m_RendererID);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * count, indices, GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint32) * count, indices, GL_STATIC_DRAW);
 	}
 
 	OpenGLIndexBuffer::~OpenGLIndexBuffer()
@@ -58,7 +58,7 @@ namespace Pearly {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
 
-	unsigned int OpenGLIndexBuffer::GetCount() const
+	uint32 OpenGLIndexBuffer::GetCount() const
 	{
 		return m_Count;
 	}

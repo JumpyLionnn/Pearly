@@ -3,7 +3,7 @@
 
 namespace Pearly {
 
-	enum class ShaderDataType : unsigned char
+	enum class ShaderDataType : uint8
 	{
 		None,
 		Float,
@@ -18,7 +18,7 @@ namespace Pearly {
 		Vec4i,
 		Bool
 	};
-	static unsigned int ShaderDataTypeSize(ShaderDataType type)
+	static uint32 ShaderDataTypeSize(ShaderDataType type)
 	{
 		switch (type)
 		{
@@ -43,8 +43,8 @@ namespace Pearly {
 		ShaderDataType Type;
 		std::string Name;
 		bool Normalized;
-		unsigned int Offset;
-		unsigned int Size;
+		uint32 Offset;
+		uint32 Size;
 
 		BufferElement() {}
 		BufferElement(ShaderDataType type, const std::string& name, bool normalized = false)
@@ -83,7 +83,7 @@ namespace Pearly {
 		}
 
 		inline const std::vector<BufferElement>& GetElements() const { return m_Elements; }
-		inline unsigned int GetStride() const { return m_Stride; }
+		inline uint32 GetStride() const { return m_Stride; }
 
 		std::vector<BufferElement>::iterator begin() { return m_Elements.begin(); }
 		std::vector<BufferElement>::iterator end() { return m_Elements.end(); }
@@ -92,7 +92,7 @@ namespace Pearly {
 	private:
 		void CalculateOffsetAndStride()
 		{
-			unsigned int offset = 0;
+			uint32 offset = 0;
 			for (BufferElement& element : m_Elements)
 			{
 				element.Offset = offset;
@@ -102,7 +102,7 @@ namespace Pearly {
 		}
 	private:
 		std::vector<BufferElement> m_Elements;
-		unsigned int m_Stride = 0;
+		uint32 m_Stride = 0;
 	};
 
 	class VertexBuffer
@@ -127,8 +127,8 @@ namespace Pearly {
 		virtual void Bind() const = 0;
 		virtual void Unbind() const = 0;
 
-		virtual unsigned int GetCount() const = 0;
+		virtual uint32 GetCount() const = 0;
 
-		static IndexBuffer* Create(unsigned int* indices, unsigned int count);
+		static IndexBuffer* Create(uint32* indices, uint32 count);
 	};
 }

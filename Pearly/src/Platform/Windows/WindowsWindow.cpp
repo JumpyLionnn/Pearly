@@ -119,7 +119,7 @@ namespace Pearly {
 			}
 		});
 
-		glfwSetCharCallback(m_Window, [](GLFWwindow* window, unsigned int keycode)
+		glfwSetCharCallback(m_Window, [](GLFWwindow* window, uint32 keycode)
 		{
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 

@@ -45,12 +45,12 @@ namespace Pearly {
 	}
 
 
-	void OpenGLVertexArray::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer)
+	void OpenGLVertexArray::AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer)
 	{
 		PR_CORE_ASSERT(vertexBuffer->GetLayout().GetElements().size(), "VertexBuffer has no layout!");
 		glBindVertexArray(m_RendererID);
 		vertexBuffer->Bind();
-		unsigned int index = 0;
+		uint32 index = 0;
 		const BufferLayout& layout = vertexBuffer->GetLayout();
 		for (const BufferElement& element : layout)
 		{
@@ -68,14 +68,14 @@ namespace Pearly {
 		m_VertexBuffers.push_back(vertexBuffer);
 	}
 
-	void OpenGLVertexArray::SetIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer)
+	void OpenGLVertexArray::SetIndexBuffer(const Ref<IndexBuffer>& indexBuffer)
 	{
 		glBindVertexArray(m_RendererID);
 		indexBuffer->Bind();
 		m_IndexBuffer = indexBuffer;
 	}
 
-	const std::shared_ptr<IndexBuffer>& OpenGLVertexArray::GetIndexBuffer() const
+	const Ref<IndexBuffer>& OpenGLVertexArray::GetIndexBuffer() const
 	{
 		return m_IndexBuffer;
 	}

@@ -6,7 +6,7 @@
 #include "Platform/OpenGL/OpenGLBuffer.h"
 
 namespace Pearly {
-	VertexBuffer* VertexBuffer::Create(float* vertices, unsigned int size)
+	VertexBuffer* VertexBuffer::Create(float* vertices, uint32 size)
 	{
 		switch (Renderer::GetAPI())
 		{
@@ -18,7 +18,7 @@ namespace Pearly {
 		return nullptr;
 	}
 	
-	IndexBuffer* IndexBuffer::Create(unsigned int* indices, unsigned int count)
+	IndexBuffer* IndexBuffer::Create(uint32* indices, uint32 count)
 	{
 		switch (Renderer::GetAPI())
 		{

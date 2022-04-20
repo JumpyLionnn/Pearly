@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Pearly/Renderer/Shader.h"
+#include "Pearly/Core.h"
 
 #include <glm/glm.hpp>
 
@@ -26,7 +27,7 @@ namespace Pearly {
 	private:
 		int GetUniformLocation(const std::string& name);
 	private:
-		unsigned int m_RendererID = 0;
+		uint32 m_RendererID = 0;
 		std::unordered_map<std::string, int> m_UniformLocationCache;
 	};
 }

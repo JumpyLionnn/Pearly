@@ -1,5 +1,5 @@
 #pragma once
-
+#include <memory>
 
 #ifdef PR_PLATFORM_WINDOWS
 
@@ -19,3 +19,17 @@
 
 #define BIT(x) (1 << x)
 
+
+
+namespace Pearly {
+
+	template<typename T>
+	using Scope = std::unique_ptr<T>;
+
+	template<typename T>
+	using Ref = std::shared_ptr<T>;
+
+
+	using uint32 = uint32_t;
+	using uint8 = uint8_t;
+}

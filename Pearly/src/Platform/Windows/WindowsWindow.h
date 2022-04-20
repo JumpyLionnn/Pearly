@@ -13,8 +13,8 @@ namespace Pearly {
 
 		virtual void OnUpdate() const override;
 
-		virtual unsigned int GetWidth() const override { return m_Data.Width; }
-		virtual unsigned int GetHeight() const override { return m_Data.Height; }
+		virtual uint32 GetWidth() const override { return m_Data.Width; }
+		virtual uint32 GetHeight() const override { return m_Data.Height; }
 
 		virtual void SetEventCallback(const EventCallbackFn& callback) override;
 		virtual void SetVSync(bool enabled) override;
@@ -31,8 +31,8 @@ namespace Pearly {
 		struct WindowData 
 		{
 			std::string Title;
-			unsigned int Width;
-			unsigned int Height;
+			uint32 Width;
+			uint32 Height;
 			bool VSync;
 
 			EventCallbackFn EventCallback;
