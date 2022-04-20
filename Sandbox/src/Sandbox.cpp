@@ -32,20 +32,21 @@ public:
 
 		m_SquareVertexArray.reset(Pearly::VertexArray::Create());
 
-		float squareVertices[3 * 4] = {
-			-0.5f, -0.5f, 0.0f, 
-			0.5f, -0.5f, 0.0f, 
-			-0.5f, 0.5f, 0.0f, 
-			0.5f, 0.5f, 0.0f, 
+		float squareVertices[5 * 4] = {
+			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+			0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+			0.5f, 0.5f, 0.0f, 1.0f, 1.0f,
+			-0.5f, 0.5f, 0.0f, 0.0f, 1.0f
 		};
 		m_SquareVertexBuffer.reset(Pearly::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
 		Pearly::BufferLayout squareLayout = {
-			{Pearly::ShaderDataType::Vec3f, "a_Position"}
+			{Pearly::ShaderDataType::Vec3f, "a_Position"},
+			{Pearly::ShaderDataType::Vec2f, "a_TexCoord"},
 		};
 		m_SquareVertexBuffer->SetLayout(squareLayout);
 		m_SquareVertexArray->AddVertexBuffer(m_SquareVertexBuffer);
 
-		unsigned int squareIndices[6] = { 0, 1, 2, 1, 2, 3 };
+		unsigned int squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
 		m_SquareIndexBuffer.reset(Pearly::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(unsigned int)));
 		m_SquareVertexArray->SetIndexBuffer(m_SquareIndexBuffer);
 
@@ -110,11 +111,51 @@ public:
 		)";
 
 		m_FlatColorShader.reset(Pearly::Shader::Create(flatColorVertexSource, flatColorFragmentSource));
+
+		std::string textureShaderVertexSource = R"(
+			#version 330 core
+
+			layout(location = 0) in vec3 a_Postion;
+			layout(location = 1) in vec2 a_TexCoord;
+
+			uniform mat4 u_ViewProjection;
+			uniform mat4 u_Transform;
+
+			out vec2 v_TexCoord;
+			
+			void main()
+			{
+				v_TexCoord = a_TexCoord;
+				gl_Position = u_ViewProjection * u_Transform * vec4(a_Postion, 1.0);
+			}
+
+		)";
+		std::string textureShaderFragmentSource = R"(
+			#version 330 core
+
+			in vec2 v_TexCoord;
+
+			uniform sampler2D u_Texture;
+
+			layout(location = 0) out vec4 Color;
+
+			void main()
+			{
+				Color = texture(u_Texture, v_TexCoord);
+			}
+		)";
+
+		m_TextureShader.reset(Pearly::Shader::Create(textureShaderVertexSource, textureShaderFragmentSource));
+
+		m_CrateTexture = Pearly::Texture2D::Create("assets/textures/Checkerboard.png");
+		m_JumpyLionLogoTexture = Pearly::Texture2D::Create("assets/textures/jumpylion.png");
+
+		std::dynamic_pointer_cast<Pearly::OpenGLShader>(m_TextureShader)->Bind();
+		std::dynamic_pointer_cast<Pearly::OpenGLShader>(m_TextureShader)->UploadUnifromInt("u_Texture", 0);
 	}
 
 	void OnUpdate(Pearly::Timestep ts) override
 	{
-		PR_TRACE("Delta time: {0}, ({1}ms)", ts, ts.GetMiliseconds());
 
 		if (Pearly::Input::IsKeyPressed(PR_KEY_A))
 			m_CameraPosition.x -= m_CameraMovementSpeed * ts;
@@ -157,7 +198,13 @@ public:
 			}
 		}
 
-		Pearly::Renderer::Submit(m_VertexArray, m_Shader);
+		m_CrateTexture->Bind();
+		Pearly::Renderer::Submit(m_SquareVertexArray, m_TextureShader, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+		m_JumpyLionLogoTexture->Bind();
+		Pearly::Renderer::Submit(m_SquareVertexArray, m_TextureShader, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+
+
+		//Pearly::Renderer::Submit(m_VertexArray, m_Shader);
 
 		Pearly::Renderer::EndScene();
 	}
@@ -180,10 +227,14 @@ private:
 	Pearly::Ref<Pearly::IndexBuffer> m_IndexBuffer;
 	Pearly::Ref<Pearly::Shader> m_Shader;
 	Pearly::Ref<Pearly::Shader> m_FlatColorShader;
+	Pearly::Ref<Pearly::Shader> m_TextureShader;
 
 	Pearly::Ref<Pearly::VertexArray> m_SquareVertexArray;
 	Pearly::Ref<Pearly::VertexBuffer> m_SquareVertexBuffer;
 	Pearly::Ref<Pearly::IndexBuffer> m_SquareIndexBuffer;
+
+	Pearly::Ref<Pearly::Texture2D> m_CrateTexture;
+	Pearly::Ref<Pearly::Texture2D> m_JumpyLionLogoTexture;
 
 	Pearly::OrthographicCamera m_Camera;
 	glm::vec3 m_CameraPosition = {0.0f, 0.0f, 0.0f};

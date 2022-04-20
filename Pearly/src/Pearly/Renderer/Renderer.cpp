@@ -6,6 +6,11 @@
 namespace Pearly {
 	Renderer::SceneData* Renderer::m_SceneData = new SceneData();
 
+	void Renderer::Init()
+	{
+		RenderCommand::Init();
+	}
+
 
 	void Renderer::BeginScene(OrthographicCamera& camera)
 	{

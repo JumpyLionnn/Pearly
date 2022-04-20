@@ -14,6 +14,7 @@ IncludeDirs["GLFW"] = "Pearly/vendor/GLFW/include"
 IncludeDirs["Glad"] = "Pearly/vendor/GLAD/include"
 IncludeDirs["imgui"] = "Pearly/vendor/imgui/"
 IncludeDirs["glm"] = "Pearly/vendor/glm/"
+IncludeDirs["stb_image"] = "Pearly/vendor/stb_image/"
 
 startproject "Sandbox"
 
@@ -37,7 +38,9 @@ project "Pearly"
 	files
 	{
 		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp"
+		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/vendor/stb_image/**.cpp",
+		"%{prj.name}/vendor/stb_image/**.h",
 	}
 
 	includedirs
@@ -47,7 +50,8 @@ project "Pearly"
 		"%{IncludeDirs.GLFW}",
 		"%{IncludeDirs.Glad}",
 		"%{IncludeDirs.imgui}",
-		"%{IncludeDirs.glm}"
+		"%{IncludeDirs.glm}",
+		"%{IncludeDirs.stb_image}"
 	}
 
 	links

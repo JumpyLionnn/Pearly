@@ -19,6 +19,7 @@
 #include "Pearly/Renderer/RenderCommand.h"
 #include "Pearly/Renderer/OrthographicCamera.h"
 #include "Pearly/Renderer/Buffer.h"
+#include "Pearly/Renderer/Texture.h"
 #include "Pearly/Renderer/Shader.h"
 #include "Pearly/Renderer/VertexArray.h"
 
