@@ -1,6 +1,7 @@
 #include <Pearly.h>
 
 #include <imgui/imgui.h>
+#include <glm/gtc/matrix_transform.hpp>
 
 class ExampleLayer : public Pearly::Layer
 {
@@ -39,13 +40,14 @@ public:
 			layout(location = 1) in vec4 a_Color;
 
 			uniform mat4 u_ViewProjection;
+			uniform mat4 u_Transform;
 
 			out vec4 v_Color;
 			
 			void main()
 			{
 				v_Color = a_Color;
-				gl_Position = u_ViewProjection * vec4(a_Postion, 1.0);
+				gl_Position = u_ViewProjection * u_Transform * vec4(a_Postion, 1.0);
 			}
 
 		)";
@@ -83,6 +85,15 @@ public:
 		if (Pearly::Input::IsKeyPressed(PR_KEY_RIGHT))
 			m_CameraRotation -= m_CameraRotationSpeed * ts;
 
+		if (Pearly::Input::IsKeyPressed(PR_KEY_J))
+			m_Position.x -= m_MovmentSpeed * ts;
+		if (Pearly::Input::IsKeyPressed(PR_KEY_L))
+			m_Position.x += m_MovmentSpeed * ts;
+		if (Pearly::Input::IsKeyPressed(PR_KEY_I))
+			m_Position.y += m_MovmentSpeed * ts;
+		if (Pearly::Input::IsKeyPressed(PR_KEY_K))
+			m_Position.y -= m_MovmentSpeed * ts;
+
 
 		Pearly::RenderCommand::SetClearColor(glm::vec4(0.32f, 0.42f, 0.52f, 1.0f));
 		Pearly::RenderCommand::Clear();
@@ -92,7 +103,9 @@ public:
 
 		Pearly::Renderer::BeginScene(m_Camera);
 
-		Pearly::Renderer::Submit(m_VertexArray, m_Shader);
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), m_Position);
+
+		Pearly::Renderer::Submit(m_VertexArray, m_Shader, transform);
 
 		Pearly::Renderer::EndScene();
 	}
@@ -117,6 +130,9 @@ private:
 
 	float m_CameraMovementSpeed = 1.0f;
 	float m_CameraRotationSpeed = 135.0f;
+
+	glm::vec3 m_Position = { 0.0f, 0.0f, 0.0f };
+	float m_MovmentSpeed = 1.0f;
 };
 
 
