@@ -145,7 +145,7 @@ public:
 			}
 		)";
 
-		m_TextureShader.reset(Pearly::Shader::Create(textureShaderVertexSource, textureShaderFragmentSource));
+		m_TextureShader.reset(Pearly::Shader::Create("assets/shaders/texture.glsl"));
 
 		m_CrateTexture = Pearly::Texture2D::Create("assets/textures/Checkerboard.png");
 		m_JumpyLionLogoTexture = Pearly::Texture2D::Create("assets/textures/jumpylion.png");

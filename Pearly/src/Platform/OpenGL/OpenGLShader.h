@@ -10,6 +10,7 @@ namespace Pearly {
 	class OpenGLShader : public Shader
 	{
 	public:
+		OpenGLShader(const std::string& filepath);
 		OpenGLShader(const std::string& vertexSource, const std::string& fragmentSource);
 		~OpenGLShader();
 
@@ -25,6 +26,9 @@ namespace Pearly {
 		void UploadUnifromMat3(const std::string& name, const glm::mat3& matrix);
 		void UploadUnifromMat4(const std::string& name, const glm::mat4& matrix);
 	private:
+		std::string ReadFile(const std::string& filepath);
+		std::unordered_map<uint32, std::string> PreProccess(const std::string& source);
+		void Compile(std::unordered_map<uint32, std::string> shaderSources);
 		int GetUniformLocation(const std::string& name);
 	private:
 		uint32 m_RendererID = 0;
