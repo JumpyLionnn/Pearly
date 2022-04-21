@@ -9,6 +9,7 @@
 #include <initializer_list>
 #include <unordered_map>
 #include <fstream>
+#include <array>
 
 
 #include "Pearly/Log.h"

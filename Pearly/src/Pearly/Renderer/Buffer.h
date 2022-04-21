@@ -22,17 +22,17 @@ namespace Pearly {
 	{
 		switch (type)
 		{
-		case Pearly::ShaderDataType::Float: return 4;
-		case Pearly::ShaderDataType::Vec2f: return 4 * 2;
-		case Pearly::ShaderDataType::Vec3f: return 4 * 3;
-		case Pearly::ShaderDataType::Vec4f: return 4 * 4;
-		case Pearly::ShaderDataType::Mat3: return 4 * 3 * 3;
-		case Pearly::ShaderDataType::Mat4: return 4 * 4 * 4;
-		case Pearly::ShaderDataType::Int: return 4;
-		case Pearly::ShaderDataType::Vec2i: return 4 * 2;
-		case Pearly::ShaderDataType::Vec3i: return 4 * 3;
-		case Pearly::ShaderDataType::Vec4i: return 4 * 4;
-		case Pearly::ShaderDataType::Bool: return 1;
+			case Pearly::ShaderDataType::Float: return 4;
+			case Pearly::ShaderDataType::Vec2f: return 4 * 2;
+			case Pearly::ShaderDataType::Vec3f: return 4 * 3;
+			case Pearly::ShaderDataType::Vec4f: return 4 * 4;
+			case Pearly::ShaderDataType::Mat3: return 4 * 3 * 3;
+			case Pearly::ShaderDataType::Mat4: return 4 * 4 * 4;
+			case Pearly::ShaderDataType::Int: return 4;
+			case Pearly::ShaderDataType::Vec2i: return 4 * 2;
+			case Pearly::ShaderDataType::Vec3i: return 4 * 3;
+			case Pearly::ShaderDataType::Vec4i: return 4 * 4;
+			case Pearly::ShaderDataType::Bool: return 1;
 		}
 		PR_CORE_ASSERT(false, "Unknown ShaderDataType!");
 		return 0;
@@ -55,17 +55,17 @@ namespace Pearly {
 		{
 			switch (Type)
 			{
-			case Pearly::ShaderDataType::Float: return 1;
-			case Pearly::ShaderDataType::Vec2f: return 2;
-			case Pearly::ShaderDataType::Vec3f: return 3;
-			case Pearly::ShaderDataType::Vec4f: return 4;
-			case Pearly::ShaderDataType::Mat3: return 3 * 3;
-			case Pearly::ShaderDataType::Mat4: return 4 * 4;
-			case Pearly::ShaderDataType::Int: return 1;
-			case Pearly::ShaderDataType::Vec2i: return 2;
-			case Pearly::ShaderDataType::Vec3i: return 3;
-			case Pearly::ShaderDataType::Vec4i: return 4;
-			case Pearly::ShaderDataType::Bool: return 1;
+				case Pearly::ShaderDataType::Float: return 1;
+				case Pearly::ShaderDataType::Vec2f: return 2;
+				case Pearly::ShaderDataType::Vec3f: return 3;
+				case Pearly::ShaderDataType::Vec4f: return 4;
+				case Pearly::ShaderDataType::Mat3: return 3 * 3;
+				case Pearly::ShaderDataType::Mat4: return 4 * 4;
+				case Pearly::ShaderDataType::Int: return 1;
+				case Pearly::ShaderDataType::Vec2i: return 2;
+				case Pearly::ShaderDataType::Vec3i: return 3;
+				case Pearly::ShaderDataType::Vec4i: return 4;
+				case Pearly::ShaderDataType::Bool: return 1;
 			}
 			PR_CORE_ASSERT(false, "Unknown ShaderDataType!");
 			return 0;
@@ -116,7 +116,7 @@ namespace Pearly {
 		virtual void SetLayout(const BufferLayout& layout) = 0;
 		virtual const BufferLayout& GetLayout() const = 0;
 
-		static VertexBuffer* Create(float* vertices, unsigned int size);
+		static Ref<VertexBuffer> Create(float* vertices, unsigned int size);
 	};
 
 	class IndexBuffer
@@ -129,6 +129,6 @@ namespace Pearly {
 
 		virtual uint32 GetCount() const = 0;
 
-		static IndexBuffer* Create(uint32* indices, uint32 count);
+		static Ref<IndexBuffer> Create(uint32* indices, uint32 count);
 	};
 }

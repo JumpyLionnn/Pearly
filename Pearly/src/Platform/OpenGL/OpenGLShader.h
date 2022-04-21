@@ -11,11 +11,13 @@ namespace Pearly {
 	{
 	public:
 		OpenGLShader(const std::string& filepath);
-		OpenGLShader(const std::string& vertexSource, const std::string& fragmentSource);
-		~OpenGLShader();
+		OpenGLShader(const std::string& name, const std::string& vertexSource, const std::string& fragmentSource);
+		virtual ~OpenGLShader() override;
 
-		void Bind() const;
-		void Unbind() const;
+		virtual void Bind() const override;
+		virtual void Unbind() const override;
+
+		inline virtual const std::string& GetName() const override { return m_Name; }
 
 		void UploadUnifromInt(const std::string& name, int value);
 		void UploadUnifromFloat(const std::string& name, float value);
@@ -32,6 +34,7 @@ namespace Pearly {
 		int GetUniformLocation(const std::string& name);
 	private:
 		uint32 m_RendererID = 0;
+		std::string m_Name;
 		std::unordered_map<std::string, int> m_UniformLocationCache;
 	};
 }

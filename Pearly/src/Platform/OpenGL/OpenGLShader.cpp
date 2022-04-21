@@ -34,9 +34,16 @@ namespace Pearly {
 		std::string source = ReadFile(filepath);
 		std::unordered_map<GLenum, std::string> shaderSources = PreProccess(source);
 		Compile(shaderSources);
+
+		int lastSlash = filepath.find_last_of("\\/");
+		lastSlash = lastSlash == std::string::npos ? 0 : lastSlash + 1;
+		int lastDot = filepath.rfind(".");
+		int count = lastDot == std::string::npos ? filepath.size() - lastSlash : lastDot - lastSlash;
+		m_Name = filepath.substr(lastSlash, count);
 	}
 
-	OpenGLShader::OpenGLShader(const std::string& vertexSource, const std::string& fragmentSource)
+	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSource, const std::string& fragmentSource)
+		: m_Name(name)
 	{
 		std::unordered_map<GLenum, std::string> sources;
 		sources[GL_VERTEX_SHADER] = vertexSource;
@@ -58,7 +65,6 @@ namespace Pearly {
 	{
 		glUseProgram(0);
 	}
-
 
 	void OpenGLShader::UploadUnifromInt(const std::string& name, int value)
 	{
@@ -116,7 +122,7 @@ namespace Pearly {
 	std::string OpenGLShader::ReadFile(const std::string& filepath)
 	{
 		std::string result;
-		std::ifstream in(filepath, std::ios::in, std::ios::binary);
+		std::ifstream in(filepath, std::ios::in | std::ios::binary);
 		if (in)
 		{
 			in.seekg(0, std::ios::end);
@@ -144,13 +150,12 @@ namespace Pearly {
 			int endOfLine = source.find_first_of("\r\n", pos);
 			PR_CORE_ASSERT(endOfLine != std::string::npos, "Syntax error!");
 			int begin = pos + typeTokenLength + 1;
-			std::string type = source.substr(begin, endOfLine - begin);
+			std::string type = source.substr(begin, (int)(endOfLine - begin));
 			PR_CORE_ASSERT(ShaderTypeFromString(type), "Invalid shader type specified '{0}'!", type);
 
 			int nextLinePos = source.find_first_not_of("\r\n", endOfLine);
 			pos = source.find(typeToken, nextLinePos);
 			shaderSources[ShaderTypeFromString(type)] = source.substr(nextLinePos, pos - (nextLinePos == std::string::npos ? source.size() - 1 : nextLinePos));
-			PR_CORE_TRACE("source: {0}", shaderSources[ShaderTypeFromString(type)]);
 		}
 		return shaderSources;
 	}
@@ -158,8 +163,9 @@ namespace Pearly {
 	void OpenGLShader::Compile(std::unordered_map<GLenum, std::string> shaderSources)
 	{
 		GLuint program = glCreateProgram();
-		std::vector<GLenum> glShaderIDs;
-		glShaderIDs.reserve(shaderSources.size());
+		PR_CORE_ASSERT(shaderSources.size() <= 2, "Only 2 shaders are supported now!");
+		std::array<GLenum, 2> glShaderIDs;
+		int shaderIdIndex = 0;
 		for (std::pair<const GLenum, std::string>& kv : shaderSources)
 		{
 			GLenum type = kv.first;
@@ -189,7 +195,7 @@ namespace Pearly {
 
 				break;
 			}
-			glShaderIDs.push_back(shader);
+			glShaderIDs[shaderIdIndex++] = shader;
 			glAttachShader(program, shader);
 		}
 
