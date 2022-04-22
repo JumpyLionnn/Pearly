@@ -1,5 +1,5 @@
 #pragma once
-#include "Pearly/Input.h"
+#include "Pearly/Core/Input.h"
 
 namespace Pearly {
 	class WindowsInput : public Input

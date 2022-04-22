@@ -1,7 +1,7 @@
 #include "prpch.h"
 #include "OrthographicCameraController.h"
-#include "Input.h"
-#include "KeyCodes.h"
+#include "Pearly/Core/Input.h"
+#include "Pearly/Core/KeyCodes.h"
 
 namespace Pearly {
 

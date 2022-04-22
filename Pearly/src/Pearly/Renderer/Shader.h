@@ -1,5 +1,5 @@
 #pragma once
-#include "Pearly/Core.h"
+#include "Pearly/Core/Core.h"
 
 namespace Pearly {
 

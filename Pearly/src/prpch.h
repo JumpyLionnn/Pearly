@@ -12,7 +12,7 @@
 #include <array>
 #include <algorithm>
 
-#include "Pearly/Log.h"
+#include "Pearly/Core/Log.h"
 
 #ifdef PR_PLATFORM_WINDOWS
 	#include <Windows.h>

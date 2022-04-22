@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include "Pearly/Core.h"
+#include "Pearly/Core/Core.h"
 
 namespace Pearly {
 

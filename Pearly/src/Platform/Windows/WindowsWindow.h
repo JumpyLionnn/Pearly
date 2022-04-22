@@ -1,5 +1,5 @@
 #pragma once
-#include "Pearly/Window.h"
+#include "Pearly/Core/Window.h"
 #include "Pearly/Renderer/GraphicsContext.h"
 
 #include <GLFW/glfw3.h>

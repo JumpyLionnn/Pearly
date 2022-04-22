@@ -1,5 +1,5 @@
 #pragma once
-#include "Pearly/Layer.h"
+#include "Pearly/Core/Layer.h"
 
 namespace Pearly {
 	class ImGuiLayer : public Layer

@@ -1,9 +1,9 @@
 #pragma once
 #include "Window.h"
-#include "Events/WindowEvents.h"
-#include "Core/Timestep.h"
+#include "Pearly/Events/WindowEvents.h"
+#include "Timestep.h"
 #include "LayerStack.h"
-#include "Debug/ImGuiLayer.h"
+#include "Pearly/Debug/ImGuiLayer.h"
 
 namespace Pearly {
 	class Application

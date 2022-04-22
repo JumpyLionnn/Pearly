@@ -141,32 +141,32 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Pearly.h" />
-    <ClInclude Include="src\Pearly\Application.h" />
-    <ClInclude Include="src\Pearly\OrthographicCameraController.h" />
-    <ClInclude Include="src\Pearly\Core.h" />
+    <ClInclude Include="src\Pearly\Core\Application.h" />
+    <ClInclude Include="src\Pearly\Core\Core.h" />
+    <ClInclude Include="src\Pearly\Core\EntryPoint.h" />
+    <ClInclude Include="src\Pearly\Core\Input.h" />
+    <ClInclude Include="src\Pearly\Core\KeyCodes.h" />
+    <ClInclude Include="src\Pearly\Core\Layer.h" />
+    <ClInclude Include="src\Pearly\Core\LayerStack.h" />
+    <ClInclude Include="src\Pearly\Core\Log.h" />
+    <ClInclude Include="src\Pearly\Core\MouseButtonCodes.h" />
     <ClInclude Include="src\Pearly\Core\Timestep.h" />
+    <ClInclude Include="src\Pearly\Core\Window.h" />
     <ClInclude Include="src\Pearly\Debug\ImGuiLayer.h" />
-    <ClInclude Include="src\Pearly\EntryPoint.h" />
     <ClInclude Include="src\Pearly\Events\Event.h" />
     <ClInclude Include="src\Pearly\Events\KeyEvents.h" />
     <ClInclude Include="src\Pearly\Events\MouseEvents.h" />
     <ClInclude Include="src\Pearly\Events\WindowEvents.h" />
-    <ClInclude Include="src\Pearly\Input.h" />
-    <ClInclude Include="src\Pearly\KeyCodes.h" />
-    <ClInclude Include="src\Pearly\Layer.h" />
-    <ClInclude Include="src\Pearly\LayerStack.h" />
-    <ClInclude Include="src\Pearly\Log.h" />
-    <ClInclude Include="src\Pearly\MouseButtonCodes.h" />
     <ClInclude Include="src\Pearly\Renderer\Buffer.h" />
     <ClInclude Include="src\Pearly\Renderer\GraphicsContext.h" />
     <ClInclude Include="src\Pearly\Renderer\OrthographicCamera.h" />
+    <ClInclude Include="src\Pearly\Renderer\OrthographicCameraController.h" />
     <ClInclude Include="src\Pearly\Renderer\RenderCommand.h" />
     <ClInclude Include="src\Pearly\Renderer\Renderer.h" />
     <ClInclude Include="src\Pearly\Renderer\RendererAPI.h" />
     <ClInclude Include="src\Pearly\Renderer\Shader.h" />
     <ClInclude Include="src\Pearly\Renderer\Texture.h" />
     <ClInclude Include="src\Pearly\Renderer\VertexArray.h" />
-    <ClInclude Include="src\Pearly\Window.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLRendererAPI.h" />
@@ -179,15 +179,15 @@
     <ClInclude Include="vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Pearly\Application.cpp" />
+    <ClCompile Include="src\Pearly\Core\Application.cpp" />
+    <ClCompile Include="src\Pearly\Core\Layer.cpp" />
+    <ClCompile Include="src\Pearly\Core\LayerStack.cpp" />
+    <ClCompile Include="src\Pearly\Core\Log.cpp" />
     <ClCompile Include="src\Pearly\Debug\ImGuiBuild.cpp" />
     <ClCompile Include="src\Pearly\Debug\ImGuiLayer.cpp" />
-    <ClCompile Include="src\Pearly\Layer.cpp" />
-    <ClCompile Include="src\Pearly\LayerStack.cpp" />
-    <ClCompile Include="src\Pearly\Log.cpp" />
-    <ClCompile Include="src\Pearly\OrthographicCameraController.cpp" />
     <ClCompile Include="src\Pearly\Renderer\Buffer.cpp" />
     <ClCompile Include="src\Pearly\Renderer\OrthographicCamera.cpp" />
+    <ClCompile Include="src\Pearly\Renderer\OrthographicCameraController.cpp" />
     <ClCompile Include="src\Pearly\Renderer\RenderCommand.cpp" />
     <ClCompile Include="src\Pearly\Renderer\Renderer.cpp" />
     <ClCompile Include="src\Pearly\Renderer\RendererAPI.cpp" />

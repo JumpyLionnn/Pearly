@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Pearly/Events/Event.h"
-#include "Core/Timestep.h"
+#include "Timestep.h"
 
 namespace Pearly {
 	class Layer

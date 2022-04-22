@@ -3,7 +3,7 @@
 
 #include "GLFW/glfw3.h"
 
-#include "Pearly/Application.h"
+#include "Pearly/Core/Application.h"
 
 namespace Pearly {
 

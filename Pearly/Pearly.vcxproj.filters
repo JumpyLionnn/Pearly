@@ -39,20 +39,41 @@
     <ClInclude Include="src\Pearly.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Pearly\Application.h">
-      <Filter>src\Pearly</Filter>
+    <ClInclude Include="src\Pearly\Core\Application.h">
+      <Filter>src\Pearly\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Pearly\Core.h">
-      <Filter>src\Pearly</Filter>
+    <ClInclude Include="src\Pearly\Core\Core.h">
+      <Filter>src\Pearly\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Pearly\Core\EntryPoint.h">
+      <Filter>src\Pearly\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Pearly\Core\Input.h">
+      <Filter>src\Pearly\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Pearly\Core\KeyCodes.h">
+      <Filter>src\Pearly\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Pearly\Core\Layer.h">
+      <Filter>src\Pearly\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Pearly\Core\LayerStack.h">
+      <Filter>src\Pearly\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Pearly\Core\Log.h">
+      <Filter>src\Pearly\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Pearly\Core\MouseButtonCodes.h">
+      <Filter>src\Pearly\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Pearly\Core\Timestep.h">
       <Filter>src\Pearly\Core</Filter>
     </ClInclude>
+    <ClInclude Include="src\Pearly\Core\Window.h">
+      <Filter>src\Pearly\Core</Filter>
+    </ClInclude>
     <ClInclude Include="src\Pearly\Debug\ImGuiLayer.h">
       <Filter>src\Pearly\Debug</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Pearly\EntryPoint.h">
-      <Filter>src\Pearly</Filter>
     </ClInclude>
     <ClInclude Include="src\Pearly\Events\Event.h">
       <Filter>src\Pearly\Events</Filter>
@@ -66,24 +87,6 @@
     <ClInclude Include="src\Pearly\Events\WindowEvents.h">
       <Filter>src\Pearly\Events</Filter>
     </ClInclude>
-    <ClInclude Include="src\Pearly\Input.h">
-      <Filter>src\Pearly</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Pearly\KeyCodes.h">
-      <Filter>src\Pearly</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Pearly\Layer.h">
-      <Filter>src\Pearly</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Pearly\LayerStack.h">
-      <Filter>src\Pearly</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Pearly\Log.h">
-      <Filter>src\Pearly</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Pearly\MouseButtonCodes.h">
-      <Filter>src\Pearly</Filter>
-    </ClInclude>
     <ClInclude Include="src\Pearly\Renderer\Buffer.h">
       <Filter>src\Pearly\Renderer</Filter>
     </ClInclude>
@@ -91,6 +94,9 @@
       <Filter>src\Pearly\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Pearly\Renderer\OrthographicCamera.h">
+      <Filter>src\Pearly\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Pearly\Renderer\OrthographicCameraController.h">
       <Filter>src\Pearly\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Pearly\Renderer\RenderCommand.h">
@@ -110,9 +116,6 @@
     </ClInclude>
     <ClInclude Include="src\Pearly\Renderer\VertexArray.h">
       <Filter>src\Pearly\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Pearly\Window.h">
-      <Filter>src\Pearly</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h">
       <Filter>src\Platform\OpenGL</Filter>
@@ -144,11 +147,19 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\Pearly\OrthographicCameraController.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Pearly\Application.cpp">
-      <Filter>src\Pearly</Filter>
+    <ClCompile Include="src\Pearly\Core\Application.cpp">
+      <Filter>src\Pearly\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Pearly\Core\Layer.cpp">
+      <Filter>src\Pearly\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Pearly\Core\LayerStack.cpp">
+      <Filter>src\Pearly\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Pearly\Core\Log.cpp">
+      <Filter>src\Pearly\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\Pearly\Debug\ImGuiBuild.cpp">
       <Filter>src\Pearly\Debug</Filter>
@@ -156,19 +167,13 @@
     <ClCompile Include="src\Pearly\Debug\ImGuiLayer.cpp">
       <Filter>src\Pearly\Debug</Filter>
     </ClCompile>
-    <ClCompile Include="src\Pearly\Layer.cpp">
-      <Filter>src\Pearly</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Pearly\LayerStack.cpp">
-      <Filter>src\Pearly</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Pearly\Log.cpp">
-      <Filter>src\Pearly</Filter>
-    </ClCompile>
     <ClCompile Include="src\Pearly\Renderer\Buffer.cpp">
       <Filter>src\Pearly\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Pearly\Renderer\OrthographicCamera.cpp">
+      <Filter>src\Pearly\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Pearly\Renderer\OrthographicCameraController.cpp">
       <Filter>src\Pearly\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Pearly\Renderer\RenderCommand.cpp">
@@ -219,6 +224,5 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\Pearly\OrthographicCameraController.cpp" />
   </ItemGroup>
 </Project>

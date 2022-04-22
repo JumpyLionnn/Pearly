@@ -1,7 +1,7 @@
 #include "prpch.h"
 #include "OpenGLContext.h"
 
-#include "Pearly/Core.h"
+#include "Pearly/Core/Core.h"
 
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>

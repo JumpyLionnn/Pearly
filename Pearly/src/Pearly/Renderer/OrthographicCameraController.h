@@ -1,9 +1,9 @@
 #pragma once
-#include "Renderer/OrthographicCamera.h"
-#include "Core/Timestep.h"
+#include "OrthographicCamera.h"
+#include "Pearly/Core/Timestep.h"
 
-#include "Events/MouseEvents.h"
-#include "Events/WindowEvents.h"
+#include "Pearly/Events/MouseEvents.h"
+#include "Pearly/Events/WindowEvents.h"
 
 namespace Pearly {
 

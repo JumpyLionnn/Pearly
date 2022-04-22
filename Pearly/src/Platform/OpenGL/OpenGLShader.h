@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Pearly/Renderer/Shader.h"
-#include "Pearly/Core.h"
+#include "Pearly/Core/Core.h"
 
 #include <glm/glm.hpp>
 

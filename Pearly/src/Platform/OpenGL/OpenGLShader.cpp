@@ -1,7 +1,7 @@
 #include "prpch.h"
 #include "OpenGLShader.h"
 
-#include "Pearly/Core.h"
+#include "Pearly/Core/Core.h"
 
 #include <glad/glad.h>
 #include <glm/gtc/type_ptr.hpp>
@@ -35,9 +35,9 @@ namespace Pearly {
 		std::unordered_map<GLenum, std::string> shaderSources = PreProccess(source);
 		Compile(shaderSources);
 
-		int lastSlash = filepath.find_last_of("\\/");
+		int lastSlash = (int)filepath.find_last_of("\\/");
 		lastSlash = lastSlash == std::string::npos ? 0 : lastSlash + 1;
-		int lastDot = filepath.rfind(".");
+		int lastDot = (int)filepath.rfind(".");
 		int count = lastDot == std::string::npos ? filepath.size() - lastSlash : lastDot - lastSlash;
 		m_Name = filepath.substr(lastSlash, count);
 	}
@@ -150,11 +150,11 @@ namespace Pearly {
 			int endOfLine = source.find_first_of("\r\n", pos);
 			PR_CORE_ASSERT(endOfLine != std::string::npos, "Syntax error!");
 			int begin = pos + typeTokenLength + 1;
-			std::string type = source.substr(begin, (int)(endOfLine - begin));
+			std::string type = source.substr(begin, endOfLine - begin);
 			PR_CORE_ASSERT(ShaderTypeFromString(type), "Invalid shader type specified '{0}'!", type);
 
-			int nextLinePos = source.find_first_not_of("\r\n", endOfLine);
-			pos = source.find(typeToken, nextLinePos);
+			int nextLinePos = (int)source.find_first_not_of("\r\n", endOfLine);
+			pos = (int)source.find(typeToken, nextLinePos);
 			shaderSources[ShaderTypeFromString(type)] = source.substr(nextLinePos, pos - (nextLinePos == std::string::npos ? source.size() - 1 : nextLinePos));
 		}
 		return shaderSources;

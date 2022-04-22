@@ -5,7 +5,7 @@
 
 #include "Input.h"
 
-#include "Renderer/Renderer.h"
+#include "Pearly/Renderer/Renderer.h"
 #include <GLFW/glfw3.h>
 
 namespace Pearly {
