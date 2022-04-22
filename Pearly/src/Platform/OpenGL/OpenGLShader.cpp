@@ -66,6 +66,26 @@ namespace Pearly {
 		glUseProgram(0);
 	}
 
+	void OpenGLShader::SetMat4(const std::string& name, const glm::mat4& value)
+	{
+		UploadUnifromMat4(name, value);
+	}
+
+	void OpenGLShader::SetVec4f(const std::string& name, const glm::vec4& value)
+	{
+		UploadUnifromVec4f(name, value);
+	}
+
+	void OpenGLShader::SetVec3f(const std::string& name, const glm::vec3& value)
+	{
+		UploadUnifromVec3f(name, value);
+	}
+
+	void OpenGLShader::SetInt(const std::string& name, int value)
+	{
+		UploadUnifromInt(name, value);
+	}
+
 	void OpenGLShader::UploadUnifromInt(const std::string& name, int value)
 	{
 		int location = GetUniformLocation(name);

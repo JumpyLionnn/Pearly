@@ -22,5 +22,3 @@
 #include "Pearly/Renderer/Texture.h"
 #include "Pearly/Renderer/Shader.h"
 #include "Pearly/Renderer/VertexArray.h"
-
-#include "Pearly/Core/EntryPoint.h"
