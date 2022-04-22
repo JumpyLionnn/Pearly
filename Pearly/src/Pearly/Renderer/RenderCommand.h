@@ -11,6 +11,10 @@ namespace Pearly {
 		{
 			s_RendererAPI->Init();
 		}
+		inline static void SetViewport(uint32 x, uint32 y, uint32 width, uint32 height)
+		{
+			s_RendererAPI->SetViewport(x, y, width, height);
+		}
 
 		inline static void SetClearColor(const glm::vec4& color)
 		{
