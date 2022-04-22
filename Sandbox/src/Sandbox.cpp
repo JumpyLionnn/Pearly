@@ -10,7 +10,7 @@ class ExampleLayer : public Pearly::Layer
 {
 public:
 	ExampleLayer()
-		: Layer("Example"), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f)
+		: Layer("Example"), m_CameraController(1280.0f/720.0f, true)
 	{
 		m_VertexArray.reset(Pearly::VertexArray::Create());
 		float vertices[3 * 7] = {
@@ -125,29 +125,12 @@ public:
 
 	void OnUpdate(Pearly::Timestep ts) override
 	{
-
-		if (Pearly::Input::IsKeyPressed(PR_KEY_A))
-			m_CameraPosition.x -= m_CameraMovementSpeed * ts;
-		if (Pearly::Input::IsKeyPressed(PR_KEY_D))
-			m_CameraPosition.x += m_CameraMovementSpeed * ts;
-		if (Pearly::Input::IsKeyPressed(PR_KEY_W))
-			m_CameraPosition.y += m_CameraMovementSpeed * ts;
-		if (Pearly::Input::IsKeyPressed(PR_KEY_S))
-			m_CameraPosition.y -= m_CameraMovementSpeed * ts;
-
-		if (Pearly::Input::IsKeyPressed(PR_KEY_LEFT))
-			m_CameraRotation += m_CameraRotationSpeed * ts;
-		if (Pearly::Input::IsKeyPressed(PR_KEY_RIGHT))
-			m_CameraRotation -= m_CameraRotationSpeed * ts;
-
-
 		Pearly::RenderCommand::SetClearColor(glm::vec4(0.32f, 0.42f, 0.52f, 1.0f));
 		Pearly::RenderCommand::Clear();
 
-		m_Camera.SetPosition(m_CameraPosition);
-		m_Camera.SetRotation(m_CameraRotation);
+		m_CameraController.OnUpdate(ts);
 
-		Pearly::Renderer::BeginScene(m_Camera);
+		Pearly::Renderer::BeginScene(m_CameraController.GetCamera());
 
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 
@@ -191,7 +174,7 @@ public:
 	virtual void OnEvent(Pearly::Event& event) override
 	{
 		Pearly::EventDispacher dispacher(event);
-		
+		m_CameraController.OnEvent(event);
 	}
 private:
 	Pearly::ShaderLibrary m_ShaderLibrary;
@@ -204,12 +187,7 @@ private:
 	Pearly::Ref<Pearly::Texture2D> m_CrateTexture;
 	Pearly::Ref<Pearly::Texture2D> m_JumpyLionLogoTexture;
 
-	Pearly::OrthographicCamera m_Camera;
-	glm::vec3 m_CameraPosition = {0.0f, 0.0f, 0.0f};
-	float m_CameraRotation = 0.0f;
-
-	float m_CameraMovementSpeed = 1.0f;
-	float m_CameraRotationSpeed = 135.0f;
+	Pearly::OrthographicCameraController m_CameraController;
 
 	glm::vec3 m_Color = {0.2f, 0.3f, 0.8f};
 };

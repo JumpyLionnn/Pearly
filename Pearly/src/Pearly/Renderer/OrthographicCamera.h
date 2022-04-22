@@ -9,6 +9,8 @@ namespace Pearly {
 	public:
 		OrthographicCamera(float left, float right, float bottom, float top, float zNear = -1.0f, float zFar = 1.0f);
 
+		void SetProjection(float left, float right, float bottom, float top, float zNear = -1.0f, float zFar = 1.0f);
+
 		inline const glm::vec3& GetPosition(const glm::vec3& position) const { return m_Position; }
 		inline void SetPosition(const glm::vec3& position) 
 		{ 

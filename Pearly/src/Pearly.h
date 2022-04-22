@@ -12,6 +12,7 @@
 #include "Pearly/Input.h"
 #include "Pearly/KeyCodes.h"
 #include "Pearly/MouseButtonCodes.h"
+#include "Pearly/OrthographicCameraController.h"
 
 #include "Pearly/Debug/ImGuiLayer.h"
 

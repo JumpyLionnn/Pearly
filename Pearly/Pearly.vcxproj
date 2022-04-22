@@ -142,6 +142,7 @@
   <ItemGroup>
     <ClInclude Include="src\Pearly.h" />
     <ClInclude Include="src\Pearly\Application.h" />
+    <ClInclude Include="src\Pearly\OrthographicCameraController.h" />
     <ClInclude Include="src\Pearly\Core.h" />
     <ClInclude Include="src\Pearly\Core\Timestep.h" />
     <ClInclude Include="src\Pearly\Debug\ImGuiLayer.h" />
@@ -184,6 +185,7 @@
     <ClCompile Include="src\Pearly\Layer.cpp" />
     <ClCompile Include="src\Pearly\LayerStack.cpp" />
     <ClCompile Include="src\Pearly\Log.cpp" />
+    <ClCompile Include="src\Pearly\OrthographicCameraController.cpp" />
     <ClCompile Include="src\Pearly\Renderer\Buffer.cpp" />
     <ClCompile Include="src\Pearly\Renderer\OrthographicCamera.cpp" />
     <ClCompile Include="src\Pearly\Renderer\RenderCommand.cpp" />

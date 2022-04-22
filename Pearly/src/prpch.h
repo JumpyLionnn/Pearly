@@ -10,7 +10,7 @@
 #include <unordered_map>
 #include <fstream>
 #include <array>
-
+#include <algorithm>
 
 #include "Pearly/Log.h"
 
