@@ -7,6 +7,11 @@ workspace "Pearly"
 		"Dist"
 	}
 
+	flags
+	{
+		"MultiProcessorCompile"
+	}
+
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 IncludeDirs = {}
@@ -83,13 +88,20 @@ project "Pearly"
 		defines 
 		{
 			"PR_DEBUG",
-			"PR_ENABLE_ASSERTS"
+			"PR_ENABLE_CORE_LOG",
+			"PR_ENABLE_ASSERTS",
+			"PR_ENABLE_RENDERER_LOG"
 		}
 		symbols "On"
 
 	filter "configurations:Release"
 		defines "PR_RELEASE"
 		optimize "On"
+		defines 
+		{
+			"PR_RELEASE",
+			"PR_ENABLE_CORE_LOG"
+		}
 
 	filter "configurations:Dist"
 		defines "PR_DIST"

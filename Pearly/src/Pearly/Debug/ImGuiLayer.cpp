@@ -18,9 +18,6 @@ namespace Pearly {
 		: Layer("ImGuiLayer")
 	{}
 
-	ImGuiLayer::~ImGuiLayer()
-	{}
-
 	void ImGuiLayer::OnAttach()
 	{
 		// Setup dear ImGui context

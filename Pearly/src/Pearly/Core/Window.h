@@ -21,7 +21,7 @@ namespace Pearly {
 	public:
 		using EventCallbackFn = std::function<void(Event&)>;
 
-		virtual ~Window() {};
+		virtual ~Window() = default;
 
 		virtual void OnUpdate() const = 0;
 

@@ -17,13 +17,20 @@ namespace Pearly {
 	};
 }
 
-
 // core log
-#define PR_CORE_TRACE(...) ::Pearly::Log::GetCoreLogger()->trace(__VA_ARGS__)
-#define PR_CORE_INFO(...) ::Pearly::Log::GetCoreLogger()->info(__VA_ARGS__)
-#define PR_CORE_WARN(...) ::Pearly::Log::GetCoreLogger()->warn(__VA_ARGS__)
-#define PR_CORE_ERROR(...) ::Pearly::Log::GetCoreLogger()->error(__VA_ARGS__)
-#define PR_CORE_FATAL(...) ::Pearly::Log::GetCoreLogger()->fatal(__VA_ARGS__)
+#ifdef PR_ENABLE_CORE_LOG
+	#define PR_CORE_TRACE(...) ::Pearly::Log::GetCoreLogger()->trace(__VA_ARGS__)
+	#define PR_CORE_INFO(...) ::Pearly::Log::GetCoreLogger()->info(__VA_ARGS__)
+	#define PR_CORE_WARN(...) ::Pearly::Log::GetCoreLogger()->warn(__VA_ARGS__)
+	#define PR_CORE_ERROR(...) ::Pearly::Log::GetCoreLogger()->error(__VA_ARGS__)
+	#define PR_CORE_CRITICAL(...) ::Pearly::Log::GetCoreLogger()->critical(__VA_ARGS__)
+#else
+	#define PR_CORE_TRACE(...) 
+	#define PR_CORE_INFO(...) 
+	#define PR_CORE_WARN(...) 
+	#define PR_CORE_ERROR(...) 
+	#define PR_CORE_CRITICAL(...) 
+#endif
 
 
 // client log
@@ -31,4 +38,4 @@ namespace Pearly {
 #define PR_INFO(...) ::Pearly::Log::GetClientLogger()->info(__VA_ARGS__)
 #define PR_WARN(...) ::Pearly::Log::GetClientLogger()->warn(__VA_ARGS__)
 #define PR_ERROR(...) ::Pearly::Log::GetClientLogger()->error(__VA_ARGS__)
-#define PR_FATAL(...) ::Pearly::Log::GetClientLogger()->fatal(__VA_ARGS__)
+#define PR_CRITICAL(...) ::Pearly::Log::GetClientLogger()->critical(__VA_ARGS__)

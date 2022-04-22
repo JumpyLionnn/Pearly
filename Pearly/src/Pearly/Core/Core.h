@@ -15,6 +15,20 @@
 	#define PR_ASSERT(x, ...)
 #endif
 
+#ifdef PR_ENABLE_RENDERER_LOG_LEVEL 
+	#define PR_ENABLE_RENDERER_LOG 
+#endif 
+#ifdef PR_ENABLE_RENDERER_LOG 
+	#ifndef PR_ENABLE_CORE_LOG 
+		// We do require the core logger
+		#define PR_ENABLE_CORE_LOG 
+	#endif 
+	#ifndef PR_ENABLE_RENDERER_LOG_LEVEL 
+		// Default: warning and above 
+		#define PR_ENABLE_RENDERER_LOG_LEVEL 2
+	#endif 
+#endif
+
 #define PR_BIND_EVENT_FN(x) std::bind(&x, this, std::placeholders::_1)
 
 #define BIT(x) (1 << x)
