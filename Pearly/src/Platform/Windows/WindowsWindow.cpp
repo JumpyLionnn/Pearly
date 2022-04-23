@@ -21,16 +21,19 @@ namespace Pearly {
 
 	WindowsWindow::WindowsWindow(const WindowProperties& properties)
 	{
+		PR_PROFILE_FUNCTION();
 		Init(properties);
 	}
 
 	WindowsWindow::~WindowsWindow()
 	{
+		PR_PROFILE_FUNCTION();
 		Shutdown();
 	}
 
 	void WindowsWindow::Init(const WindowProperties& properties)
 	{
+		PR_PROFILE_FUNCTION();
 		m_Data.Title = properties.Title;
 		m_Data.Width = properties.Width;
 		m_Data.Height = properties.Height;
@@ -40,14 +43,17 @@ namespace Pearly {
 
 		if (!s_GLFWInitialized)
 		{
+			PR_PROFILE_SCOPE("glfwInit");
 			// TODO: glfwTerminate on system shutdown
 			int success = glfwInit();
 			PR_CORE_ASSERT(success, "Could bot initialize glfw!");
 			glfwSetErrorCallback(GLFWErrorCallback);
 			s_GLFWInitialized = true;
 		}
-
-		m_Window = glfwCreateWindow((int)properties.Width, (int)properties.Height, properties.Title.c_str(), nullptr, nullptr);
+		{
+			PR_PROFILE_SCOPE("glfwCreateWindow");
+			m_Window = glfwCreateWindow((int)properties.Width, (int)properties.Height, properties.Title.c_str(), nullptr, nullptr);
+		}
 		m_Context = new OpenGLContext(m_Window);
 
 		m_Context->Init();
@@ -167,11 +173,13 @@ namespace Pearly {
 
 	void WindowsWindow::Shutdown()
 	{
+		PR_PROFILE_FUNCTION();
 		glfwDestroyWindow(m_Window);
 	}
 
 	void WindowsWindow::OnUpdate() const
 	{
+		PR_PROFILE_FUNCTION();
 		glfwPollEvents();
 		m_Context->SwapBuffers();
 	}
@@ -183,6 +191,7 @@ namespace Pearly {
 
 	void WindowsWindow::SetVSync(bool enabled)
 	{
+		PR_PROFILE_FUNCTION();
 		if (enabled)
 		{
 			glfwSwapInterval(1);

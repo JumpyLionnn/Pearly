@@ -11,6 +11,7 @@ namespace Pearly {
 
 	bool WindowsInput::IsKeyPressedImpl(int keycode)
 	{
+		PR_PROFILE_FUNCTION();
 		GLFWwindow* window = (GLFWwindow*)Application::Get().GetWindow().GetNativeWindow();
 		int state = glfwGetKey(window, keycode);
 		return state == GLFW_PRESS || state == GLFW_REPEAT;
@@ -18,6 +19,7 @@ namespace Pearly {
 
 	bool WindowsInput::IsMouseButtonPressedImpl(int button)
 	{
+		PR_PROFILE_FUNCTION();
 		GLFWwindow* window = (GLFWwindow*)Application::Get().GetWindow().GetNativeWindow();
 		int state = glfwGetMouseButton(window, button);
 		return state == GLFW_PRESS;
@@ -25,6 +27,7 @@ namespace Pearly {
 
 	std::pair<float, float> WindowsInput::GetMousePositionImpl()
 	{
+		PR_PROFILE_FUNCTION();
 		GLFWwindow* window = (GLFWwindow*)Application::Get().GetWindow().GetNativeWindow();
 		double xPos;
 		double yPos;

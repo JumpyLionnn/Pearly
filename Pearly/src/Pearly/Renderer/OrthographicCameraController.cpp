@@ -11,6 +11,7 @@ namespace Pearly {
 
 	void OrthographicCameraController::OnUpdate(Timestep ts)
 	{
+		PR_PROFILE_FUNCTION();
 		if (Input::IsKeyPressed(PR_KEY_A))
 			m_CameraPosition.x -= CameraMovementSpeed * m_ZoomLevel * ts;
 		if (Input::IsKeyPressed(PR_KEY_D))
@@ -34,6 +35,7 @@ namespace Pearly {
 
 	void OrthographicCameraController::OnEvent(Event& e)
 	{
+		PR_PROFILE_FUNCTION();
 		EventDispacher dispacher(e);
 		dispacher.Dispatch<MouseScrolledEvent>(PR_BIND_EVENT_FN(OrthographicCameraController::OnMouseScrolled));
 		dispacher.Dispatch<WindowResizeEvent>(PR_BIND_EVENT_FN(OrthographicCameraController::OnWindowResized));
@@ -41,6 +43,7 @@ namespace Pearly {
 
 	bool OrthographicCameraController::OnMouseScrolled(MouseScrolledEvent& e)
 	{
+		PR_PROFILE_FUNCTION();
 		m_ZoomLevel -= e.GetYOffset() * 0.25f;
 		m_ZoomLevel = std::max(m_ZoomLevel, 0.1f);
 		m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
@@ -49,6 +52,7 @@ namespace Pearly {
 
 	bool OrthographicCameraController::OnWindowResized(WindowResizeEvent& e)
 	{
+		PR_PROFILE_FUNCTION();
 		m_AspectRatio = (float)e.GetWidth() / (float)e.GetHeight();
 		m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
 		return false;

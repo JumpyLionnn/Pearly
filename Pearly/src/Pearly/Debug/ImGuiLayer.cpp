@@ -20,6 +20,7 @@ namespace Pearly {
 
 	void ImGuiLayer::OnAttach()
 	{
+		PR_PROFILE_FUNCTION();
 		// Setup dear ImGui context
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
@@ -51,6 +52,7 @@ namespace Pearly {
 
 	void ImGuiLayer::OnDetach()
 	{
+		PR_PROFILE_FUNCTION();
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();
@@ -58,6 +60,7 @@ namespace Pearly {
 
 	void ImGuiLayer::Begin()
 	{
+		PR_PROFILE_FUNCTION();
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
@@ -65,6 +68,7 @@ namespace Pearly {
 
 	void ImGuiLayer::End()
 	{
+		PR_PROFILE_FUNCTION();
 		ImGuiIO& io = ImGui::GetIO();
 		Application& app = Application::Get();
 		io.DisplaySize = ImVec2((float)app.GetWindow().GetWidth(), (float)app.GetWindow().GetHeight());
@@ -79,9 +83,5 @@ namespace Pearly {
 			ImGui::RenderPlatformWindowsDefault();
 			glfwMakeContextCurrent(backupCurrentContext);
 		}
-	}
-
-	void ImGuiLayer::OnImGuiRender()
-	{
 	}
 }

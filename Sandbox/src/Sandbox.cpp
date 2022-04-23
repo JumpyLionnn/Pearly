@@ -14,16 +14,18 @@ public:
 
 	virtual void OnAttach() override
 	{
+		PR_PROFILE_FUNCTION();
 		m_Texture = Pearly::Texture2D::Create("assets/textures/Checkerboard.png");
 	}
 
 	virtual void OnDetach() override
 	{
-		
+		PR_PROFILE_FUNCTION();
 	}
 
 	virtual void OnUpdate(Pearly::Timestep ts) 
 	{
+		PR_PROFILE_FUNCTION();
 		m_CameraController.OnUpdate(ts);
 
 		Pearly::RenderCommand::SetClearColor(glm::vec4(0.32f, 0.42f, 0.52f, 1.0f));
@@ -49,6 +51,7 @@ public:
 
 	virtual void OnImGuiRender() 
 	{
+		PR_PROFILE_FUNCTION();
 		ImGui::Begin("Settings");
 		ImGui::ColorEdit4("Square Color", glm::value_ptr(m_Color));
 		ImGui::End();
@@ -63,7 +66,6 @@ private:
 
 	glm::vec4 m_Color = { 0.2f, 0.3f, 0.8f, 1.0f };
 };
-
 
 class Sandbox : public Pearly::Application
 {

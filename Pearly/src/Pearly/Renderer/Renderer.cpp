@@ -16,6 +16,7 @@ namespace Pearly {
 
 	void Renderer::Init()
 	{
+		PR_PROFILE_FUNCTION();
 		s_Data = new RendererStorage();
 		RenderCommand::Init();
 
@@ -49,6 +50,7 @@ namespace Pearly {
 	}
 	void Renderer::Shutdown()
 	{
+		PR_PROFILE_FUNCTION();
 		delete s_Data;
 	}
 
@@ -60,6 +62,7 @@ namespace Pearly {
 
 	void Renderer::BeginScene(const OrthographicCamera& camera)
 	{
+		PR_PROFILE_FUNCTION();
 		s_Data->TextureShader->Bind();
 		s_Data->TextureShader->SetMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
 	}
@@ -76,6 +79,7 @@ namespace Pearly {
 
 	void Renderer::DrawQuad(const glm::vec3& position, const glm::vec2& scale, const glm::vec4& color)
 	{
+		PR_PROFILE_FUNCTION();
 		s_Data->TextureShader->SetVec4f("u_Color", color);
 		s_Data->WhiteTexture->Bind();
 
@@ -93,6 +97,7 @@ namespace Pearly {
 
 	void Renderer::DrawQuad(const glm::vec3& position, const glm::vec2& scale, Ref<Texture2D> texture)
 	{
+		PR_PROFILE_FUNCTION();
 		s_Data->TextureShader->SetVec4f("u_Color", glm::vec4(1.0f));
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f });
 		s_Data->TextureShader->SetMat4("u_Transform", transform);

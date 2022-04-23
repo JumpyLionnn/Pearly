@@ -10,6 +10,7 @@ namespace Pearly {
 
 	static GLenum ShaderTypeFromString(const std::string& type)
 	{
+		PR_PROFILE_FUNCTION();
 		if (type == "vertex" || type == "vert") return GL_VERTEX_SHADER;
 		if (type == "fragment" || type == "frag" || type == "pixel") return GL_FRAGMENT_SHADER;
 
@@ -19,6 +20,7 @@ namespace Pearly {
 
 	static std::string ShaderTypeToString(GLenum& type)
 	{
+		PR_PROFILE_FUNCTION();
 		switch (type)
 		{
 			case GL_VERTEX_SHADER: return "Vertex";
@@ -31,6 +33,7 @@ namespace Pearly {
 
 	OpenGLShader::OpenGLShader(const std::string& filepath)
 	{
+		PR_PROFILE_FUNCTION();
 		std::string source = ReadFile(filepath);
 		std::unordered_map<GLenum, std::string> shaderSources = PreProccess(source);
 		Compile(shaderSources);
@@ -45,6 +48,7 @@ namespace Pearly {
 	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSource, const std::string& fragmentSource)
 		: m_Name(name)
 	{
+		PR_PROFILE_FUNCTION();
 		std::unordered_map<GLenum, std::string> sources;
 		sources[GL_VERTEX_SHADER] = vertexSource;
 		sources[GL_FRAGMENT_SHADER] = fragmentSource;
@@ -53,36 +57,43 @@ namespace Pearly {
 
 	OpenGLShader::~OpenGLShader()
 	{
+		PR_PROFILE_FUNCTION();
 		glDeleteProgram(m_RendererID);
 	}
 
 	void OpenGLShader::Bind() const
 	{
+		PR_PROFILE_FUNCTION();
 		glUseProgram(m_RendererID);
 	}
 
 	void OpenGLShader::Unbind() const
 	{
+		PR_PROFILE_FUNCTION();
 		glUseProgram(0);
 	}
 
 	void OpenGLShader::SetMat4(const std::string& name, const glm::mat4& value)
 	{
+		PR_PROFILE_FUNCTION();
 		UploadUnifromMat4(name, value);
 	}
 
 	void OpenGLShader::SetVec4f(const std::string& name, const glm::vec4& value)
 	{
+		PR_PROFILE_FUNCTION();
 		UploadUnifromVec4f(name, value);
 	}
 
 	void OpenGLShader::SetVec3f(const std::string& name, const glm::vec3& value)
 	{
+		PR_PROFILE_FUNCTION();
 		UploadUnifromVec3f(name, value);
 	}
 
 	void OpenGLShader::SetInt(const std::string& name, int value)
 	{
+		PR_PROFILE_FUNCTION();
 		UploadUnifromInt(name, value);
 	}
 
@@ -131,6 +142,7 @@ namespace Pearly {
 
 	int OpenGLShader::GetUniformLocation(const std::string& name)
 	{
+		PR_PROFILE_FUNCTION();
 		if (m_UniformLocationCache.find(name) != m_UniformLocationCache.end())
 			return m_UniformLocationCache.at(name);
 
@@ -141,6 +153,7 @@ namespace Pearly {
 
 	std::string OpenGLShader::ReadFile(const std::string& filepath)
 	{
+		PR_PROFILE_FUNCTION();
 		std::string result;
 		std::ifstream in(filepath, std::ios::in | std::ios::binary);
 		if (in)
@@ -160,6 +173,7 @@ namespace Pearly {
 
 	std::unordered_map<GLenum, std::string> OpenGLShader::PreProccess(const std::string& source)
 	{
+		PR_PROFILE_FUNCTION();
 		std::unordered_map<GLenum, std::string> shaderSources;
 
 		const char* typeToken = "#type";
@@ -182,6 +196,7 @@ namespace Pearly {
 
 	void OpenGLShader::Compile(std::unordered_map<GLenum, std::string> shaderSources)
 	{
+		PR_PROFILE_FUNCTION();
 		GLuint program = glCreateProgram();
 		PR_CORE_ASSERT(shaderSources.size() <= 2, "Only 2 shaders are supported now!");
 		std::array<GLenum, 2> glShaderIDs;

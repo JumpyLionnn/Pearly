@@ -8,6 +8,7 @@ namespace Pearly {
 	OpenGLTexture2D::OpenGLTexture2D(uint32 width, uint32 height)
 		: m_Width(width), m_Height(height), m_Path("")
 	{
+		PR_PROFILE_FUNCTION();
 		m_InternalFormat = GL_RGBA8;
 		m_DataFormat = GL_RGBA;
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
@@ -20,11 +21,16 @@ namespace Pearly {
 	OpenGLTexture2D::OpenGLTexture2D(const std::string& path)
 		: m_Path(path)
 	{
+		PR_PROFILE_FUNCTION();
 		int width;
 		int height;
 		int channels;
 		stbi_set_flip_vertically_on_load(1);
-		stbi_uc* data = stbi_load(path.c_str(), &width, &height, &channels, 0);
+		stbi_uc* data = nullptr;
+		{
+			PR_PROFILE_SCOPE("stbi_load - OpenGLTexture2D::OpenGLTexture2D(const std::string&)");
+			data = stbi_load(path.c_str(), &width, &height, &channels, 0);
+		}
 		PR_CORE_ASSERT(data, "Faild to load image '{0}'!", path);
 		m_Width = width;
 		m_Height = height;
@@ -59,11 +65,13 @@ namespace Pearly {
 
 	OpenGLTexture2D::~OpenGLTexture2D()
 	{
+		PR_PROFILE_FUNCTION();
 		glDeleteTextures(1, &m_RendererID);
 	}
 
 	void OpenGLTexture2D::SetData(void* data, uint32 size)
 	{
+		PR_PROFILE_FUNCTION();
 		uint32 bytesPerPixel = m_DataFormat == GL_RGBA ? 4 : 3;
 		PR_CORE_ASSERT(size == m_Width * m_Height * bytesPerPixel, "Data must be the extire texture!");
 		glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, m_DataFormat, GL_UNSIGNED_BYTE, data);
@@ -71,6 +79,7 @@ namespace Pearly {
 
 	void OpenGLTexture2D::Bind(uint32 slot) const
 	{
+		PR_PROFILE_FUNCTION();
 		glBindTextureUnit(slot, m_RendererID);
 	}
 }

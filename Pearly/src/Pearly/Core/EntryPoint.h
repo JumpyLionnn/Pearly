@@ -10,10 +10,17 @@ extern Pearly::Application* Pearly::CreateApplication();
 int main(int argc, char** argv)
 {
 	Pearly::Log::Init();
-	PR_CORE_WARN("Initialized log!");
 
+	PR_PROFILE_BEGIN_SESSION("Startup", "PearlyProfileStartup.json");
 	Pearly::Application* application = Pearly::CreateApplication();
+	PR_PROFILE_END_SESSION();
+
+	PR_PROFILE_BEGIN_SESSION("Runtime", "PearlyProfileRuntime.json");
 	application->Run();
+	PR_PROFILE_END_SESSION();
+
+	PR_PROFILE_BEGIN_SESSION("Shutdown", "PearlyProfileShutdown.json");
 	delete application;
+	PR_PROFILE_END_SESSION();
 }
 #endif

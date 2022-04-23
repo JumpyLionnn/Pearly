@@ -15,6 +15,7 @@ namespace Pearly {
 
 	void OpenGLContext::Init()
 	{
+		PR_PROFILE_FUNCTION();
 		glfwMakeContextCurrent(m_WindowHandle);
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		PR_CORE_ASSERT(status, "Faild to initialize Glad!");
@@ -26,6 +27,7 @@ namespace Pearly {
 	}
 	void OpenGLContext::SwapBuffers()
 	{
+		PR_PROFILE_FUNCTION();
 		glfwSwapBuffers(m_WindowHandle);
 	}
 }

@@ -8,3 +8,9 @@ bin-int/
 **.vcxproj
 **.vcxproj.filters
 **.vcxproj.user
+
+imgui.ini
+
+PearlyProfileRuntime.json
+PearlyProfileShutdown.json
+PearlyProfileStartup.json

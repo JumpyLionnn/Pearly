@@ -14,6 +14,7 @@ namespace Pearly {
 
 	Application::Application()
 	{
+		PR_PROFILE_FUNCTION();
 		PR_CORE_ASSERT(!s_Instance, "Application already exists!");
 		s_Instance = this;
 
@@ -28,16 +29,21 @@ namespace Pearly {
 
 	void Application::Run()
 	{
+		PR_PROFILE_FUNCTION();
 		while (m_Running)
 		{
+			PR_PROFILE_SCOPE("Frame");
 			float time = (float)glfwGetTime(); // TODO: Platform::GetTime();
 			Timestep timestep = time - m_LastFrameTime;
 			m_LastFrameTime = time;
 
 			if (!m_Minimized)
 			{
-				for (Layer* layer : m_LayerStack)
-					layer->OnUpdate(timestep);
+				{
+					PR_PROFILE_SCOPE("Layers update");
+					for (Layer* layer : m_LayerStack)
+						layer->OnUpdate(timestep);
+				}
 			}
 			
 
@@ -52,6 +58,7 @@ namespace Pearly {
 
 	void Application::OnEvent(Event& e)
 	{
+		PR_PROFILE_FUNCTION();
 		EventDispacher dispacher(e);
 		dispacher.Dispatch<WindowCloseEvent>(PR_BIND_EVENT_FN(Application::OnWindowClose));
 		dispacher.Dispatch<WindowResizeEvent>(PR_BIND_EVENT_FN(Application::OnWindowResize));
@@ -66,19 +73,27 @@ namespace Pearly {
 
 	void Application::PushLayer(Layer* layer)
 	{
+		PR_PROFILE_FUNCTION();
 		m_LayerStack.PushLayer(layer);
+		layer->OnAttach();
 	}
 	void Application::PushOverlay(Layer* overlay)
 	{
+		PR_PROFILE_FUNCTION();
 		m_LayerStack.PushOverlay(overlay);
+		overlay->OnAttach();
 	}
 	void Application::PopLayer(Layer* layer)
 	{
+		PR_PROFILE_FUNCTION();
 		m_LayerStack.PopLayer(layer);
+		layer->OnDetach();
 	}
 	void Application::PopOverlay(Layer* overlay)
 	{
+		PR_PROFILE_FUNCTION();
 		m_LayerStack.PopOverlay(overlay);
+		overlay->OnDetach();
 	}
 
 	bool Application::OnWindowClose(WindowCloseEvent& event)
@@ -89,6 +104,7 @@ namespace Pearly {
 
 	bool Application::OnWindowResize(WindowResizeEvent& event)
 	{
+		PR_PROFILE_FUNCTION();
 		if (event.GetWidth() == 0 || event.GetHeight() == 0)
 		{
 			m_Minimized = true;
