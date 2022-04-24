@@ -12,12 +12,12 @@ namespace Pearly {
 		Ref<Texture2D> WhiteTexture;
 	};
 
-	static RendererStorage* s_Data;
+	static Scope<RendererStorage> s_Data;
 
 	void Renderer::Init()
 	{
 		PR_PROFILE_FUNCTION();
-		s_Data = new RendererStorage();
+		s_Data = CreateScope<RendererStorage>();
 		RenderCommand::Init();
 
 		s_Data->QuadVertexArray = VertexArray::Create();
@@ -51,7 +51,7 @@ namespace Pearly {
 	void Renderer::Shutdown()
 	{
 		PR_PROFILE_FUNCTION();
-		delete s_Data;
+		delete s_Data.release();
 	}
 
 	void Renderer::OnWindowResize(uint32 width, uint32 height)

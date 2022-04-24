@@ -7,7 +7,7 @@
 #include "Pearly/Events/MouseEvents.h"
 
 namespace Pearly {
-	static bool s_GLFWInitialized = false;
+	static uint8_t s_GLFWWindowCount = 0;
 
 	static void GLFWErrorCallback(int error, const char* description)
 	{
@@ -41,20 +41,21 @@ namespace Pearly {
 		PR_CORE_INFO("Creating a window {0}, ({1}, {2})", properties.Title, properties.Width, properties.Height);
 
 
-		if (!s_GLFWInitialized)
+		if (s_GLFWWindowCount == 0)
 		{
 			PR_PROFILE_SCOPE("glfwInit");
+			PR_CORE_INFO("Initializing GLFW!");
 			// TODO: glfwTerminate on system shutdown
 			int success = glfwInit();
 			PR_CORE_ASSERT(success, "Could bot initialize glfw!");
 			glfwSetErrorCallback(GLFWErrorCallback);
-			s_GLFWInitialized = true;
 		}
 		{
 			PR_PROFILE_SCOPE("glfwCreateWindow");
 			m_Window = glfwCreateWindow((int)properties.Width, (int)properties.Height, properties.Title.c_str(), nullptr, nullptr);
+			s_GLFWWindowCount++;
 		}
-		m_Context = new OpenGLContext(m_Window);
+		m_Context = CreateScope<OpenGLContext>(m_Window);
 
 		m_Context->Init();
 
@@ -175,6 +176,11 @@ namespace Pearly {
 	{
 		PR_PROFILE_FUNCTION();
 		glfwDestroyWindow(m_Window);
+		if (--s_GLFWWindowCount == 0)
+		{
+			PR_CORE_INFO("Terminating GLFW!");
+			glfwTerminate();
+		}
 	}
 
 	void WindowsWindow::OnUpdate() const

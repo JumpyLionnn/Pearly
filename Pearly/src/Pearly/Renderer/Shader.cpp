@@ -10,7 +10,7 @@ namespace Pearly {
 		switch (Renderer::GetAPI())
 		{
 		case RendererAPI::API::None: PR_CORE_ASSERT(false, "Renderer API None is currently not supported!"); return nullptr;
-		case RendererAPI::API::OpenGL: return std::make_shared<OpenGLShader>(filepath);
+		case RendererAPI::API::OpenGL: return CreateRef<OpenGLShader>(filepath);
 		}
 
 		PR_CORE_ASSERT(false, "Unknown Renderer API!");
@@ -22,7 +22,7 @@ namespace Pearly {
 		switch (Renderer::GetAPI())
 		{
 		case RendererAPI::API::None: PR_CORE_ASSERT(false, "Renderer API None is currently not supported!"); return nullptr;
-		case RendererAPI::API::OpenGL: return std::make_shared<OpenGLShader>(name, vertexSource, fragmentSource);
+		case RendererAPI::API::OpenGL: return CreateRef<OpenGLShader>(name, vertexSource, fragmentSource);
 		}
 
 		PR_CORE_ASSERT(false, "Unknown Renderer API!");

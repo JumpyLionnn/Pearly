@@ -5,14 +5,16 @@
 #include "LayerStack.h"
 #include "Pearly/Debug/ImGuiLayer.h"
 
+int main(int argc, char** argv);
+
 namespace Pearly {
 	class Application
 	{
+	friend int ::main(int argc, char** argv);
 	public:
 		Application();
 		virtual ~Application() = default;
 
-		void Run();
 
 		void OnEvent(Event& e);
 
@@ -24,6 +26,7 @@ namespace Pearly {
 		inline static Application& Get() { return *s_Instance; }
 		inline Window& GetWindow() { return *m_Window; }
 	private:
+		void Run();
 		bool OnWindowClose(WindowCloseEvent& event);
 		bool OnWindowResize(WindowResizeEvent& event);
 	private:
