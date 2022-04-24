@@ -1,4 +1,5 @@
 #pragma once
+#include "CoreConfig.h"
 #include <memory>
 
 #if !defined(PR_PLATFORM_WINDOWS) && !defined(PR_PLATFORM_IOS) && !defined(PR_PLATFORM_MACOS) && !defined(PR_PLATFORM_ANDROID) && !defined(PR_PLATFORM_LINUX)
@@ -43,7 +44,7 @@
 	#endif
 #endif
 
-#ifdef PR_ENABLE_ASSERTS
+#if PR_ENABLE_ASSERTS
 	#define PR_CORE_ASSERT(x, ...) {if(!(x)) { PR_CORE_ERROR("Assertion Failed: {}", __VA_ARGS__); __debugbreak();}}
 	#define PR_ASSERT(x, ...) {if(!(x)) { PR_ERROR("Assertion Failed: {}", __VA_ARGS__); __debugbreak();}}
 #else
@@ -54,7 +55,7 @@
 #ifdef PR_ENABLE_RENDERER_LOG_LEVEL 
 	#define PR_ENABLE_RENDERER_LOG 
 #endif 
-#ifdef PR_ENABLE_RENDERER_LOG 
+#if PR_ENABLE_RENDERER_LOG 
 	#ifndef PR_ENABLE_CORE_LOG 
 		// We do require the core logger
 		#define PR_ENABLE_CORE_LOG 

@@ -2,9 +2,8 @@
 #include "prpch.h"
 #include "Pearly/Core/Core.h"
 
-#define PR_PROFILE 1
 namespace Pearly {
-    #ifdef PR_PROFILE
+    #if PR_PROFILE
 
     static void EraseSubStr(std::string& mainStr, const std::string& toErase)
     {
@@ -145,7 +144,7 @@ namespace Pearly {
 }
 
 
-#ifdef PR_PROFILE
+#if PR_PROFILE
     // Resolve which function signature macro will be used. Note that this only
     // is resolved when the (pre)compiler starts, so the syntax highlighting
     // could mark the wrong one in your editor!

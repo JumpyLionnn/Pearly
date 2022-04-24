@@ -18,7 +18,7 @@ namespace Pearly {
 }
 
 // core log
-#ifdef PR_ENABLE_CORE_LOG
+#if PR_ENABLE_CORE_LOG
 	#define PR_CORE_TRACE(...) ::Pearly::Log::GetCoreLogger()->trace(__VA_ARGS__)
 	#define PR_CORE_INFO(...) ::Pearly::Log::GetCoreLogger()->info(__VA_ARGS__)
 	#define PR_CORE_WARN(...) ::Pearly::Log::GetCoreLogger()->warn(__VA_ARGS__)

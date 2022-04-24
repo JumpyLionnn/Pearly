@@ -186,7 +186,7 @@ namespace Pearly {
 
 		const char* typeToken = "#type";
 		uint32 typeTokenLength = strlen(typeToken);
-		int pos = source.find(typeToken, 0);
+		size_t pos = source.find(typeToken, 0);
 		while (pos != std::string::npos)
 		{
 			uint32 endOfLine = source.find_first_of("\r\n", pos);
