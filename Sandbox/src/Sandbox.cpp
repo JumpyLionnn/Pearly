@@ -36,10 +36,10 @@ public:
 		glm::vec4 redColor(0.8f, 0.2f, 0.3f, 1.0f);
 		glm::vec4 blueColor(0.2f, 0.3f, 0.8f, 1.0f);
 
-		Pearly::Renderer::DrawQuad({ 0.0f, 0.0f }, { 1.0f, 1.0f }, m_Color);
-		Pearly::Renderer::DrawQuad({ 1.2f, 0.0f }, { 1.0f, 2.0f }, redColor);
-		Pearly::Renderer::DrawQuad({ -1.2f, 1.3f }, { 1.0f, 2.0f }, blueColor);
-		Pearly::Renderer::DrawQuad({ -0.5f, 0.0f, -0.1f }, { 5.0f, 5.0f }, m_Texture);
+		Pearly::Renderer::DrawQuad({ { 0.0f, 0.0f }, { 1.0f, 1.0f } }, m_Color);
+		Pearly::Renderer::DrawQuad({ { 1.2f, 0.0f }, { 1.0f, 2.0f } }, redColor);
+		Pearly::Renderer::DrawQuad({ { -1.2f, 1.3f }, { 1.0f, 2.0f } }, blueColor);
+		Pearly::Renderer::DrawQuad({ { -0.5f, 0.0f, -0.1f }, { 5.0f, 5.0f } }, m_Texture, {1.0f, 1.0f, 1.0f, 1.0f}, 10);
 
 		Pearly::Renderer::EndScene();
 	}

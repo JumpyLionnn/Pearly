@@ -72,34 +72,17 @@ namespace Pearly {
 
 	}
 
-	void Renderer::DrawQuad(const glm::vec2& position, const glm::vec2& scale, const glm::vec4& color)
+	void Renderer::DrawQuad(const TransformProperties& transformProperties, const glm::vec4& color)
 	{
-		DrawQuad({ position.x, position.y, 0.0f }, scale, color);
+		DrawQuad(transformProperties, s_Data->WhiteTexture, color, 1.0f);
 	}
 
-	void Renderer::DrawQuad(const glm::vec3& position, const glm::vec2& scale, const glm::vec4& color)
+	void Renderer::DrawQuad(const TransformProperties& transformProperties, Ref<Texture2D> texture, const glm::vec4& tint, float tilingFactor)
 	{
 		PR_PROFILE_FUNCTION();
-		s_Data->TextureShader->SetVec4f("u_Color", color);
-		s_Data->WhiteTexture->Bind();
-
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f });
-		s_Data->TextureShader->SetMat4("u_Transform", transform);
-
-		s_Data->QuadVertexArray->Bind();
-		RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
-	}
-
-	void Renderer::DrawQuad(const glm::vec2& position, const glm::vec2& scale, Ref<Texture2D> texture)
-	{
-		DrawQuad({ position.x, position.y, 0.0f }, scale, texture);
-	}
-
-	void Renderer::DrawQuad(const glm::vec3& position, const glm::vec2& scale, Ref<Texture2D> texture)
-	{
-		PR_PROFILE_FUNCTION();
-		s_Data->TextureShader->SetVec4f("u_Color", glm::vec4(1.0f));
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f });
+		s_Data->TextureShader->SetVec4f("u_Color", tint);
+		s_Data->TextureShader->SetFloat("u_TilingFactor", tilingFactor);
+		glm::mat4 transform = CanculateTransformMatrix(transformProperties);
 		s_Data->TextureShader->SetMat4("u_Transform", transform);
 
 		texture->Bind();
@@ -107,4 +90,16 @@ namespace Pearly {
 		s_Data->QuadVertexArray->Bind();
 		RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
 	}
+	
+	glm::mat4 Renderer::CanculateTransformMatrix(const TransformProperties& transformProperties)
+	{
+		PR_PROFILE_FUNCTION();
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), transformProperties.Position);
+		if (transformProperties.Rotation != 0)
+		{
+			transform = glm::rotate(transform, transformProperties.Rotation, { 0.0f, 0.0f, 1.0f });
+		}
+		return glm::scale(transform, { transformProperties.Scale.x, transformProperties.Scale.y, 1.0f });
+	}
+	
 }

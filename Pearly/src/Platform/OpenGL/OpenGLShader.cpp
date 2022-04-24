@@ -91,6 +91,13 @@ namespace Pearly {
 		UploadUnifromVec3f(name, value);
 	}
 
+	void OpenGLShader::SetFloat(const std::string& name, float value)
+	{
+		PR_PROFILE_FUNCTION();
+		UploadUnifromFloat(name, value);
+	}
+
+
 	void OpenGLShader::SetInt(const std::string& name, int value)
 	{
 		PR_PROFILE_FUNCTION();
