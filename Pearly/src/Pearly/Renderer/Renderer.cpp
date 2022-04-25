@@ -179,25 +179,16 @@ namespace Pearly {
 	{
 		PR_PROFILE_FUNCTION();
 
-		float textureIndex = 0.0f;
-
-		for (uint32 i = 1; i < s_Data.TextureSlotIndex; i++)
-		{
-			if (*s_Data.TextureSlots[i].get() == *texture.get())
-			{
-				textureIndex = (float)i;
-			}
-		}
-
-		if (textureIndex == 0.0f)
-		{
-			if (s_Data.TextureSlotIndex >= RendererData::MaxTextureSlots)
-				FlushAndReset();
-			textureIndex = (float)s_Data.TextureSlotIndex;
-			s_Data.TextureSlots[s_Data.TextureSlotIndex++] = texture;
-		}
-
+		float textureIndex = GetTextureIndex(texture);
 		SubmitQuad(transformProperties, textureIndex, tint, tilingFactor);
+	}
+
+	void Renderer::DrawQuad(const TransformProperties& transformProperties, Ref<SubTexture2D> subTexture, const glm::vec4& tint, float tilingFactor)
+	{
+		PR_PROFILE_FUNCTION();
+
+		float textureIndex = GetTextureIndex(subTexture->GetTexture());
+		SubmitQuad(transformProperties, textureIndex, tint, tilingFactor, subTexture->GetTexCoords());
 	}
 
 	void Renderer::ResetStats()
@@ -216,7 +207,29 @@ namespace Pearly {
 		#endif
 	}
 
-	void Renderer::SubmitQuad(const TransformProperties& transformProperties, uint32 textureIndex, const glm::vec4& color, float tilingFactor)
+	float Renderer::GetTextureIndex(const Ref<Texture2D>& texture)
+	{
+		float textureIndex = 0.0f;
+
+		for (uint32 i = 1; i < s_Data.TextureSlotIndex; i++)
+		{
+			if (*s_Data.TextureSlots[i].get() == *texture.get())
+			{
+				textureIndex = (float)i;
+			}
+		}
+
+		if (textureIndex == 0.0f)
+		{
+			if (s_Data.TextureSlotIndex >= RendererData::MaxTextureSlots)
+				FlushAndReset();
+			textureIndex = (float)s_Data.TextureSlotIndex;
+			s_Data.TextureSlots[s_Data.TextureSlotIndex++] = texture;
+		}
+		return textureIndex;
+	}
+
+	void Renderer::SubmitQuad(const TransformProperties& transformProperties, uint32 textureIndex, const glm::vec4& color, float tilingFactor, const std::array<glm::vec2, 4>& textureCoords)
 	{
 		PR_PROFILE_FUNCTION();
 		if (s_Data.QuadIndexCount >= RendererData::MaxIndices)
@@ -226,28 +239,28 @@ namespace Pearly {
 
 		s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[0];
 		s_Data.QuadVertexBufferPtr->Color = color;
-		s_Data.QuadVertexBufferPtr->TexCoord = { 0.0f, 0.0f };
+		s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[0];
 		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
 		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
 		s_Data.QuadVertexBufferPtr++;
 
 		s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[1];
 		s_Data.QuadVertexBufferPtr->Color = color;
-		s_Data.QuadVertexBufferPtr->TexCoord = { 1.0f, 0.0f };
+		s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[1];
 		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
 		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
 		s_Data.QuadVertexBufferPtr++;
 
 		s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[2];
 		s_Data.QuadVertexBufferPtr->Color = color;
-		s_Data.QuadVertexBufferPtr->TexCoord = { 1.0f, 1.0f };
+		s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[2];
 		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
 		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
 		s_Data.QuadVertexBufferPtr++;
 
 		s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[3];
 		s_Data.QuadVertexBufferPtr->Color = color;
-		s_Data.QuadVertexBufferPtr->TexCoord = { 0.0f, 1.0f };
+		s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[3];
 		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
 		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
 		s_Data.QuadVertexBufferPtr++;
