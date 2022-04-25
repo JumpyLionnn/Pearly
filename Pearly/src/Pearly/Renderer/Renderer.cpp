@@ -35,7 +35,9 @@ namespace Pearly {
 
 		glm::vec4 QuadVertexPositions[4];
 
+		#if PR_ENABLE_RENDERER_STATS
 		Renderer::Statistics Stats;
+		#endif
 	};
 
 	static RendererData s_Data;
@@ -106,6 +108,7 @@ namespace Pearly {
 	void Renderer::Shutdown()
 	{
 		PR_PROFILE_FUNCTION();
+		delete[] s_Data.QuadVertexBufferBase;
 	}
 
 	void Renderer::OnWindowResize(uint32 width, uint32 height)
@@ -139,12 +142,18 @@ namespace Pearly {
 	void Renderer::Flush()
 	{
 		PR_PROFILE_FUNCTION();
+		if (s_Data.QuadIndexCount == 0)
+			return;
+
 		for (uint32 i = 0; i < s_Data.TextureSlotIndex; i++)
 		{
 			s_Data.TextureSlots[i]->Bind(i);
 		}
 		RenderCommand::DrawIndexed(s_Data.QuadVertexArray, s_Data.QuadIndexCount);
+
+		#if PR_ENABLE_RENDERER_STATS
 		s_Data.Stats.DrawCalls++;
+		#endif
 	}
 
 	void Renderer::FlushAndReset()
@@ -182,6 +191,8 @@ namespace Pearly {
 
 		if (textureIndex == 0.0f)
 		{
+			if (s_Data.TextureSlotIndex >= RendererData::MaxTextureSlots)
+				FlushAndReset();
 			textureIndex = (float)s_Data.TextureSlotIndex;
 			s_Data.TextureSlots[s_Data.TextureSlotIndex++] = texture;
 		}
@@ -191,12 +202,18 @@ namespace Pearly {
 
 	void Renderer::ResetStats()
 	{
+		#if PR_ENABLE_RENDERER_STATS
 		PR_PROFILE_FUNCTION();
 		memset(&s_Data.Stats, 0, sizeof(Statistics));
+		#endif
 	}
 	Renderer::Statistics Renderer::GetStats()
 	{
+		#if PR_ENABLE_RENDERER_STATS
 		return s_Data.Stats;
+		#else
+		return {};
+		#endif
 	}
 
 	void Renderer::SubmitQuad(const TransformProperties& transformProperties, uint32 textureIndex, const glm::vec4& color, float tilingFactor)
@@ -237,7 +254,9 @@ namespace Pearly {
 
 		s_Data.QuadIndexCount += 6;
 
+		#if PR_ENABLE_RENDERER_STATS
 		s_Data.Stats.QuadCount++;
+		#endif
 	}
 	
 	glm::mat4 Renderer::CanculateTransformMatrix(const TransformProperties& transformProperties)

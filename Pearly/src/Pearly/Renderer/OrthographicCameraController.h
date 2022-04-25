@@ -7,6 +7,16 @@
 
 namespace Pearly {
 
+	struct OrthographicCameraBounds
+	{
+		float Left;
+		float Right;
+		float Bottom;
+		float Top;
+
+		inline float GetWidth() { return Right - Left; }
+		inline float GetHeight() { return Top - Bottom; }
+	};
 
 	class OrthographicCameraController
 	{
@@ -16,6 +26,7 @@ namespace Pearly {
 		void OnUpdate(Timestep ts);
 		void OnEvent(Event& e);
 
+		inline OrthographicCameraBounds& GetBounds() { return m_Bounds; }
 		inline OrthographicCamera& GetCamera() { return m_Camera; };
 	public:
 		float CameraMovementSpeed = 1.0f;
@@ -26,6 +37,7 @@ namespace Pearly {
 	private:
 		float m_AspectRatio;
 		float m_ZoomLevel = 1.0f;
+		OrthographicCameraBounds m_Bounds;
 		OrthographicCamera m_Camera;
 
 		bool m_RotationEnabled;

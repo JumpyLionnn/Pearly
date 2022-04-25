@@ -65,7 +65,7 @@ namespace Pearly {
 	}
 	void OpenGLRendererAPI::DrawIndexed(const Ref<VertexArray>& vertexArray, uint32 indexCount)
 	{
-		uint32 count = indexCount ? vertexArray->GetIndexBuffer()->GetCount() : indexCount;
+		uint32 count = indexCount ? indexCount : vertexArray->GetIndexBuffer()->GetCount();
 		glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
 	}
 }
