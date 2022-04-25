@@ -6,6 +6,7 @@ namespace Pearly {
 	class OpenGLVertexBuffer : public VertexBuffer
 	{
 	public:
+		OpenGLVertexBuffer(uint32 size);
 		OpenGLVertexBuffer(float* vertices, uint32 size);
 		virtual ~OpenGLVertexBuffer();
 
@@ -14,6 +15,8 @@ namespace Pearly {
 
 		inline virtual void SetLayout(const BufferLayout& layout) override { m_Layout = layout; }
 		inline virtual const BufferLayout& GetLayout() const override { return m_Layout; }
+
+		virtual void SetData(const void* data, uint32 size) override;
 	private:
 		uint32 m_RendererID = 0;
 		BufferLayout m_Layout;

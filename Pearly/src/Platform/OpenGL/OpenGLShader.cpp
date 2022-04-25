@@ -104,10 +104,22 @@ namespace Pearly {
 		UploadUnifromInt(name, value);
 	}
 
+	void OpenGLShader::SetIntArray(const std::string& name, int* values, uint32 count)
+	{
+		PR_PROFILE_FUNCTION();
+		UploadUnifromIntArray(name, values, count);
+	}
+
 	void OpenGLShader::UploadUnifromInt(const std::string& name, int value)
 	{
 		int location = GetUniformLocation(name);
 		glUniform1i(location, value);
+	}
+
+	void OpenGLShader::UploadUnifromIntArray(const std::string& name, int* values, uint32 count)
+	{
+		int location = GetUniformLocation(name);
+		glUniform1iv(location, count, values);
 	}
 
 	void OpenGLShader::UploadUnifromFloat(const std::string& name, float value)

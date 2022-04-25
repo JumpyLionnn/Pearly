@@ -17,6 +17,7 @@ namespace Pearly {
 		virtual void SetVec3f(const std::string& name, const glm::vec3& value) = 0;
 		virtual void SetFloat(const std::string& name, float value) = 0;
 		virtual void SetInt(const std::string& name, int value) = 0;
+		virtual void SetIntArray(const std::string& name, int* values, uint32 count) = 0;
 
 		virtual const std::string& GetName() const = 0;
 

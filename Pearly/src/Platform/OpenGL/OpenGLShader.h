@@ -22,10 +22,12 @@ namespace Pearly {
 		virtual void SetVec3f(const std::string& name, const glm::vec3& value) override;
 		virtual void SetFloat(const std::string& name, float value) override;
 		virtual void SetInt(const std::string& name, int value) override;
+		virtual void SetIntArray(const std::string& name, int* values, uint32 count) override;
 
 		inline virtual const std::string& GetName() const override { return m_Name; }
 
 		void UploadUnifromInt(const std::string& name, int value);
+		void UploadUnifromIntArray(const std::string& name, int* values, uint32 count);
 		void UploadUnifromFloat(const std::string& name, float value);
 		void UploadUnifromVec2f(const std::string& name, const glm::vec2& vector);
 		void UploadUnifromVec3f(const std::string& name, const glm::vec3& vector);
