@@ -8,6 +8,8 @@ namespace Pearly {
 		ImGuiLayer();
 		~ImGuiLayer() = default;
 
+		virtual void OnEvent(Event& event) override;
+
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;
 

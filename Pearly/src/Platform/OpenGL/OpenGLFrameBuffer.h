@@ -8,7 +8,9 @@ namespace Pearly {
 		OpenGLFrameBuffer(const FrameBufferSpecification& spec);
 		virtual ~OpenGLFrameBuffer();
 
-		void Resize();
+		virtual void Resize(uint32 width, uint32 height) override;
+
+		void Invalidate();
 
 		virtual void Bind() override;
 		virtual void Unbind() override;
@@ -18,7 +20,7 @@ namespace Pearly {
 		virtual const FrameBufferSpecification& GetSpecification() const override { return m_Specification; }
 	private:
 		FrameBufferSpecification m_Specification;
-		uint32 m_RendererID;
-		uint32 m_ColorAttachment, m_DepthAttachment;
+		uint32 m_RendererID = 0;
+		uint32 m_ColorAttachment = 0, m_DepthAttachment = 0;
 	};
 }

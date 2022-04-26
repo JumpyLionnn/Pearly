@@ -5,8 +5,8 @@ namespace Pearly {
 
 	struct FrameBufferSpecification
 	{
-		uint32 Width;
-		uint32 Height;
+		uint32 Width = 0;
+		uint32 Height = 0;
 		uint32 Samples = 1;
 
 		bool SwapChainTarget = false;
@@ -19,6 +19,8 @@ namespace Pearly {
 
 		virtual void Bind() = 0;
 		virtual void Unbind() = 0;
+
+		virtual void Resize(uint32 width, uint32 height) = 0;
 
 		virtual uint32 GetColorAttachmentRendererID() const = 0;
 

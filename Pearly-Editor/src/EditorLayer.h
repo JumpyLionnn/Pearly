@@ -22,6 +22,7 @@ namespace Pearly {
 		Ref<SubTexture2D> m_BigTreeTexture;
 
 		Ref<FrameBuffer> m_FrameBuffer;
+		glm::vec2 m_ViewportSize = { 0, 0 };
 
 		OrthographicCameraController m_CameraController;
 

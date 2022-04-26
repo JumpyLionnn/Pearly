@@ -50,6 +50,13 @@ namespace Pearly {
 		ImGui_ImplOpenGL3_Init("#version 410");
 	}
 
+	void ImGuiLayer::OnEvent(Event& e)
+	{
+		ImGuiIO& io = ImGui::GetIO();
+		e.Handled |= e.IsInCategory(EventCategory::Mouse) & io.WantCaptureMouse;
+		e.Handled |= e.IsInCategory(EventCategory::Keyboard) & io.WantCaptureKeyboard;
+	}
+
 	void ImGuiLayer::OnDetach()
 	{
 		PR_PROFILE_FUNCTION();

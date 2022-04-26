@@ -33,6 +33,13 @@ namespace Pearly {
 		m_Camera.SetPosition(m_CameraPosition);
 	}
 
+	void OrthographicCameraController::OnResize(float width, float height)
+	{
+		PR_PROFILE_FUNCTION();
+		m_AspectRatio = width / height;
+		CalculateView();
+	}
+
 	void OrthographicCameraController::OnEvent(Event& e)
 	{
 		PR_PROFILE_FUNCTION();
@@ -53,12 +60,12 @@ namespace Pearly {
 	bool OrthographicCameraController::OnWindowResized(WindowResizeEvent& e)
 	{
 		PR_PROFILE_FUNCTION();
-		m_AspectRatio = (float)e.GetWidth() / (float)e.GetHeight();
-		CalculateView();
+		OnResize((float)e.GetWidth(), (float)e.GetHeight());
 		return false;
 	}
 	void OrthographicCameraController::CalculateView()
 	{
+		PR_PROFILE_FUNCTION();
 		m_Bounds = { -m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel };
 		m_Camera.SetProjection(m_Bounds.Left, m_Bounds.Right, m_Bounds.Bottom, m_Bounds.Top);
 	}

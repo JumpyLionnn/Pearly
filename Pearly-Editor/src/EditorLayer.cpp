@@ -39,6 +39,16 @@ namespace Pearly {
 		Renderer::ResetStats();
 		{
 			PR_PROFILE_SCOPE("Renderer Prep");
+
+			// Resize
+			if (FrameBufferSpecification spec = m_FrameBuffer->GetSpecification();
+				m_ViewportSize.x > 0 && m_ViewportSize.y > 0 && // zero sized framebuffer is invalid
+				(spec.Width != m_ViewportSize.x || spec.Height != m_ViewportSize.y))
+			{
+				m_FrameBuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+				m_CameraController.OnResize(m_ViewportSize.x, m_ViewportSize.y);
+			}
+
 			m_FrameBuffer->Bind();
 			RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 			RenderCommand::Clear();
@@ -129,9 +139,19 @@ namespace Pearly {
 		ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
 		ImGui::End();
 
-		ImGui::Begin("Game");
-		ImGui::Image((void*)m_FrameBuffer->GetColorAttachmentRendererID(), ImVec2{ 1280, 720 }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0,0));
+		ImGui::Begin("Viewport");
+		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+		m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
+		if (m_ViewportSize != *((glm::vec2*)&viewportPanelSize))
+		{
+			//m_FrameBuffer->Resize((uint32)viewportPanelSize.x, (uint32)viewportPanelSize.y);
+
+			//m_CameraController.OnResize(m_ViewportSize.x, m_ViewportSize.y);
+		}
+		ImGui::Image((void*)m_FrameBuffer->GetColorAttachmentRendererID(), { m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 		ImGui::End();
+		ImGui::PopStyleVar();
 
 		ImGui::End();
 	}
