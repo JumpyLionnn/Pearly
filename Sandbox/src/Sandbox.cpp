@@ -18,12 +18,6 @@ public:
 		m_CheckerboardTexture = Pearly::Texture2D::Create("assets/textures/Checkerboard.png");
 		m_LilyPadTexture = m_SpriteSheet.CreateSubTexture({ 13, 20 });
 		m_BigTreeTexture = m_SpriteSheet.CreateSubTexture({ 1, 20 }, {4, 4});
-
-
-		Pearly::FrameBufferSpecification frameBufferSpec;
-		frameBufferSpec.Width = 1280;
-		frameBufferSpec.Height = 720;
-		m_FrameBuffer = Pearly::FrameBuffer::Create(frameBufferSpec);
 	}
 
 	virtual void OnDetach() override
@@ -38,7 +32,6 @@ public:
 
 		Pearly::Renderer::ResetStats();
 
-		m_FrameBuffer->Bind();
 		Pearly::RenderCommand::SetClearColor(glm::vec4(0.32f, 0.42f, 0.52f, 1.0f));
 		Pearly::RenderCommand::Clear();
 
@@ -61,7 +54,6 @@ public:
 		Pearly::Renderer::DrawQuad({ { -1.0f, 1.0f }, { 4.0f, 4.0f } }, m_BigTreeTexture);
 		Pearly::Renderer::DrawQuad({ { 1.0f, 0.0f, 0.1f }, { 1.0f, 1.0f } }, m_LilyPadTexture);
 		Pearly::Renderer::EndScene();
-		m_FrameBuffer->Unbind();
 	}
 
 	virtual void OnEvent(Pearly::Event& event)
@@ -80,7 +72,6 @@ public:
 		ImGui::Text("Quad Count: %d", stats.QuadCount);
 		ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
 		ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
-		ImGui::Image((void*)m_FrameBuffer->GetColorAttachmentRendererID(), ImVec2(320.0f, 180.0f));
 
 		ImGui::ColorEdit4("Square Color", glm::value_ptr(m_Color));
 		ImGui::End();
@@ -92,8 +83,6 @@ private:
 
 	Pearly::Ref<Pearly::SubTexture2D> m_LilyPadTexture;
 	Pearly::Ref<Pearly::SubTexture2D> m_BigTreeTexture;
-
-	Pearly::Ref<Pearly::FrameBuffer> m_FrameBuffer;
 
 	Pearly::OrthographicCameraController m_CameraController;
 

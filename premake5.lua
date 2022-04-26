@@ -21,7 +21,7 @@ IncludeDirs["imgui"] = "Pearly/vendor/imgui/"
 IncludeDirs["glm"] = "Pearly/vendor/glm/"
 IncludeDirs["stb_image"] = "Pearly/vendor/stb_image/"
 
-startproject "Sandbox"
+startproject "Pearly-Editor"
 
 group "Dependencies"
 	include "Pearly/vendor/GLFW"
@@ -33,6 +33,8 @@ project "Pearly"
 	location "Pearly"
 	kind "StaticLib"
 	language "C++"
+	cppdialect "C++20"
+	staticruntime "On"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin/" .. outputdir .. "/%{prj.name}")
@@ -74,8 +76,6 @@ project "Pearly"
 	}
 
 	filter "system:windows"
-		cppdialect "C++17"
-		staticruntime "On"
 		systemversion "latest"
 
 		defines 
@@ -111,6 +111,8 @@ project "Sandbox"
 	location "Sandbox"
 	kind "ConsoleApp"
 	language "C++"
+	cppdialect "C++20"
+	staticruntime "On"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin/" .. outputdir .. "/%{prj.name}")
@@ -135,20 +137,55 @@ project "Sandbox"
 	}
 
 	filter "system:windows"
-		cppdialect "C++17"
-		staticruntime "On"
 		systemversion "latest"
 
-		defines "PR_PLATFORM_WINDOWS"
-
 	filter "configurations:Debug"
-		defines "PR_DEBUG"
 		symbols "On"
 
 	filter "configurations:Release"
-		defines "PR_RELEASE"
 		optimize "On"
 
 	filter "configurations:Dist"
-		defines "PR_DIST"
+		optimize "On"
+
+
+project "Pearly-Editor"
+	location "Pearly-Editor"
+	kind "ConsoleApp"
+	language "C++"
+	cppdialect "C++20"
+	staticruntime "On"
+
+	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("bin/" .. outputdir .. "/%{prj.name}")
+
+	files
+	{
+		"%{prj.name}/src/**.h",
+		"%{prj.name}/src/**.cpp"
+	}
+
+	includedirs
+	{
+		"Pearly/vendor/spdlog/include",
+		"Pearly/src",
+		"%{IncludeDirs.glm}",
+		"Pearly/vendor"
+	}
+
+	links
+	{
+		"Pearly"
+	}
+
+	filter "system:windows"
+		systemversion "latest"
+
+	filter "configurations:Debug"
+		symbols "On"
+
+	filter "configurations:Release"
+		optimize "On"
+
+	filter "configurations:Dist"
 		optimize "On"

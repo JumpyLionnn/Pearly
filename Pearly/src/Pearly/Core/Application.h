@@ -12,7 +12,7 @@ namespace Pearly {
 	{
 	friend int ::main(int argc, char** argv);
 	public:
-		Application();
+		Application(const std::string& name = "Pearly Application");
 		virtual ~Application() = default;
 
 
@@ -25,6 +25,8 @@ namespace Pearly {
 
 		inline static Application& Get() { return *s_Instance; }
 		inline Window& GetWindow() { return *m_Window; }
+
+		void Close();
 	private:
 		void Run();
 		bool OnWindowClose(WindowCloseEvent& event);

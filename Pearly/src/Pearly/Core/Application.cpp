@@ -12,13 +12,13 @@ namespace Pearly {
 
 	Application* Application::s_Instance = nullptr;
 
-	Application::Application()
+	Application::Application(const std::string& name)
 	{
 		PR_PROFILE_FUNCTION();
 		PR_CORE_ASSERT(!s_Instance, "Application already exists!");
 		s_Instance = this;
 
-		m_Window = std::unique_ptr<Window>(Window::Create());
+		m_Window = std::unique_ptr<Window>(Window::Create(WindowProperties(name)));
 		m_Window->SetEventCallback(PR_BIND_EVENT_FN(Application::OnEvent));
 
 		Renderer::Init();
@@ -94,6 +94,11 @@ namespace Pearly {
 		PR_PROFILE_FUNCTION();
 		m_LayerStack.PopOverlay(overlay);
 		overlay->OnDetach();
+	}
+
+	void Application::Close()
+	{
+		m_Running = false;
 	}
 
 	bool Application::OnWindowClose(WindowCloseEvent& event)
