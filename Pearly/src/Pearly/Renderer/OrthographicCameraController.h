@@ -26,6 +26,9 @@ namespace Pearly {
 		void OnUpdate(Timestep ts);
 		void OnEvent(Event& e);
 
+		void SetZoomLevel(float zoomLevel) { m_ZoomLevel = zoomLevel; CalculateView(); }
+		float GetZoomLevel() { return m_ZoomLevel; }
+
 		inline OrthographicCameraBounds& GetBounds() { return m_Bounds; }
 		inline OrthographicCamera& GetCamera() { return m_Camera; };
 	public:
@@ -34,6 +37,8 @@ namespace Pearly {
 	private:
 		bool OnMouseScrolled(MouseScrolledEvent& e);
 		bool OnWindowResized(WindowResizeEvent& e);
+
+		void CalculateView();
 	private:
 		float m_AspectRatio;
 		float m_ZoomLevel = 1.0f;
