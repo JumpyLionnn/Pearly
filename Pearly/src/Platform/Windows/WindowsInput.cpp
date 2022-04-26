@@ -1,15 +1,12 @@
 #include "prpch.h"
-#include "WindowsInput.h"
-
-#include "GLFW/glfw3.h"
-
+#include "Pearly/Core/Input.h"
 #include "Pearly/Core/Application.h"
+
+#include <GLFW/glfw3.h>
 
 namespace Pearly {
 
-	Scope<Input> Input::s_Instance = CreateScope<WindowsInput>();
-
-	bool WindowsInput::IsKeyPressedImpl(int keycode)
+	bool Input::IsKeyPressed(int keycode)
 	{
 		PR_PROFILE_FUNCTION();
 		GLFWwindow* window = (GLFWwindow*)Application::Get().GetWindow().GetNativeWindow();
@@ -17,7 +14,7 @@ namespace Pearly {
 		return state == GLFW_PRESS || state == GLFW_REPEAT;
 	}
 
-	bool WindowsInput::IsMouseButtonPressedImpl(int button)
+	bool Input::IsMouseButtonPressed(int button)
 	{
 		PR_PROFILE_FUNCTION();
 		GLFWwindow* window = (GLFWwindow*)Application::Get().GetWindow().GetNativeWindow();
@@ -25,7 +22,7 @@ namespace Pearly {
 		return state == GLFW_PRESS;
 	}
 
-	std::pair<float, float> WindowsInput::GetMousePositionImpl()
+	std::pair<float, float> Input::GetMousePosition()
 	{
 		PR_PROFILE_FUNCTION();
 		GLFWwindow* window = (GLFWwindow*)Application::Get().GetWindow().GetNativeWindow();
@@ -35,15 +32,15 @@ namespace Pearly {
 		return { (float)xPos, (float)yPos };
 	}
 
-	float WindowsInput::GetMouseXImpl()
+	float Input::GetMouseX()
 	{
-		auto [x, y] = GetMousePositionImpl();
+		auto [x, y] = GetMousePosition();
 		return x;
 	}
 
-	float WindowsInput::GetMouseYImpl()
+	float Input::GetMouseY()
 	{
-		auto [x, y] = GetMousePositionImpl();
+		auto [x, y] = GetMousePosition();
 		return y;
 	}
 }
