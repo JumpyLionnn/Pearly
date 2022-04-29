@@ -129,6 +129,21 @@ namespace Pearly {
 		s_Data.TextureSlotIndex = 1;
 	}
 
+	void Renderer::BeginScene(const Camera& camera, const glm::mat4& transform)
+	{
+		PR_PROFILE_FUNCTION();
+
+		glm::mat4 viewProjection = camera.GetProjection() * glm::inverse(transform);
+
+		s_Data.TextureShader->Bind();
+		s_Data.TextureShader->SetMat4("u_ViewProjection", viewProjection);
+
+		s_Data.QuadIndexCount = 0;
+		s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
+
+		s_Data.TextureSlotIndex = 1;
+	}
+
 	void Renderer::EndScene()
 	{
 		PR_PROFILE_FUNCTION();
@@ -191,6 +206,16 @@ namespace Pearly {
 		SubmitQuad(transformProperties, textureIndex, tint, tilingFactor, subTexture->GetTexCoords());
 	}
 
+	void Renderer::DrawQuad(const glm::mat4& transform, const glm::vec4& color)
+	{
+		SubmitQuadVertices(transform, 0, color, 1.0f, defaultTextureCoords);
+	}
+	void Renderer::DrawQuad(const glm::mat4& transform, Ref<Texture2D> texture, const glm::vec4& tint, float tilingFactor)
+	{
+		float textureIndex = GetTextureIndex(texture);
+		SubmitQuadVertices(transform, textureIndex, tint, tilingFactor, defaultTextureCoords);
+	}
+
 	void Renderer::ResetStats()
 	{
 		#if PR_ENABLE_RENDERER_STATS
@@ -232,10 +257,18 @@ namespace Pearly {
 	void Renderer::SubmitQuad(const TransformProperties& transformProperties, uint32 textureIndex, const glm::vec4& color, float tilingFactor, const std::array<glm::vec2, 4>& textureCoords)
 	{
 		PR_PROFILE_FUNCTION();
-		if (s_Data.QuadIndexCount >= RendererData::MaxIndices)
-			FlushAndReset();
+		
 
 		glm::mat4 transform = CanculateTransformMatrix(transformProperties);
+
+		SubmitQuadVertices(transform, textureIndex, color, tilingFactor, textureCoords);
+	}
+
+	void Renderer::SubmitQuadVertices(const glm::mat4& transform, uint32 textureIndex, const glm::vec4& color, float tilingFactor, const std::array<glm::vec2, 4>& textureCoords)
+	{
+		PR_PROFILE_FUNCTION();
+		if (s_Data.QuadIndexCount >= RendererData::MaxIndices)
+			FlushAndReset();
 
 		s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[0];
 		s_Data.QuadVertexBufferPtr->Color = color;

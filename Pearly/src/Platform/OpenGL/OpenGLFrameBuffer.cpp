@@ -5,6 +5,7 @@
 
 namespace Pearly {
 
+	static const uint32 s_MaxFrameBufferSize = 8192; // TODO: use RenderCapabilities
 
 	OpenGLFrameBuffer::OpenGLFrameBuffer(const FrameBufferSpecification& spec)
 		: m_Specification(spec)
@@ -21,6 +22,11 @@ namespace Pearly {
 
 	void OpenGLFrameBuffer::Resize(uint32 width, uint32 height)
 	{
+		if (width == 0 || height == 0 || width > s_MaxFrameBufferSize || height > s_MaxFrameBufferSize)
+		{
+			PR_CORE_WARN("Cannot resize the frame buffer to {0}, {1}", width, height);
+			return;
+		}
 		m_Specification.Width = width;
 		m_Specification.Height = height;
 		Invalidate();

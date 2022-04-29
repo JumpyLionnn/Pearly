@@ -1,5 +1,6 @@
 #pragma once
 #include "RenderCommand.h"
+#include "Camera.h"
 #include "OrthographicCamera.h"
 #include "Shader.h"
 #include "Texture.h"
@@ -28,6 +29,7 @@ namespace Pearly {
 		static void Shutdown();
 		static void OnWindowResize(uint32 width, uint32 height);
 
+		static void BeginScene(const Camera& camera, const glm::mat4& transform); 
 		static void BeginScene(const OrthographicCamera& camera); 
 		static void EndScene();
 		static void Flush();
@@ -36,6 +38,8 @@ namespace Pearly {
 		static void DrawQuad(const TransformProperties& transformProperties, Ref<Texture2D> texture, const glm::vec4& tint = glm::vec4(1.0f), float tilingFactor = 1.0f);
 		static void DrawQuad(const TransformProperties& transformProperties, Ref<SubTexture2D> subTexture, const glm::vec4& tint = glm::vec4(1.0f), float tilingFactor = 1.0f);
 
+		static void DrawQuad(const glm::mat4& transform, const glm::vec4& color);
+		static void DrawQuad(const glm::mat4& transform, Ref<Texture2D> texture, const glm::vec4& tint = glm::vec4(1.0f), float tilingFactor = 1.0f);
 		// stats
 		struct Statistics
 		{
@@ -55,6 +59,7 @@ namespace Pearly {
 
 		static constexpr std::array<glm::vec2, 4> defaultTextureCoords{ glm::vec2( 0.0f, 0.0f), glm::vec2(1.0f, 0.0f), glm::vec2(1.0f, 1.0f), glm::vec2(0.0f, 1.0f) };
 		static void SubmitQuad(const TransformProperties& transformProperties, uint32 textureIndex, const glm::vec4& color, float tilingFactor, const std::array<glm::vec2, 4>& textureCoords = defaultTextureCoords);
+		static void SubmitQuadVertices(const glm::mat4&, uint32 textureIndex, const glm::vec4& color, float tilingFactor, const std::array<glm::vec2, 4>& textureCoords);
 
 		static glm::mat4 CanculateTransformMatrix(const TransformProperties& transformProperties);
 

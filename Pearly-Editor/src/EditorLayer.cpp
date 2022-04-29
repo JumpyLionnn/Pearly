@@ -21,6 +21,13 @@ namespace Pearly {
 		frameBufferSpec.Width = 1280;
 		frameBufferSpec.Height = 720;
 		m_FrameBuffer = FrameBuffer::Create(frameBufferSpec);
+
+		m_ActiveScene = CreateRef<Scene>();
+		m_SquareEntity = m_ActiveScene->CreateEntity("Square");
+		m_SquareEntity.AddComponent<SpriteRendererComponent>(glm::vec4(0.2f, 1.0f, 0.3f, 1.0f));
+
+		m_CameraEntity = m_ActiveScene->CreateEntity("camera");
+		m_SquareEntity.AddComponent<CameraComponent>(glm::ortho(-16.0f, 16.0f, -9.0f, 9.0f, -1.0f, 1.0f), true);
 	}
 
 	void EditorLayer::OnDetach()
@@ -38,33 +45,33 @@ namespace Pearly {
 
 		// Render
 		Renderer::ResetStats();
+
+		// Resize
+		FrameBufferSpecification spec = m_FrameBuffer->GetSpecification();
+		if (m_ViewportSize.x > 0 && m_ViewportSize.y > 0 &&
+			(spec.Width != m_ViewportSize.x || spec.Height != m_ViewportSize.y))
 		{
-			PR_PROFILE_SCOPE("Renderer Prep");
-
-			// Resize
-			FrameBufferSpecification spec = m_FrameBuffer->GetSpecification();
-			if (m_ViewportSize.x > 0 && m_ViewportSize.y > 0 &&
-				(spec.Width != m_ViewportSize.x || spec.Height != m_ViewportSize.y))
-			{
-				m_FrameBuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
-				m_CameraController.OnResize(m_ViewportSize.x, m_ViewportSize.y);
-			}
-
-			m_FrameBuffer->Bind();
-			RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
-			RenderCommand::Clear();
+			m_FrameBuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+			m_CameraController.OnResize(m_ViewportSize.x, m_ViewportSize.y);
 		}
 
-		{
+		m_FrameBuffer->Bind();
+		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+		RenderCommand::Clear();
+		
 
-			PR_PROFILE_SCOPE("Renderer Draw");
+		
+		Renderer::BeginScene(m_CameraController.GetCamera());
+		Renderer::DrawQuad({ { -1.0f, 1.0f }, { 4.0f, 4.0f } }, m_BigTreeTexture);
+		Renderer::DrawQuad({ { 1.0f, 0.0f, 0.1f }, { 1.0f, 1.0f } }, m_LilyPadTexture);
+		Renderer::EndScene();
+		
 
-			Pearly::Renderer::BeginScene(m_CameraController.GetCamera());
-			Pearly::Renderer::DrawQuad({ { -1.0f, 1.0f }, { 4.0f, 4.0f } }, m_BigTreeTexture);
-			Pearly::Renderer::DrawQuad({ { 1.0f, 0.0f, 0.1f }, { 1.0f, 1.0f } }, m_LilyPadTexture);
-			Pearly::Renderer::EndScene();
-			m_FrameBuffer->Unbind();
-		}
+		
+		m_ActiveScene->OnUpdate(ts);
+
+		m_FrameBuffer->Unbind();
+		
 	}
 
 	void EditorLayer::OnImGuiRender()
@@ -130,7 +137,15 @@ namespace Pearly {
 		}
 
 		ImGui::Begin("Settings");
-		ImGui::ColorEdit4("Square Color", glm::value_ptr(m_Color));
+		if (m_SquareEntity)
+		{
+			ImGui::Text("%s", m_SquareEntity.GetComponent<TagComponent>().Tag.c_str());
+
+			glm::vec4& color = m_SquareEntity.GetComponent<SpriteRendererComponent>().Color;
+			ImGui::ColorEdit4("Square Color", glm::value_ptr(color));
+		}
+		ImGui::Separator();
+		
 
 		Renderer::Statistics stats = Renderer::GetStats();
 		ImGui::Text("Renderer Stats:");

@@ -21,6 +21,10 @@ namespace Pearly {
 		Ref<SubTexture2D> m_LilyPadTexture;
 		Ref<SubTexture2D> m_BigTreeTexture;
 
+		Ref<Scene> m_ActiveScene;
+		Entity m_SquareEntity;
+		Entity m_CameraEntity;
+
 		Ref<FrameBuffer> m_FrameBuffer;
 		glm::vec2 m_ViewportSize = { 0, 0 };
 

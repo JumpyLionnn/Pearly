@@ -20,6 +20,7 @@ IncludeDirs["Glad"] = "Pearly/vendor/GLAD/include"
 IncludeDirs["imgui"] = "Pearly/vendor/imgui/"
 IncludeDirs["glm"] = "Pearly/vendor/glm/"
 IncludeDirs["stb_image"] = "Pearly/vendor/stb_image/"
+IncludeDirs["entt"] = "Pearly/vendor/entt/include"
 
 startproject "Pearly-Editor"
 
@@ -58,7 +59,8 @@ project "Pearly"
 		"%{IncludeDirs.Glad}",
 		"%{IncludeDirs.imgui}",
 		"%{IncludeDirs.glm}",
-		"%{IncludeDirs.stb_image}"
+		"%{IncludeDirs.stb_image}",
+		"%{IncludeDirs.entt}",
 	}
 
 	links
@@ -170,6 +172,7 @@ project "Pearly-Editor"
 		"Pearly/vendor/spdlog/include",
 		"Pearly/src",
 		"%{IncludeDirs.glm}",
+		"%{IncludeDirs.entt}",
 		"Pearly/vendor"
 	}
 
