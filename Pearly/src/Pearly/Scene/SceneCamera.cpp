@@ -20,13 +20,13 @@ namespace Pearly {
 
 	void SceneCamera::SetViewportSize(uint32 width, uint32 height)
 	{
-		PR_CORE_INFO("width: {0}, height: {1}", width, height);
 		m_AspectRatio = (float)width / (float)height;
 		RecalculateProjection();
 	}
 
 	void SceneCamera::RecalculateProjection()
 	{
+		PR_PROFILE_FUNCTION();
 		float orthoLeft = -m_OrthographicSize * m_AspectRatio * 0.5f;
 		float orthoRight = m_OrthographicSize * m_AspectRatio * 0.5f;
 		float orthoBottom = -m_OrthographicSize * 0.5f;

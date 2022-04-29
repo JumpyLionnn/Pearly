@@ -2,7 +2,9 @@
 #include <glm/glm.hpp>
 
 #include "Pearly/Renderer/Camera.h"
+#include "Pearly/Core/Timestep.h"
 #include "SceneCamera.h"
+#include "ScriptableEntity.h"
 
 namespace Pearly {
 
@@ -47,5 +49,23 @@ namespace Pearly {
 
 		CameraComponent() = default;
 		CameraComponent(const CameraComponent&) = default;
+	};
+
+	struct NativeScriptComponent
+	{
+		ScriptableEntity* Instance = nullptr;
+
+		ScriptableEntity*(*InstantiateScript)();
+		void(*DestroyScript)(NativeScriptComponent*);
+
+
+
+		template<typename T>
+		void Bind()
+		{
+			PR_PROFILE_FUNCTION();
+			InstantiateScript = []() { return (ScriptableEntity*)(new T()); };
+			DestroyScript = [](NativeScriptComponent* script) { delete script->Instance; script->Instance = nullptr; };
+		}
 	};
 }

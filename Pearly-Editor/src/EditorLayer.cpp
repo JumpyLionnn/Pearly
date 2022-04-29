@@ -1,10 +1,36 @@
 #include "EditorLayer.h"
+#include <iostream>
 
 
 #include <imgui/imgui.h>
 #include <glm/gtc/type_ptr.hpp>
 
+
+
+
 namespace Pearly {
+
+
+	class Controller : public ScriptableEntity
+	{
+	public:
+		void OnUpdate(Timestep ts)
+		{
+			auto& transformComponent = GetComponent<TransformComponent>();
+			float speed = 5.0f;
+
+			if (Input::IsKeyPressed(PR_KEY_A))
+				transformComponent.Transform[3][0] -= speed * ts;
+			if (Input::IsKeyPressed(PR_KEY_D))
+				transformComponent.Transform[3][0] += speed * ts;
+			if (Input::IsKeyPressed(PR_KEY_W))
+				transformComponent.Transform[3][1] += speed * ts;
+			if (Input::IsKeyPressed(PR_KEY_S))
+				transformComponent.Transform[3][1] -= speed * ts;
+
+		}
+	};
+
 	EditorLayer::EditorLayer()
 		: Layer("EditorLayer"), m_CameraController(1280.0f / 720.0f), m_SpriteSheet("assets/textures/tiles.png", { 12, 12 })
 	{}
@@ -29,6 +55,8 @@ namespace Pearly {
 		m_CameraEntity = m_ActiveScene->CreateEntity("camera");
 		CameraComponent& camera = m_SquareEntity.AddComponent<CameraComponent>();
 		camera.Primary = true;
+
+		m_CameraEntity.AddComponent<NativeScriptComponent>().Bind<Controller>();
 	}
 
 	void EditorLayer::OnDetach()

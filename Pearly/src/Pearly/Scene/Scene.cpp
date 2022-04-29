@@ -28,9 +28,26 @@ namespace Pearly {
 	void Scene::OnUpdate(Timestep ts)
 	{
 		PR_PROFILE_FUNCTION();
+		// script updating
+		/////////////////////
+		{
+			m_Registry.view<NativeScriptComponent>().each([=](entt::entity entity, NativeScriptComponent& script) 
+			{
+					if (!script.Instance)
+					{
+						script.Instance = script.InstantiateScript();
+						script.Instance->m_Entity = Entity{ entity, this };
+						script.Instance->OnStart();
+					}
+
+					script.Instance->OnUpdate(ts);	
+			});
+		}
+
+		// Rendering
+		/////////////////////
 		Camera* primaryCamera = nullptr;
 		glm::mat4* primaryCameraTransform = nullptr;
-		
 		{
 			auto group = m_Registry.group<CameraComponent>(entt::get<TransformComponent>);
 			for (entt::entity entity : group)
@@ -45,7 +62,6 @@ namespace Pearly {
 			}
 			
 		}
-		
 		
 		if (primaryCamera)
 		{
@@ -73,7 +89,6 @@ namespace Pearly {
 			CameraComponent& camera = view.get<CameraComponent>(entity);
 			if (!camera.FixedAspectRatio)
 			{
-				PR_CORE_INFO("resizing camera");
 				camera.Camera.SetViewportSize(width, height);
 			}
 		}

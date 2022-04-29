@@ -27,6 +27,7 @@
 
 #include "Pearly/Scene/Scene.h"
 #include "Pearly/Scene/Entity.h"
+#include "Pearly/Scene/ScriptableEntity.h"
 #include "Pearly/Scene/Components.h"
 
 #include "Pearly/Renderer/OrthographicCameraController.h"
