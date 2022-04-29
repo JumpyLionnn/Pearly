@@ -91,6 +91,7 @@ namespace Pearly {
 	}
 
 
+	using uint64 = uint64_t;
 	using uint32 = uint32_t;
 	using uint8 = uint8_t;
 }

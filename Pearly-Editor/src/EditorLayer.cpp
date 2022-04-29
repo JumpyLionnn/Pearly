@@ -1,15 +1,9 @@
 #include "EditorLayer.h"
 #include <iostream>
-
-
 #include <imgui/imgui.h>
 #include <glm/gtc/type_ptr.hpp>
 
-
-
-
 namespace Pearly {
-
 
 	class Controller : public ScriptableEntity
 	{
@@ -39,6 +33,7 @@ namespace Pearly {
 	{
 		PR_PROFILE_FUNCTION();
 
+
 		m_CheckerboardTexture = Texture2D::Create("assets/textures/Checkerboard.png");
 		m_LilyPadTexture = m_SpriteSheet.CreateSubTexture({ 13, 20 });
 		m_BigTreeTexture = m_SpriteSheet.CreateSubTexture({ 1, 20 }, { 4, 4 });
@@ -57,6 +52,8 @@ namespace Pearly {
 		camera.Primary = true;
 
 		m_CameraEntity.AddComponent<NativeScriptComponent>().Bind<Controller>();
+
+		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
 	}
 
 	void EditorLayer::OnDetach()
@@ -186,6 +183,8 @@ namespace Pearly {
 		ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
 		ImGui::End();
 
+		
+
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0,0));
 		ImGui::Begin("Viewport");
 
@@ -204,6 +203,8 @@ namespace Pearly {
 		ImGui::Image((void*)m_FrameBuffer->GetColorAttachmentRendererID(), { m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 		ImGui::End();
 		ImGui::PopStyleVar();
+
+		m_SceneHierarchyPanel.OnRender();
 
 		ImGui::End();
 	}
