@@ -15,11 +15,12 @@ namespace Pearly {
 
 		Entity CreateEntity(const std::string& name = "Entity");
 
-		entt::registry& Reg() { return m_Registry; }
-
 		void OnUpdate(Timestep ts);
+		void OnViewportResize(uint32 width, uint32 height);
 	private:
 		entt::registry m_Registry;
+		uint32 m_ViewportWidth;
+		uint32 m_ViewportHeight;
 	};
 
 }

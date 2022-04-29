@@ -27,7 +27,8 @@ namespace Pearly {
 		m_SquareEntity.AddComponent<SpriteRendererComponent>(glm::vec4(0.2f, 1.0f, 0.3f, 1.0f));
 
 		m_CameraEntity = m_ActiveScene->CreateEntity("camera");
-		m_SquareEntity.AddComponent<CameraComponent>(glm::ortho(-16.0f, 16.0f, -9.0f, 9.0f, -1.0f, 1.0f), true);
+		CameraComponent& camera = m_SquareEntity.AddComponent<CameraComponent>();
+		camera.Primary = true;
 	}
 
 	void EditorLayer::OnDetach()
@@ -53,6 +54,8 @@ namespace Pearly {
 		{
 			m_FrameBuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 			m_CameraController.OnResize(m_ViewportSize.x, m_ViewportSize.y);
+
+			m_ActiveScene->OnViewportResize((uint32)m_ViewportSize.x, (uint32)m_ViewportSize.y);
 		}
 
 		m_FrameBuffer->Bind();
@@ -61,12 +64,12 @@ namespace Pearly {
 		
 
 		
+		/*
 		Renderer::BeginScene(m_CameraController.GetCamera());
 		Renderer::DrawQuad({ { -1.0f, 1.0f }, { 4.0f, 4.0f } }, m_BigTreeTexture);
 		Renderer::DrawQuad({ { 1.0f, 0.0f, 0.1f }, { 1.0f, 1.0f } }, m_LilyPadTexture);
 		Renderer::EndScene();
-		
-
+		*/
 		
 		m_ActiveScene->OnUpdate(ts);
 

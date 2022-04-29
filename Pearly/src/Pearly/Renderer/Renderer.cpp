@@ -208,10 +208,12 @@ namespace Pearly {
 
 	void Renderer::DrawQuad(const glm::mat4& transform, const glm::vec4& color)
 	{
+		PR_PROFILE_FUNCTION();
 		SubmitQuadVertices(transform, 0, color, 1.0f, defaultTextureCoords);
 	}
 	void Renderer::DrawQuad(const glm::mat4& transform, Ref<Texture2D> texture, const glm::vec4& tint, float tilingFactor)
 	{
+		PR_PROFILE_FUNCTION();
 		float textureIndex = GetTextureIndex(texture);
 		SubmitQuadVertices(transform, textureIndex, tint, tilingFactor, defaultTextureCoords);
 	}
@@ -234,6 +236,7 @@ namespace Pearly {
 
 	float Renderer::GetTextureIndex(const Ref<Texture2D>& texture)
 	{
+		PR_PROFILE_FUNCTION();
 		float textureIndex = 0.0f;
 
 		for (uint32 i = 1; i < s_Data.TextureSlotIndex; i++)
@@ -257,7 +260,6 @@ namespace Pearly {
 	void Renderer::SubmitQuad(const TransformProperties& transformProperties, uint32 textureIndex, const glm::vec4& color, float tilingFactor, const std::array<glm::vec2, 4>& textureCoords)
 	{
 		PR_PROFILE_FUNCTION();
-		
 
 		glm::mat4 transform = CanculateTransformMatrix(transformProperties);
 

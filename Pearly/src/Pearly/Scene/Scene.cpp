@@ -62,4 +62,21 @@ namespace Pearly {
 		
 	}
 
+	void Scene::OnViewportResize(uint32 width, uint32 height)
+	{
+		m_ViewportWidth = width;
+		m_ViewportHeight = height;
+
+		auto view = m_Registry.view<CameraComponent>();
+		for (entt::entity entity : view)
+		{
+			CameraComponent& camera = view.get<CameraComponent>(entity);
+			if (!camera.FixedAspectRatio)
+			{
+				PR_CORE_INFO("resizing camera");
+				camera.Camera.SetViewportSize(width, height);
+			}
+		}
+	}
+
 }

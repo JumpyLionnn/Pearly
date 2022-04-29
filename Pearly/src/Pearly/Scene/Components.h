@@ -2,6 +2,7 @@
 #include <glm/glm.hpp>
 
 #include "Pearly/Renderer/Camera.h"
+#include "SceneCamera.h"
 
 namespace Pearly {
 
@@ -40,13 +41,11 @@ namespace Pearly {
 
 	struct CameraComponent
 	{
-		Pearly::Camera Camera;
+		SceneCamera Camera;
 		bool Primary = false;
+		bool FixedAspectRatio = false;
 
 		CameraComponent() = default;
 		CameraComponent(const CameraComponent&) = default;
-		CameraComponent(const Pearly::Camera& camera, bool primary = false)
-			: Camera(camera), Primary(primary)
-		{}
 	};
 }
