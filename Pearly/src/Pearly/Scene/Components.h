@@ -1,5 +1,6 @@
 #pragma once
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 #include "Pearly/Renderer/Camera.h"
 #include "Pearly/Core/Timestep.h"
@@ -10,13 +11,23 @@ namespace Pearly {
 
 	struct TransformComponent
 	{
-		glm::mat4 Transform = glm::mat4(1.0f);
+		glm::vec2 Position = {0.0f, 0.0f};
+		float Rotation = 0.0f;
+		glm::vec2 Scale = { 1.0f, 1.0f };
 
 		TransformComponent() = default;
 		TransformComponent(const TransformComponent&) = default;
-		TransformComponent(const glm::mat4& transform)
-			: Transform(transform)
+		TransformComponent(const glm::vec2& position)
+			: Position(position)
 		{}
+
+		glm::mat4 GetTransform() const
+		{
+			// TODO: add z-indexing in the rendering components
+			return glm::translate(glm::mat4(1.0f), { Position.x , Position.y, 0.0f }) * 
+				glm::rotate(glm::mat4(1.0f), glm::radians(Rotation), { 0.0f, 0.0f, 1.0f }) * 
+				glm::scale(glm::mat4(1.0f), { Scale.x , Scale.y, 1.0f });
+		}
 	};
 
 	struct TagComponent

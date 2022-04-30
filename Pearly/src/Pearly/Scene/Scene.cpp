@@ -6,6 +6,7 @@
 #include "Pearly/Renderer/Renderer.h"
 
 #include <glm/glm.hpp>
+#include <glm/gtx/string_cast.hpp>
 
 namespace Pearly {
 	Scene::Scene()
@@ -47,16 +48,16 @@ namespace Pearly {
 		// Rendering
 		/////////////////////
 		Camera* primaryCamera = nullptr;
-		glm::mat4* primaryCameraTransform = nullptr;
+		glm::mat4 primaryCameraTransform;
 		{
-			auto group = m_Registry.group<CameraComponent>(entt::get<TransformComponent>);
-			for (entt::entity entity : group)
+			auto view = m_Registry.view<CameraComponent, TransformComponent>();
+			for (entt::entity entity : view)
 			{
-				auto[camera, transform] = group.get<CameraComponent, TransformComponent>(entity);
+				auto[camera, transform] = view.get<CameraComponent, TransformComponent>(entity);
 				if (camera.Primary)
 				{
 					primaryCamera = &camera.Camera;
-					primaryCameraTransform = &transform.Transform;
+					primaryCameraTransform = transform.GetTransform();
 					break;
 				}
 			}
@@ -65,13 +66,13 @@ namespace Pearly {
 		
 		if (primaryCamera)
 		{
-			Renderer::BeginScene(*primaryCamera, *primaryCameraTransform);
-			auto group = m_Registry.group<SpriteRendererComponent>(entt::get<TransformComponent>);
-			for (entt::entity entity : group)
+			Renderer::BeginScene(*primaryCamera, primaryCameraTransform);
+			auto view = m_Registry.view<SpriteRendererComponent, TransformComponent>();
+			for (entt::entity entity : view)
 			{
-				auto [sprite, transform] = group.get<SpriteRendererComponent, TransformComponent>(entity);
+				auto [sprite, transform] = view.get<SpriteRendererComponent, TransformComponent>(entity);
 
-				Renderer::DrawQuad(transform.Transform, sprite.Color);
+				Renderer::DrawQuad(transform.GetTransform(), sprite.Color);
 			}
 			Renderer::EndScene();
 		}

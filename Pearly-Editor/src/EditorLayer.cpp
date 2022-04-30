@@ -10,19 +10,19 @@ namespace Pearly {
 	public:
 		void OnUpdate(Timestep ts)
 		{
-			auto& transformComponent = GetComponent<TransformComponent>();
-			float speed = 5.0f;
+			TransformComponent& transformComponent = GetComponent<TransformComponent>();
 
 			if (Input::IsKeyPressed(PR_KEY_A))
-				transformComponent.Transform[3][0] -= speed * ts;
+				transformComponent.Position.x -= m_MovmentSpeed * ts;
 			if (Input::IsKeyPressed(PR_KEY_D))
-				transformComponent.Transform[3][0] += speed * ts;
+				transformComponent.Position.x += m_MovmentSpeed * ts;
 			if (Input::IsKeyPressed(PR_KEY_W))
-				transformComponent.Transform[3][1] += speed * ts;
+				transformComponent.Position.y += m_MovmentSpeed * ts;
 			if (Input::IsKeyPressed(PR_KEY_S))
-				transformComponent.Transform[3][1] -= speed * ts;
-
+				transformComponent.Position.y -= m_MovmentSpeed * ts;
 		}
+	private:
+		float m_MovmentSpeed = 5.0f;
 	};
 
 	EditorLayer::EditorLayer()
@@ -48,7 +48,7 @@ namespace Pearly {
 		m_SquareEntity.AddComponent<SpriteRendererComponent>(glm::vec4(0.2f, 1.0f, 0.3f, 1.0f));
 
 		m_CameraEntity = m_ActiveScene->CreateEntity("camera");
-		CameraComponent& camera = m_SquareEntity.AddComponent<CameraComponent>();
+		CameraComponent& camera = m_CameraEntity.AddComponent<CameraComponent>();
 		camera.Primary = true;
 
 		m_CameraEntity.AddComponent<NativeScriptComponent>().Bind<Controller>();
@@ -165,15 +165,6 @@ namespace Pearly {
 		}
 
 		ImGui::Begin("Settings");
-		if (m_SquareEntity)
-		{
-			ImGui::Text("%s", m_SquareEntity.GetComponent<TagComponent>().Tag.c_str());
-
-			glm::vec4& color = m_SquareEntity.GetComponent<SpriteRendererComponent>().Color;
-			ImGui::ColorEdit4("Square Color", glm::value_ptr(color));
-		}
-		ImGui::Separator();
-		
 
 		Renderer::Statistics stats = Renderer::GetStats();
 		ImGui::Text("Renderer Stats:");

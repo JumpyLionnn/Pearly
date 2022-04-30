@@ -9,11 +9,14 @@ namespace Pearly {
 		SceneCamera();
 		virtual ~SceneCamera() {}
 
+		float GetOrthographicNearClip() const { return m_OrthographicNear; }
+		float GetOrthographicFarClip() const { return m_OrthographicFar; }
+
 		void SetOrthographic(float size, float nearClip, float farClip);
 		void SetViewportSize(uint32 width, uint32 height);
 
 		float GetOrthographicSize() const { return m_OrthographicSize; }
-		void GetOrthographicSize(float size) { m_OrthographicSize = size; RecalculateProjection(); }
+		void SetOrthographicSize(float size) { m_OrthographicSize = size; RecalculateProjection(); }
 	private:
 		void RecalculateProjection();
 	private:
