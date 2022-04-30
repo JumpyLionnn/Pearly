@@ -21,7 +21,6 @@ namespace Pearly {
 		ImGui::Begin("Hierarchy");
 		m_Context->m_Registry.each([&](auto entityID) 
 		{
-			PR_CORE_INFO("entity");
 			Entity entity { entityID, m_Context.get() };
 			DrawEntityNode(entity);
 		});

@@ -183,12 +183,28 @@ project "Pearly-Editor"
 
 	filter "system:windows"
 		systemversion "latest"
+		defines 
+		{
+			"PR_PLATFORM_WINDOWS"
+		}
 
 	filter "configurations:Debug"
 		symbols "On"
+		defines
+		{
+			"PR_DEBUG",
+			"PR_ENABLE_CORE_LOG",
+			"PR_ENABLE_ASSERTS"
+		}
 
 	filter "configurations:Release"
 		optimize "On"
+		defines
+		{
+			"PR_RELEASE",
+			"PR_ENABLE_CORE_LOG",
+			"PR_ENABLE_ASSERTS"
+		}
 
 	filter "configurations:Dist"
 		optimize "On"
