@@ -6,11 +6,15 @@
 #include "Pearly/Core/Layer.h"
 #include "Pearly/Core/Log.h"
 
+
 #include "Pearly/Core/Timestep.h"
 
 #include "Pearly/Core/Input.h"
 #include "Pearly/Core/KeyCodes.h"
 #include "Pearly/Core/MouseButtonCodes.h"
+#include "Pearly/Events/KeyEvents.h"
+#include "Pearly/Events/MouseEvents.h"
+#include "Pearly/Events/WindowEvents.h"
 
 #include "Pearly/Debug/ImGuiLayer.h"
 
@@ -29,5 +33,7 @@
 #include "Pearly/Scene/Entity.h"
 #include "Pearly/Scene/ScriptableEntity.h"
 #include "Pearly/Scene/Components.h"
+#include "Pearly/Scene/SceneSerializer.h"
 
 #include "Pearly/Renderer/OrthographicCameraController.h"
+#include "Pearly/Utilities/PlatformUtilities.h"

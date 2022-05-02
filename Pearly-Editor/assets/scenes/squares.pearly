@@ -1,0 +1,43 @@
+Scene: Scene Name
+Entities:
+  - Entity: 123456789
+    TagComponent:
+      Tag: square
+    TransformComponent:
+      Position: [0, 0]
+      Rotation: 0
+      Scale: [1, 1]
+    SpriteRendererComponent:
+      Color: [1, 1, 1, 1]
+  - Entity: 123456789
+    TagComponent:
+      Tag: camera
+    TransformComponent:
+      Position: [0, 0]
+      Rotation: 0
+      Scale: [1, 1]
+    CameraComponent:
+      Camera:
+        OrthographicSize: 10
+        OrthographicNear: -1
+        OrthographicFar: 1
+      Primary: true
+      FixedAspectRatio: false
+  - Entity: 123456789
+    TagComponent:
+      Tag: big red square
+    TransformComponent:
+      Position: [1.05999994, 2.04999995]
+      Rotation: 0
+      Scale: [2, 2]
+    SpriteRendererComponent:
+      Color: [0.965250969, 0.388382554, 0.257151812, 1]
+  - Entity: 123456789
+    TagComponent:
+      Tag: rotated square
+    TransformComponent:
+      Position: [-1.32000005, 0.25999999]
+      Rotation: -47.4000015
+      Scale: [1, 1]
+    SpriteRendererComponent:
+      Color: [0.374517381, 0.616016388, 1, 1]

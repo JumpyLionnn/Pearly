@@ -10,3 +10,6 @@
 [submodule "Pearly/vendor/glm"]
 	path = Pearly/vendor/glm
 	url = https://github.com/g-truc/glm
+[submodule "Pearly/vendor/yaml-cpp"]
+	path = Pearly/vendor/yaml-cpp
+	url = https://github.com/JumpyLionnn/yaml-cpp

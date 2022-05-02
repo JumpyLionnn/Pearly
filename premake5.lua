@@ -21,6 +21,7 @@ IncludeDirs["imgui"] = "Pearly/vendor/imgui/"
 IncludeDirs["glm"] = "Pearly/vendor/glm/"
 IncludeDirs["stb_image"] = "Pearly/vendor/stb_image/"
 IncludeDirs["entt"] = "Pearly/vendor/entt/include"
+IncludeDirs["yaml_cpp"] = "Pearly/vendor/yaml-cpp/include"
 
 startproject "Pearly-Editor"
 
@@ -28,6 +29,7 @@ group "Dependencies"
 	include "Pearly/vendor/GLFW"
 	include "Pearly/vendor/Glad"
 	include "Pearly/vendor/imgui"
+	include "Pearly/vendor/yaml-cpp"
 group ""
 
 project "Pearly"
@@ -61,6 +63,7 @@ project "Pearly"
 		"%{IncludeDirs.glm}",
 		"%{IncludeDirs.stb_image}",
 		"%{IncludeDirs.entt}",
+		"%{IncludeDirs.yaml_cpp}",
 	}
 
 	links
@@ -68,6 +71,7 @@ project "Pearly"
 		"GLFW",
 		"Glad",
 		"imgui",
+		"yaml-cpp",
 		"opengl32.lib"
 	}
 

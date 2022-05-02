@@ -16,6 +16,13 @@ namespace Pearly {
 		virtual void OnEvent(Event& event) override;
 		virtual void OnImGuiRender() override;
 	private:
+		bool OnKeyPressed(KeyPressedEvent& event);
+
+		void NewScene();
+		void OpenScene();
+		void SaveScene();
+		void SaveAsScene();
+	private:
 		SpriteSheet m_SpriteSheet;
 		Ref<Texture2D> m_CheckerboardTexture;
 
@@ -23,6 +30,8 @@ namespace Pearly {
 		Ref<SubTexture2D> m_BigTreeTexture;
 
 		Ref<Scene> m_ActiveScene;
+		std::string m_CurrentSceneFilePath;
+
 		Entity m_SquareEntity;
 		Entity m_CameraEntity;
 
@@ -37,6 +46,7 @@ namespace Pearly {
 		glm::vec4 m_Color = { 0.2f, 0.3f, 0.8f, 1.0f };
 
 		SceneHierarchyPanel m_SceneHierarchyPanel;
+
 	};
 
 }

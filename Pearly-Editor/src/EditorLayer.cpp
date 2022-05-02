@@ -47,6 +47,7 @@ namespace Pearly {
 		m_FrameBuffer = FrameBuffer::Create(frameBufferSpec);
 
 		m_ActiveScene = CreateRef<Scene>();
+		/*
 		m_SquareEntity = m_ActiveScene->CreateEntity("Square");
 		m_SquareEntity.AddComponent<SpriteRendererComponent>(glm::vec4(0.2f, 1.0f, 0.3f, 1.0f));
 
@@ -55,6 +56,7 @@ namespace Pearly {
 		camera.Primary = true;
 
 		m_CameraEntity.AddComponent<NativeScriptComponent>().Bind<Controller>();
+		*/
 
 		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
 
@@ -218,9 +220,12 @@ namespace Pearly {
 		{
 			if (ImGui::BeginMenu("File"))
 			{
-				// Disabling fullscreen would allow the window to be moved to the front of other windows, 
-				// which we can't undo at the moment without finer window depth/z control.
-				//ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen_persistant);
+				if (ImGui::MenuItem("New", "Ctrl+N")) NewScene();
+				if (ImGui::MenuItem("Open...", "Ctrl+O")) OpenScene();
+				if (ImGui::MenuItem("Save", "Ctrl+S")) SaveScene();
+				if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S")) SaveAsScene();
+
+				ImGui::Separator();
 
 				if (ImGui::MenuItem("Exit")) Application::Get().Close();
 				ImGui::EndMenu();
@@ -263,5 +268,93 @@ namespace Pearly {
 	void EditorLayer::OnEvent(Event& e)
 	{
 		m_CameraController.OnEvent(e);
+
+		EventDispacher dispacher(e);
+		dispacher.Dispatch<KeyPressedEvent>(PR_BIND_EVENT_FN(EditorLayer::OnKeyPressed));
+	}
+
+	bool EditorLayer::OnKeyPressed(KeyPressedEvent& event)
+	{
+		if (event.GetRepeatCount() == 0)
+		{
+			bool control = Input::IsKeyPressed(PR_KEY_LEFT_CONTROL) || Input::IsKeyPressed(PR_KEY_RIGHT_CONTROL);
+			bool shift = Input::IsKeyPressed(PR_KEY_LEFT_SHIFT) || Input::IsKeyPressed(PR_KEY_RIGHT_SHIFT);
+			switch (event.GetKeyCode())
+			{
+				case PR_KEY_N:
+				{
+					if (control)
+					{
+						NewScene();
+					}
+					break;
+				}
+				case PR_KEY_O:
+				{
+					if (control)
+					{
+						OpenScene();
+					}
+					break;
+				}
+				case PR_KEY_S:
+				{
+					if (control)
+					{
+						SaveScene();
+					}
+					if (control && shift)
+					{
+						SaveAsScene();
+					}
+					break;
+				}
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	void EditorLayer::NewScene()
+	{
+		m_ActiveScene = CreateRef<Scene>();
+		m_ActiveScene->OnViewportResize((uint32)m_ViewportSize.x, (uint32)m_ViewportSize.y);
+		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+		m_CurrentSceneFilePath = std::string();
+	}
+	void EditorLayer::OpenScene()
+	{
+		std::string filepath = FileDialogs::OpenFile("Pearly Scene (*.pearly)\0*.pearly\0");
+		if (!filepath.empty())
+		{
+			NewScene();
+			m_CurrentSceneFilePath = filepath;
+			SceneSerializer serializer(m_ActiveScene);
+			serializer.Deserialize(filepath);
+		}
+	}
+	void EditorLayer::SaveScene()
+	{
+		if (m_CurrentSceneFilePath.empty())
+		{
+			SaveAsScene();
+		}
+		else
+		{
+			SceneSerializer serializer(m_ActiveScene);
+			serializer.Serialize(m_CurrentSceneFilePath);
+		}
+	}
+	void EditorLayer::SaveAsScene()
+	{
+		std::string filepath = FileDialogs::SaveFile("Pearly Scene (*.pearly)\0*.pearly\0");
+		if (!filepath.empty())
+		{
+			m_CurrentSceneFilePath = filepath;
+			SceneSerializer serializer(m_ActiveScene);
+			serializer.Serialize(filepath);
+		}
 	}
 }

@@ -23,6 +23,7 @@ namespace Pearly {
 	void SceneHierarchyPanel::SetContext(const Ref<Scene>& scene)
 	{
 		m_Context = scene;
+		m_Selected = {};
 	}
 
 	void SceneHierarchyPanel::OnRender()
@@ -128,7 +129,6 @@ namespace Pearly {
 					{
 						if (ImGui::Selectable(components[i].c_str()))
 						{
-							std::cout << "selected" << std::endl;
 							// using string comparation for now will be removed later
 							if (components[i] == "Camera")
 							{
