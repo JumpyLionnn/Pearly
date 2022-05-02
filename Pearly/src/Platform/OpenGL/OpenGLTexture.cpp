@@ -85,4 +85,9 @@ namespace Pearly {
 		PR_PROFILE_FUNCTION();
 		glBindTextureUnit(slot, m_RendererID);
 	}
+
+	void* OpenGLTexture2D::GetRendererID() const
+	{
+		return (void*)m_RendererID;
+	}
 }

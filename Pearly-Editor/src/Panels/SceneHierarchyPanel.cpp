@@ -3,13 +3,22 @@
 #include <imgui/imgui.h>
 #include <glm/gtc/type_ptr.hpp>
 #include <imgui/imgui_internal.h>
+#include "gui/Widgets.h"
+#include "gui/Layout.h"
+#include <iostream>
 
 namespace Pearly {
 
+	SceneHierarchyPanel::SceneHierarchyPanel()
+	{
+		m_ViewMoreIcon = Image::Load("assets/textures/icons/viewMore.png");
+	}
 
 	SceneHierarchyPanel::SceneHierarchyPanel(const Ref<Scene>& scene)
 		: m_Context(scene)
-	{}
+	{
+		m_ViewMoreIcon = Image::Load("assets/textures/icons/viewMore.png");
+	}
 
 	void SceneHierarchyPanel::SetContext(const Ref<Scene>& scene)
 	{
@@ -46,26 +55,14 @@ namespace Pearly {
 		{
 			DrawComponents(m_Selected);
 
-			if (ImGui::Button("Add Component"))
-			{
-				ImGui::OpenPopup("AddComponent");
-			}
+			float width = ImGui::GetContentRegionAvail().x;
+			Widgets::Separator();
+			Layout::Space(10.0f);
+			Layout::Indent(width * 0.15f);
+			bool open = Widgets::Button("Add Component", {width * 0.7f, 0.0f});
+			Layout::EndIndent();
 
-			if (ImGui::BeginPopup("AddComponent"))
-			{
-				if (ImGui::MenuItem("Camera"))
-				{
-					m_Selected.AddComponent<CameraComponent>();
-					ImGui::CloseCurrentPopup();
-				}
-
-				if (ImGui::MenuItem("Sprite Renderer"))
-				{
-					m_Selected.AddComponent<SpriteRendererComponent>();
-					ImGui::CloseCurrentPopup();
-				}
-				ImGui::EndPopup();
-			}
+			DrawAddComponentPopup(open);
 		}
 		ImGui::End();
 	}
@@ -79,7 +76,7 @@ namespace Pearly {
 		// if the entity doesnt have childrent it cannt be opened
 		//if (entity.Children.Empty()) add this back when entities can have children
 			flags |= ImGuiTreeNodeFlags_Leaf;
-		bool opened = ImGui::TreeNodeEx((void*)(uint64)(uint32)entity, flags, tag.Tag.c_str());
+		bool opened = Widgets::TreeNode((void*)(uint64)(uint32)entity, flags, tag.Tag);
 		if (ImGui::IsItemClicked())
 		{
 			m_Selected = entity;
@@ -106,50 +103,98 @@ namespace Pearly {
 
 	}
 
-	static void DrawVec2Controls(const std::string& label, glm::vec2& values, float speed = 0.01f, float columnWidth = 100.0f)
+	void SceneHierarchyPanel::DrawAddComponentPopup(bool open)
 	{
-		ImGui::PushID(label.c_str());
-		ImGui::Columns(2, "", false);
+		if (open)
+		{
+			ImGui::OpenPopup("AddComponent");
+		}
 
-		ImGui::SetColumnWidth(0, columnWidth);
-		ImGui::Text(label.c_str());
+		if (Widgets::BeginModal("AddComponent", true, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
+		{
+			//TODO: improve this system
+			float modalWidth = ImGui::GetContentRegionAvail().x;
+			static Widgets::TextFilter filter("##Filter", "Search...");
+			//filter.
+			//Widgets::TextInput("##Search")
+			filter.Draw();
+			std::vector<std::string> components = { "Camera", "SpriteRenderer" };
+			if (ImGui::BeginListBox("##Components"))
+			{
 
-		ImGui::NextColumn();
-			
-		ImGui::PushMultiItemsWidths(2, ImGui::CalcItemWidth());
-		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(5.0f, 3.0f));
+				for (int i = 0; i < components.size(); i++)
+				{
+					if (filter.PassFilter(components[i].c_str()))
+					{
+						if (ImGui::Selectable(components[i].c_str()))
+						{
+							std::cout << "selected" << std::endl;
+							// using string comparation for now will be removed later
+							if (components[i] == "Camera")
+							{
+								m_Selected.AddComponent<CameraComponent>();
+								ImGui::CloseCurrentPopup();
+							}
+							if (components[i] == "SpriteRenderer")
+							{
+								m_Selected.AddComponent<SpriteRendererComponent>();
+								ImGui::CloseCurrentPopup();
+							}
+						}
+					}
 
-		ImGui::Text("X");
-		ImGui::SameLine();
-		ImGui::DragFloat("##X", &values.x, speed);
-		ImGui::PopItemWidth();
+				}
+				ImGui::EndListBox();
+			}
 
-		ImGui::SameLine();
-
-		ImGui::Text("Y");
-		ImGui::SameLine();
-		ImGui::DragFloat("##Y", &values.y, speed);
-		ImGui::PopItemWidth();
-		
-		ImGui::PopStyleVar();
-		ImGui::Columns(1);
-		ImGui::PopID();
+			Layout::Indent(modalWidth * 0.25f);
+			if (Widgets::Button("Cancel", { modalWidth * 0.5f, 0 }))
+				ImGui::CloseCurrentPopup();
+			Layout::EndIndent();
+			ImGui::EndPopup();
+		}
 	}
 
-	static void DrawFloatControls(const std::string& label, float& value, float speed = 0.1f, float componentWidthAddition = 0.0f, float labelWidth = 100.0f)
+	static const ImGuiTreeNodeFlags componentTreeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_Framed | ImGuiTreeNodeFlags_FramePadding;
+
+	template<typename T, typename UIFunc>
+	void SceneHierarchyPanel::DrawComponent(const std::string& label, Entity entity, UIFunc function)
 	{
-		ImGui::PushID(label.c_str());
-		ImGui::Columns(2, "", false);
+		if (entity.HasComponent<T>())
+		{
+			T& component = entity.GetComponent<T>();
+			ImVec2 contentRegionAvail = ImGui::GetContentRegionAvail();
+			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(4.0f, 4.0f));
+			Widgets::Separator();
+			float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
+			float lineWidth = GImGui->Font->FontSize + GImGui->Style.FramePadding.x * 2.0f;
+			bool open = Widgets::TreeNode((void*)typeid(T).hash_code(), componentTreeNodeFlags, label);
+			ImGui::PopStyleVar();
+			ImGui::SameLine(contentRegionAvail.x - lineHeight * 0.5f - 4.0f);
 
-		ImGui::SetColumnWidth(0, labelWidth);
-		ImGui::Text(label.c_str());
-		ImGui::NextColumn();
-		
-		ImGui::SetNextItemWidth(ImGui::CalcItemWidth() + componentWidthAddition);
-		ImGui::DragFloat("##Float", &value, speed);
-
-		ImGui::Columns(1);
-		ImGui::PopID();
+			bool settingsOpen = Widgets::Button(m_ViewMoreIcon, { lineHeight, lineHeight });
+			
+			bool removeComponent = false;
+			if (ImGui::BeginPopup("ComponentSettings"))
+			{
+				if (ImGui::MenuItem("Remove Component"))
+				{
+					removeComponent = true;
+				}
+				ImGui::EndPopup();
+			}
+			if (settingsOpen)
+			{
+				ImGui::OpenPopup("ComponentSettings");
+			}
+			if (open)
+			{
+				function(component);
+				ImGui::TreePop();
+			}
+			if (removeComponent)
+				entity.RemoveComponent<T>();
+		}
 	}
 
 	void SceneHierarchyPanel::DrawComponents(Entity entity)
@@ -157,31 +202,25 @@ namespace Pearly {
 		if (entity.HasComponent<TagComponent>())
 		{
 			TagComponent& tag = entity.GetComponent<TagComponent>();
-			char buffer[256];
-			memset(buffer, 0, sizeof(buffer));
-			strcpy_s(buffer, sizeof(buffer), tag.Tag.c_str());
-			if (ImGui::InputText("Tag", buffer, sizeof(buffer)))
-			{
-				tag.Tag = std::string(buffer);
-			}
+			Widgets::TextInput("##Tag", tag.Tag);
 		}
-
-		const ImGuiTreeNodeFlags treeNodesFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_AllowItemOverlap;
 
 		if (entity.HasComponent<TransformComponent>())
 		{
-			if (ImGui::TreeNodeEx((void*)typeid(TransformComponent).hash_code(), treeNodesFlags, "Transform"))
+			Widgets::Separator();
+			if (Widgets::TreeNode((void*)typeid(TransformComponent).hash_code(), componentTreeNodeFlags, "Transform"))
 			{
 				TransformComponent& transformComponent = entity.GetComponent<TransformComponent>();
 
-				DrawVec2Controls("Positon", transformComponent.Position);
+				Widgets::Vec2Controls("Positon", transformComponent.Position);
 
 				float fontSize = GImGui->Font->FontSize;
 				// taking the font size * 2 for the x and the y width rendered in the position and the scale
 				float widthAdditon = fontSize * 2;
-				DrawFloatControls("Rotation", transformComponent.Rotation, 0.1f, widthAdditon);
+				// TODO: find a better layout for those 3 inputs
+				Widgets::FloatControls("Rotation", transformComponent.Rotation, 0.1f, widthAdditon);
 
-				DrawVec2Controls("Scale", transformComponent.Scale);
+				Widgets::Vec2Controls("Scale", transformComponent.Scale);
 
 				ImGui::TreePop();
 			}
@@ -189,76 +228,29 @@ namespace Pearly {
 			
 		}
 
-		if (entity.HasComponent<CameraComponent>())
+
+		DrawComponent<CameraComponent>("Camera", entity, [](CameraComponent& component)
 		{
-			bool open = ImGui::TreeNodeEx((void*)typeid(CameraComponent).hash_code(), treeNodesFlags, "Camera");
-			ImGui::SameLine();
-			if (ImGui::Button("+"))
-			{
-				ImGui::OpenPopup("ComponentSettings");
-			}
-			bool removeComponent = false;
-			if (ImGui::BeginPopup("ComponentSettings"))
-			{
-				if (ImGui::MenuItem("Remove Component"))
-				{
-					removeComponent = true;
-				}
-				ImGui::EndPopup();
-			}
-			if (open)
-			{
-				CameraComponent& camera = entity.GetComponent<CameraComponent>();
+				Widgets::Checkbox("Primary", component.Primary);
 
-				ImGui::Checkbox("Primary", &camera.Primary);
+				float size = component.Camera.GetOrthographicSize();
+				bool changed = Widgets::FloatControls("Size", size, 0.05f);
 
-				float size = camera.Camera.GetOrthographicSize();
-				bool changed = ImGui::DragFloat("Size", &size, 0.05f);
+				float nearClip = component.Camera.GetOrthographicNearClip();
+				changed = Widgets::FloatControls("Near clip", nearClip, 0.1f) || changed;
 
-				float nearClip = camera.Camera.GetOrthographicNearClip();
-				changed = ImGui::DragFloat("Near clip", &nearClip, 0.1f) || changed;
+				float farClip = component.Camera.GetOrthographicFarClip();
+				changed = Widgets::FloatControls("Far clip", farClip, 0.1f) || changed;
 
-				float farClip = camera.Camera.GetOrthographicFarClip();
-				changed = ImGui::DragFloat("Far clip", &farClip, 0.1f) || changed;
+				if (changed)
+					component.Camera.SetOrthographic(size, nearClip, farClip);
 
-				if(changed)
-					camera.Camera.SetOrthographic(size, nearClip, farClip);
+				Widgets::Checkbox("Fixed Aspect Ratio", component.FixedAspectRatio);
+		});
 
-				ImGui::Checkbox("Fixed aspect ratio", &camera.FixedAspectRatio);
-
-				ImGui::TreePop();
-			}
-			if (removeComponent)
-				entity.RemoveComponent<CameraComponent>();
-		}
-
-		if (entity.HasComponent<SpriteRendererComponent>())
+		DrawComponent<SpriteRendererComponent>("Sprite Renderer", entity, [](SpriteRendererComponent& component) 
 		{
-			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(4.0f, 4.0f));
-			bool open = ImGui::TreeNodeEx((void*)typeid(SpriteRendererComponent).hash_code(), treeNodesFlags, "Sprite Renderer");
-			ImGui::SameLine(ImGui::GetWindowWidth() - 25.0f);
-			if (ImGui::Button("+", ImVec2(20.0f, 20.0f)))
-			{
-				ImGui::OpenPopup("ComponentSettings");
-			}
-			ImGui::PopStyleVar();
-			bool removeComponent = false;
-			if (ImGui::BeginPopup("ComponentSettings"))
-			{
-				if (ImGui::MenuItem("Remove Component"))
-				{
-					removeComponent = true;
-				}
-				ImGui::EndPopup();
-			}
-			if (open)
-			{
-				SpriteRendererComponent& spriteRenderer = entity.GetComponent<SpriteRendererComponent>();
-				ImGui::ColorEdit4("Color", glm::value_ptr(spriteRenderer.Color));
-				ImGui::TreePop();
-			}
-			if (removeComponent)
-				entity.RemoveComponent<SpriteRendererComponent>();
-		}
+				Widgets::ColorEdit4("Color", component.Color);
+		});
 	}
 }

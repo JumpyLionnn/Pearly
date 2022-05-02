@@ -171,6 +171,7 @@ project "Pearly-Editor"
 	{
 		"Pearly/vendor/spdlog/include",
 		"Pearly/src",
+		"Pearly-Editor/src",
 		"%{IncludeDirs.glm}",
 		"%{IncludeDirs.entt}",
 		"Pearly/vendor"

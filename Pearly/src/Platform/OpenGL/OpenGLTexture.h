@@ -20,6 +20,8 @@ namespace Pearly {
 
 		virtual void Bind(uint32 slot = 0) const override;
 
+		virtual void* GetRendererID() const override;
+
 		virtual bool operator==(const Texture& other) const override { return m_RendererID == ((OpenGLTexture2D&)other).m_RendererID; }
 	private:
 		std::string m_Path;

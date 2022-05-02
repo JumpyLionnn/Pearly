@@ -1,12 +1,13 @@
 #pragma once
 #include <Pearly.h>
+#include "gui/Image.h"
 
 namespace Pearly {
 
 	class SceneHierarchyPanel
 	{
 	public:
-		SceneHierarchyPanel() = default;
+		SceneHierarchyPanel();
 		SceneHierarchyPanel(const Ref<Scene>& scene);
 
 		void SetContext(const Ref<Scene>& scene);
@@ -15,8 +16,14 @@ namespace Pearly {
 	private:
 		void DrawEntityNode(const Entity& entity);
 		void DrawComponents(Entity entity);
+		void DrawAddComponentPopup(bool open);
+
+
+		template<typename T, typename UIFunc>
+		void DrawComponent(const std::string& label, Entity entity, UIFunc function);
 	private:
 		Ref<Scene> m_Context;
 		Entity m_Selected;
+		Ref<Image> m_ViewMoreIcon;
 	};
 }
