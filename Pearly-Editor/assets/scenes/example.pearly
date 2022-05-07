@@ -27,7 +27,7 @@ Entities:
       Scale: [1, 1]
     CameraComponent:
       Camera:
-        OrthographicSize: 6.80000019
+        OrthographicSize: 10
         OrthographicNear: -1
         OrthographicFar: 1
       Primary: true
@@ -36,7 +36,7 @@ Entities:
     TagComponent:
       Tag: square
     TransformComponent:
-      Position: [0.239999995, -0.730000019]
+      Position: [0, 0]
       Rotation: 0
       Scale: [1, 1]
     SpriteRendererComponent:

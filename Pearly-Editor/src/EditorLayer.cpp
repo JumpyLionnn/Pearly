@@ -1,7 +1,7 @@
 #include "EditorLayer.h"
 #include <iostream>
-#include <imgui/imgui.h>
 #include <glm/gtc/type_ptr.hpp>
+
 
 namespace Pearly {
 
@@ -148,6 +148,9 @@ namespace Pearly {
 	void EditorLayer::OnImGuiRender()
 	{
 		PR_PROFILE_FUNCTION();
+
+		ImGuizmo::BeginFrame();
+
 		static bool dockspaceOpen = true;
 		static bool opt_fullscreen_persistant = true;
 		bool opt_fullscreen = opt_fullscreen_persistant;
@@ -239,7 +242,6 @@ namespace Pearly {
 
 			ImGui::EndMenuBar();
 		}
-
 		
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0,0));
 		ImGui::Begin("Viewport");
@@ -250,13 +252,43 @@ namespace Pearly {
 
 		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 		m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
-		if (m_ViewportSize != *((glm::vec2*)&viewportPanelSize))
-		{
-			//m_FrameBuffer->Resize((uint32)viewportPanelSize.x, (uint32)viewportPanelSize.y);
-
-			//m_CameraController.OnResize(m_ViewportSize.x, m_ViewportSize.y);
-		}
 		ImGui::Image((void*)m_FrameBuffer->GetColorAttachmentRendererID(), { m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+		
+		
+		Entity selectedEntity = m_SceneHierarchyPanel.GetSelectedEntity();
+		if (selectedEntity)
+		{
+			ImGuizmo::SetOrthographic(true);
+			ImGuizmo::SetDrawlist();
+			ImVec2 windowPosition = ImGui::GetWindowPos();
+			float windowWidth = ImGui::GetWindowWidth();
+			float windowHeight = ImGui::GetWindowHeight();
+			ImGuizmo::SetRect(windowPosition.x, windowPosition.y, windowWidth, windowHeight);
+
+			Entity cameraEntity = m_ActiveScene->GetPrimaryCameraEntity();
+			CameraComponent& cameraComponent = cameraEntity.GetComponent<CameraComponent>();
+			const glm::mat4& cameraProjection = cameraComponent.Camera.GetProjection();
+			glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>().GetTransform());
+
+			TransformComponent& entityTransform = selectedEntity.GetComponent<TransformComponent>();
+			glm::mat4 transform = entityTransform.GetTransform();
+			float originalRotation = entityTransform.Rotation;
+
+			ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection), (ImGuizmo::OPERATION)m_GizmoType, ImGuizmo::MODE::LOCAL, glm::value_ptr(transform));
+			
+			if (ImGuizmo::IsUsing())
+			{
+				glm::vec3 position;
+				float rotation;
+				glm::vec2 scale;
+				Math::DecomposeTransform(transform, position, rotation, scale);
+				entityTransform.Position = glm::vec2(position);
+				entityTransform.Rotation = glm::degrees(rotation);
+				entityTransform.Scale = glm::vec2(scale);
+			}
+		}
+		
+
 		ImGui::End();
 		ImGui::PopStyleVar();
 
@@ -309,6 +341,16 @@ namespace Pearly {
 					}
 					break;
 				}
+
+				case PR_KEY_W:
+					m_GizmoType = GizmoOperation::Translation;
+					break;
+				case PR_KEY_E:
+					m_GizmoType = GizmoOperation::Rotation;
+					break;
+				case PR_KEY_R:
+					m_GizmoType = GizmoOperation::Scale;
+					break;
 			}
 		}
 		else

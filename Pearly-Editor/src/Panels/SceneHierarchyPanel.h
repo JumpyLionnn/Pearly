@@ -12,6 +12,8 @@ namespace Pearly {
 
 		void SetContext(const Ref<Scene>& scene);
 
+		Entity GetSelectedEntity() const;
+
 		void OnRender();
 	private:
 		void DrawEntityNode(const Entity& entity);

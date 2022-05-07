@@ -1,8 +1,17 @@
 #pragma once
 #include <Pearly.h>
 #include "Panels/SceneHierarchyPanel.h"
+#include <imgui/imgui.h>
+#include <ImGuizmo.h>
 
 namespace Pearly {
+
+	enum GizmoOperation
+	{
+		Translation = (int)ImGuizmo::OPERATION::TRANSLATE_X | (int)ImGuizmo::OPERATION::TRANSLATE_Y,
+		Rotation = ImGuizmo::OPERATION::ROTATE_Z,
+		Scale = (int)ImGuizmo::OPERATION::SCALE_X | (int)ImGuizmo::OPERATION::SCALE_Y
+	};
 
 	class EditorLayer : public Layer
 	{
@@ -46,6 +55,8 @@ namespace Pearly {
 		glm::vec4 m_Color = { 0.2f, 0.3f, 0.8f, 1.0f };
 
 		SceneHierarchyPanel m_SceneHierarchyPanel;
+
+		GizmoOperation m_GizmoType = GizmoOperation::Translation;
 
 	};
 

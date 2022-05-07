@@ -26,6 +26,11 @@ namespace Pearly {
 		m_Selected = {};
 	}
 
+	Entity SceneHierarchyPanel::GetSelectedEntity() const
+	{
+		return m_Selected;
+	}
+
 	void SceneHierarchyPanel::OnRender()
 	{
 		ImGui::Begin("Hierarchy");

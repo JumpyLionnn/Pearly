@@ -13,3 +13,6 @@
 [submodule "Pearly/vendor/yaml-cpp"]
 	path = Pearly/vendor/yaml-cpp
 	url = https://github.com/JumpyLionnn/yaml-cpp
+[submodule "Pearly-Editor/vendor/ImGuizmo"]
+	path = Pearly-Editor/vendor/ImGuizmo
+	url = https://github.com/JumpyLionnn/ImGuizmo

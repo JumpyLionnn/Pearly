@@ -22,6 +22,7 @@ IncludeDirs["glm"] = "Pearly/vendor/glm/"
 IncludeDirs["stb_image"] = "Pearly/vendor/stb_image/"
 IncludeDirs["entt"] = "Pearly/vendor/entt/include"
 IncludeDirs["yaml_cpp"] = "Pearly/vendor/yaml-cpp/include"
+IncludeDirs["ImGuizmo"] = "Pearly-Editor/vendor/ImGuizmo"
 
 startproject "Pearly-Editor"
 
@@ -168,7 +169,9 @@ project "Pearly-Editor"
 	files
 	{
 		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp"
+		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/vendor/ImGuizmo/ImGuizmo.h",
+		"%{prj.name}/vendor/ImGuizmo/ImGuizmo.cpp"
 	}
 
 	includedirs
@@ -178,6 +181,8 @@ project "Pearly-Editor"
 		"Pearly-Editor/src",
 		"%{IncludeDirs.glm}",
 		"%{IncludeDirs.entt}",
+		"%{IncludeDirs.ImGuizmo}",
+		"%{IncludeDirs.imgui}", -- for ImGuizmo 
 		"Pearly/vendor"
 	}
 
@@ -185,6 +190,9 @@ project "Pearly-Editor"
 	{
 		"Pearly"
 	}
+
+	filter "files:vendor/ImGuizmo/**.cpp"
+		flags { "NoPCH" }
 
 	filter "system:windows"
 		systemversion "latest"

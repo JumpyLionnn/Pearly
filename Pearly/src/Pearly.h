@@ -16,6 +16,8 @@
 #include "Pearly/Events/MouseEvents.h"
 #include "Pearly/Events/WindowEvents.h"
 
+#include "Pearly/Math/Math.h"
+
 #include "Pearly/Debug/ImGuiLayer.h"
 
 #include "Pearly/Renderer/Renderer.h"

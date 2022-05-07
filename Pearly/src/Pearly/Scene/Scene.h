@@ -21,6 +21,8 @@ namespace Pearly {
 		void OnUpdate(Timestep ts);
 		void OnViewportResize(uint32 width, uint32 height);
 
+		Entity GetPrimaryCameraEntity();
+
 	private:
 		template<typename T>
 		void OnComponentAdded(Entity entity, T& component);

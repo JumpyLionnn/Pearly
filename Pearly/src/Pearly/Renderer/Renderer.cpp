@@ -97,7 +97,6 @@ namespace Pearly {
 		s_Data.TextureShader = Shader::Create("assets/shaders/Texture.glsl");
 		s_Data.TextureShader->Bind();
 		s_Data.TextureShader->SetIntArray("u_Textures", samplers, s_Data.MaxTextureSlots);
-
 		
 
 		s_Data.QuadVertexPositions[0] = { -0.5f, -0.5, 0.0f, 1.0f };
