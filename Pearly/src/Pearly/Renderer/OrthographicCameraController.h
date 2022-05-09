@@ -1,22 +1,12 @@
 #pragma once
 #include "OrthographicCamera.h"
+#include "Camera.h"
 #include "Pearly/Core/Timestep.h"
 
 #include "Pearly/Events/MouseEvents.h"
 #include "Pearly/Events/WindowEvents.h"
 
 namespace Pearly {
-
-	struct OrthographicCameraBounds
-	{
-		float Left;
-		float Right;
-		float Bottom;
-		float Top;
-
-		inline float GetWidth() { return Right - Left; }
-		inline float GetHeight() { return Top - Bottom; }
-	};
 
 	class OrthographicCameraController
 	{

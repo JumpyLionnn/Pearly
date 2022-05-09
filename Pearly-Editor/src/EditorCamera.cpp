@@ -7,7 +7,11 @@ namespace Pearly {
 	static constexpr float s_MaxZoomSpeed = 100.0f;
 
 	EditorCamera::EditorCamera(float aspectRatio, float nearClip, float farClip)
-		: Camera(glm::ortho(-aspectRatio, aspectRatio, nearClip, farClip, m_NearClip, m_FarClip)), m_AspectRatio(aspectRatio), m_NearClip(nearClip), m_FarClip(farClip)
+		: Camera(glm::ortho(-aspectRatio * m_Distance, aspectRatio* m_Distance, -m_Distance, m_Distance, nearClip, farClip)), 
+			m_Bounds(-aspectRatio * m_Distance, aspectRatio * m_Distance, -m_Distance, m_Distance),
+			m_AspectRatio(aspectRatio),
+			m_NearClip(nearClip),
+			m_FarClip(farClip)
 	{
 		UpdateView();
 	}
@@ -16,18 +20,17 @@ namespace Pearly {
 	{
 		if (Input::IsMouseButtonPressed(PR_MOUSE_BUTTON_RIGHT))
 		{
-			// TODO: improve precision of the movment to be perfect on all window sizes
 			glm::vec2 mousePosition{ Input::GetMouseX(), Input::GetMouseY() };
-			glm::vec2 delta = (mousePosition - m_InitialMousePosition) * 0.015f;
+			glm::vec2 delta = (mousePosition - m_InitialMousePosition);
 			m_InitialMousePosition = mousePosition;
 
-			float x = std::min(m_ViewportWidth / 1000.0f, 2.4f); // max = 2.4f
-			float xFactor = 0.0366f * (x * x) - 0.1778f * x + 0.3021f;
+			// getting the ratio between the screen pixels and the scene units
+			float xAxisUnitsPerScreenPixel = m_Bounds.GetWidth() / m_ViewportWidth;
+			float yAxisUnitsPerScreenPixel = m_Bounds.GetHeight() / m_ViewportHeight;
+			// calculating the amout of units the camera needs to move
+			m_Position.x -= xAxisUnitsPerScreenPixel * delta.x;
+			m_Position.y += yAxisUnitsPerScreenPixel * delta.y;
 
-			float y = std::min(m_ViewportHeight / 1000.0f, 2.4f); // max = 2.4f
-			float yFactor = 0.0366f * (y * y) - 0.1778f * y + 0.3021f;
-
-			m_Position += glm::vec2(delta.x * xFactor, delta.y * yFactor) * glm::vec2(-1.0f, 1.0f) * m_Distance;
 			UpdateView();
 		}
 
@@ -43,7 +46,8 @@ namespace Pearly {
 	void EditorCamera::UpdateProjection()
 	{
 		m_AspectRatio = m_ViewportWidth / m_ViewportHeight;
-		m_Projection = glm::ortho(-m_AspectRatio * m_Distance, m_AspectRatio * m_Distance, -m_Distance, m_Distance, m_NearClip, m_FarClip);
+		m_Bounds = { -m_AspectRatio * m_Distance, m_AspectRatio * m_Distance, -m_Distance, m_Distance };
+		m_Projection = glm::ortho(m_Bounds.Left, m_Bounds.Right, m_Bounds.Bottom, m_Bounds.Top, m_NearClip, m_FarClip);
 	}
 
 	void EditorCamera::UpdateView()
@@ -56,6 +60,7 @@ namespace Pearly {
 	{
 		m_Distance -= event.GetYOffset() * ZoomSpeed();
 		m_Distance = std::max(m_Distance, 0.1f);
+
 		UpdateProjection();
 		return false;
 	}

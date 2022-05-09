@@ -11,5 +11,10 @@ namespace Pearly {
 	{
 	public:
 		static bool DecomposeTransform(const glm::mat4& transform, glm::vec3& translation, float& rotation, glm::vec2& scale);
+	
+		static float Signum(float value) 
+		{
+			return (0.0f < value) - (value < 0.0f);
+		}
 	};
 }

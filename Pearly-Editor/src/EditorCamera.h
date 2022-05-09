@@ -24,12 +24,13 @@ namespace Pearly {
 
 		float ZoomSpeed() const;
 	private:
-		glm::mat4 m_View;
+		OrthographicCameraBounds m_Bounds;
+		glm::mat4 m_View = glm::mat4(1.0f);
 
-		glm::vec2 m_Position = { 0.0f, 0.0f };
-		float m_Distance = 1.0f;
+		glm::vec2 m_Position = glm::vec2(0.0f);
+		float m_Distance = 4.0f;
 
-		glm::vec2 m_InitialMousePosition = { 0.0f, 0.0f };
+		glm::vec2 m_InitialMousePosition = glm::vec2(0.0f);
 
 		float m_ViewportWidth = 1280;
 		float m_ViewportHeight = 720;
