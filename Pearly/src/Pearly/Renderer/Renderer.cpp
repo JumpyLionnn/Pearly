@@ -128,11 +128,11 @@ namespace Pearly {
 		s_Data.TextureSlotIndex = 1;
 	}
 
-	void Renderer::BeginScene(const Camera& camera, const glm::mat4& transform)
+	void Renderer::BeginScene(const Camera& camera, const glm::mat4& view)
 	{
 		PR_PROFILE_FUNCTION();
 
-		glm::mat4 viewProjection = camera.GetProjection() * glm::inverse(transform);
+		glm::mat4 viewProjection = camera.GetProjection() * view;
 
 		s_Data.TextureShader->Bind();
 		s_Data.TextureShader->SetMat4("u_ViewProjection", viewProjection);

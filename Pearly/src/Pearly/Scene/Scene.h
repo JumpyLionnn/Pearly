@@ -1,5 +1,6 @@
 #pragma once
 #include "Pearly/Core/Timestep.h"
+#include "Pearly/Events/Event.h"
 #include <entt.hpp>
 
 namespace Pearly {
@@ -18,15 +19,16 @@ namespace Pearly {
 		Entity CreateEntity(const std::string& name = "Entity");
 		void DestroyEntity(Entity entity);
 
-		void OnUpdate(Timestep ts);
-		void OnViewportResize(uint32 width, uint32 height);
+		virtual void OnUpdate(Timestep ts);
+		virtual void OnEvent(Event& event) {};
+		virtual void OnViewportResize(uint32 width, uint32 height);
 
 		Entity GetPrimaryCameraEntity();
 
-	private:
+	protected:
 		template<typename T>
 		void OnComponentAdded(Entity entity, T& component);
-	private:
+	protected:
 		entt::registry m_Registry;
 		uint32 m_ViewportWidth;
 		uint32 m_ViewportHeight;

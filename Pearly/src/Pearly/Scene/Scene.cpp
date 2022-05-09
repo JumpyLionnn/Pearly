@@ -70,7 +70,7 @@ namespace Pearly {
 		
 		if (primaryCamera)
 		{
-			Renderer::BeginScene(*primaryCamera, primaryCameraTransform);
+			Renderer::BeginScene(*primaryCamera, glm::inverse(primaryCameraTransform));
 			auto view = m_Registry.view<SpriteRendererComponent, TransformComponent>();
 			for (entt::entity entity : view)
 			{

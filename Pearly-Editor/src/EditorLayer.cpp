@@ -46,19 +46,7 @@ namespace Pearly {
 		frameBufferSpec.Height = 720;
 		m_FrameBuffer = FrameBuffer::Create(frameBufferSpec);
 
-		m_ActiveScene = CreateRef<Scene>();
-		/*
-		m_SquareEntity = m_ActiveScene->CreateEntity("Square");
-		m_SquareEntity.AddComponent<SpriteRendererComponent>(glm::vec4(0.2f, 1.0f, 0.3f, 1.0f));
-
-		m_CameraEntity = m_ActiveScene->CreateEntity("camera");
-		CameraComponent& camera = m_CameraEntity.AddComponent<CameraComponent>();
-		camera.Primary = true;
-
-		m_CameraEntity.AddComponent<NativeScriptComponent>().Bind<Controller>();
-		*/
-
-		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+		NewScene();
 
 		// setting the theme
 		auto& style = ImGui::GetStyle();
@@ -92,7 +80,6 @@ namespace Pearly {
 		colors[ImGuiCol_TitleBgActive] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
 		colors[ImGuiCol_TitleBgCollapsed] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
 
-		//style.FrameRounding = 6.0f;
 		style.WindowMenuButtonPosition = ImGuiDir_None;
 		style.TabRounding = 6.0f;
 		style.IndentSpacing = 10.0f;
@@ -248,7 +235,7 @@ namespace Pearly {
 
 		m_ViewportFocused = ImGui::IsWindowFocused();
 		m_ViewportHovered = ImGui::IsWindowHovered();
-		Application::Get().GetImGuiLayer()->SetBlockEvents(!m_ViewportFocused || !m_ViewportHovered);
+		Application::Get().GetImGuiLayer()->SetBlockEvents(!m_ViewportFocused && !m_ViewportHovered);
 
 		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 		m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
@@ -265,15 +252,15 @@ namespace Pearly {
 			float windowHeight = ImGui::GetWindowHeight();
 			ImGuizmo::SetRect(windowPosition.x, windowPosition.y, windowWidth, windowHeight);
 
-			Entity cameraEntity = m_ActiveScene->GetPrimaryCameraEntity();
-			CameraComponent& cameraComponent = cameraEntity.GetComponent<CameraComponent>();
-			const glm::mat4& cameraProjection = cameraComponent.Camera.GetProjection();
-			glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>().GetTransform());
+			const EditorCamera& camera = m_ActiveScene->GetCamera();
+			const glm::mat4& cameraProjection = camera.GetProjection();
+			glm::mat4 cameraView = camera.GetView();
 
 			TransformComponent& entityTransform = selectedEntity.GetComponent<TransformComponent>();
 			glm::mat4 transform = entityTransform.GetTransform();
 			float originalRotation = entityTransform.Rotation;
 
+			// TODO: center the gizmos
 			ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection), (ImGuizmo::OPERATION)m_GizmoType, ImGuizmo::MODE::LOCAL, glm::value_ptr(transform));
 			
 			if (ImGuizmo::IsUsing())
@@ -300,6 +287,7 @@ namespace Pearly {
 	void EditorLayer::OnEvent(Event& e)
 	{
 		m_CameraController.OnEvent(e);
+		m_ActiveScene->OnEvent(e);
 
 		EventDispacher dispacher(e);
 		dispacher.Dispatch<KeyPressedEvent>(PR_BIND_EVENT_FN(EditorLayer::OnKeyPressed));
@@ -361,7 +349,7 @@ namespace Pearly {
 
 	void EditorLayer::NewScene()
 	{
-		m_ActiveScene = CreateRef<Scene>();
+		m_ActiveScene = CreateRef<EditorScene>();
 		m_ActiveScene->OnViewportResize((uint32)m_ViewportSize.x, (uint32)m_ViewportSize.y);
 		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
 		m_CurrentSceneFilePath = std::string();

@@ -1,6 +1,8 @@
 #pragma once
 #include <Pearly.h>
 #include "Panels/SceneHierarchyPanel.h"
+#include "EditorScene.h"
+
 #include <imgui/imgui.h>
 #include <ImGuizmo.h>
 
@@ -38,7 +40,7 @@ namespace Pearly {
 		Ref<SubTexture2D> m_LilyPadTexture;
 		Ref<SubTexture2D> m_BigTreeTexture;
 
-		Ref<Scene> m_ActiveScene;
+		Ref<EditorScene> m_ActiveScene;
 		std::string m_CurrentSceneFilePath;
 
 		Entity m_SquareEntity;
