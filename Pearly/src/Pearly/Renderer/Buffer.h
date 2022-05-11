@@ -46,7 +46,6 @@ namespace Pearly {
 		uint32 Offset;
 		uint32 Size;
 
-		BufferElement() {}
 		BufferElement(ShaderDataType type, const std::string& name, bool normalized = false)
 			: Type(type), Name(name), Normalized(normalized), Size(ShaderDataTypeSize(type)), Offset(0)
 		{}

@@ -14,7 +14,7 @@ namespace Pearly {
 	
 		static float Signum(float value) 
 		{
-			return (0.0f < value) - (value < 0.0f);
+			return (float)((0.0f < value) - (value < 0.0f));
 		}
 	};
 }

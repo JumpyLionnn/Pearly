@@ -27,6 +27,7 @@ namespace Pearly {
 				value = std::string(buffer);
 				return true;
 			}
+			return false;
 		}
 
 		static void Vec2Controls(const std::string& label, glm::vec2& values, float speed = 0.01f, float labelMinWidth = 100.0f);

@@ -1,4 +1,5 @@
 #include "prpch.h"
+#include "Log.h"
 
 
 namespace Pearly {

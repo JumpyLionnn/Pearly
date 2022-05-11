@@ -59,7 +59,7 @@ namespace Pearly {
 
 		inline static RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); };
 	private:
-		static float GetTextureIndex(const Ref<Texture2D>& texture);
+		static uint32 GetTextureIndex(const Ref<Texture2D>& texture);
 
 		static constexpr std::array<glm::vec2, 4> defaultTextureCoords{ glm::vec2( 0.0f, 0.0f), glm::vec2(1.0f, 0.0f), glm::vec2(1.0f, 1.0f), glm::vec2(0.0f, 1.0f) };
 		static void SubmitQuad(const TransformProperties& transformProperties, uint32 textureIndex, const glm::vec4& color, float tilingFactor, const std::array<glm::vec2, 4>& textureCoords = defaultTextureCoords, int entityID = -1);

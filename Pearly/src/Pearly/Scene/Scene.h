@@ -13,7 +13,7 @@ namespace Pearly {
 		friend class SceneSerializer;
 		friend class SceneHierarchyPanel;
 	public:
-		Scene();
+		Scene() = default;
 		~Scene();
 
 		Entity CreateEntity(const std::string& name = "Entity");
@@ -30,8 +30,8 @@ namespace Pearly {
 		void OnComponentAdded(Entity entity, T& component);
 	protected:
 		entt::registry m_Registry;
-		uint32 m_ViewportWidth;
-		uint32 m_ViewportHeight;
+		uint32 m_ViewportWidth = 0;
+		uint32 m_ViewportHeight = 0;
 	};
 
 }

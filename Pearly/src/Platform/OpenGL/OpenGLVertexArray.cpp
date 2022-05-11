@@ -71,7 +71,7 @@ namespace Pearly {
 						ShaderDataTypeToOpenGLBaseType(element.Type),
 						element.Normalized ? GL_TRUE : GL_FALSE,
 						layout.GetStride(),
-						(const void*)element.Offset);
+						(const void*)(uint64)element.Offset);
 					m_VertexBufferIndex++;
 					break;
 				}
@@ -85,7 +85,7 @@ namespace Pearly {
 						element.GetComponentCount(),
 						ShaderDataTypeToOpenGLBaseType(element.Type),
 						layout.GetStride(),
-						(const void*)element.Offset);
+						(const void*)(uint64)element.Offset);
 					m_VertexBufferIndex++;
 					break;
 				}

@@ -9,9 +9,6 @@
 #include <glm/gtx/string_cast.hpp>
 
 namespace Pearly {
-	Scene::Scene()
-	{
-	}
 	Scene::~Scene()
 	{
 

@@ -36,7 +36,7 @@ namespace Pearly {
 		std::array<Ref<Texture2D>, MaxTextureSlots> TextureSlots;
 		uint32 TextureSlotIndex = 1; // slot 0 is a white texture
 
-		glm::vec4 QuadVertexPositions[4];
+		glm::vec4 QuadVertexPositions[4] = { glm::vec4(0.0f)};
 
 		#if PR_ENABLE_RENDERER_STATS
 		Renderer::Statistics Stats;
@@ -151,7 +151,7 @@ namespace Pearly {
 	{
 		PR_PROFILE_FUNCTION();
 
-		uint32 dataSize = (uint8*)s_Data.QuadVertexBufferPtr - (uint8*)s_Data.QuadVertexBufferBase;
+		uint32 dataSize = (uint32)((uint8*)s_Data.QuadVertexBufferPtr - (uint8*)s_Data.QuadVertexBufferBase);
 		s_Data.QuadVertexBuffer->SetData(s_Data.QuadVertexBufferBase, dataSize);
 
 		Flush();
@@ -189,7 +189,7 @@ namespace Pearly {
 	{
 		PR_PROFILE_FUNCTION();
 
-		constexpr float textureIndex = 0.0f; // white texture
+		constexpr uint32 textureIndex = 0; // white texture
 		SubmitQuad(transformProperties, textureIndex, color, 1.0f);
 	}
 
@@ -197,7 +197,7 @@ namespace Pearly {
 	{
 		PR_PROFILE_FUNCTION();
 
-		float textureIndex = GetTextureIndex(texture);
+		uint32 textureIndex = GetTextureIndex(texture);
 		SubmitQuad(transformProperties, textureIndex, tint, tilingFactor);
 	}
 
@@ -205,7 +205,7 @@ namespace Pearly {
 	{
 		PR_PROFILE_FUNCTION();
 
-		float textureIndex = GetTextureIndex(subTexture->GetTexture());
+		uint32 textureIndex = GetTextureIndex(subTexture->GetTexture());
 		SubmitQuad(transformProperties, textureIndex, tint, tilingFactor, subTexture->GetTexCoords());
 	}
 
@@ -217,7 +217,7 @@ namespace Pearly {
 	void Renderer::DrawQuad(const glm::mat4& transform, Ref<Texture2D> texture, const glm::vec4& tint, float tilingFactor)
 	{
 		PR_PROFILE_FUNCTION();
-		float textureIndex = GetTextureIndex(texture);
+		uint32 textureIndex = GetTextureIndex(texture);
 		SubmitQuadVertecies(transform, textureIndex, tint, tilingFactor, defaultTextureCoords);
 	}
 
@@ -243,24 +243,24 @@ namespace Pearly {
 		#endif
 	}
 
-	float Renderer::GetTextureIndex(const Ref<Texture2D>& texture)
+	uint32 Renderer::GetTextureIndex(const Ref<Texture2D>& texture)
 	{
 		PR_PROFILE_FUNCTION();
-		float textureIndex = 0.0f;
+		uint32 textureIndex = 0;
 
 		for (uint32 i = 1; i < s_Data.TextureSlotIndex; i++)
 		{
 			if (*s_Data.TextureSlots[i].get() == *texture.get())
 			{
-				textureIndex = (float)i;
+				textureIndex = i;
 			}
 		}
 
-		if (textureIndex == 0.0f)
+		if (textureIndex == 0)
 		{
 			if (s_Data.TextureSlotIndex >= RendererData::MaxTextureSlots)
 				FlushAndReset();
-			textureIndex = (float)s_Data.TextureSlotIndex;
+			textureIndex = s_Data.TextureSlotIndex;
 			s_Data.TextureSlots[s_Data.TextureSlotIndex++] = texture;
 		}
 		return textureIndex;
@@ -284,7 +284,7 @@ namespace Pearly {
 		s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[0];
 		s_Data.QuadVertexBufferPtr->Color = color;
 		s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[0];
-		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
+		s_Data.QuadVertexBufferPtr->TexIndex = (float)textureIndex;
 		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
 		s_Data.QuadVertexBufferPtr->EntityID = entityID;
 		s_Data.QuadVertexBufferPtr++;
@@ -292,7 +292,7 @@ namespace Pearly {
 		s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[1];
 		s_Data.QuadVertexBufferPtr->Color = color;
 		s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[1];
-		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
+		s_Data.QuadVertexBufferPtr->TexIndex = (float)textureIndex;
 		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
 		s_Data.QuadVertexBufferPtr->EntityID = entityID;
 		s_Data.QuadVertexBufferPtr++;
@@ -300,7 +300,7 @@ namespace Pearly {
 		s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[2];
 		s_Data.QuadVertexBufferPtr->Color = color;
 		s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[2];
-		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
+		s_Data.QuadVertexBufferPtr->TexIndex = (float)textureIndex;
 		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
 		s_Data.QuadVertexBufferPtr->EntityID = entityID;
 		s_Data.QuadVertexBufferPtr++;
@@ -308,7 +308,7 @@ namespace Pearly {
 		s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[3];
 		s_Data.QuadVertexBufferPtr->Color = color;
 		s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[3];
-		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
+		s_Data.QuadVertexBufferPtr->TexIndex = (float)textureIndex;
 		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
 		s_Data.QuadVertexBufferPtr->EntityID = entityID;
 		s_Data.QuadVertexBufferPtr++;

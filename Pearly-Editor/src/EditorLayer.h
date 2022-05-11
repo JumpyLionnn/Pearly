@@ -4,7 +4,11 @@
 #include "EditorScene.h"
 
 #include <imgui/imgui.h>
+
+#pragma warning(push, 0)
 #include <ImGuizmo.h>
+#pragma warning(pop)
+
 
 namespace Pearly {
 

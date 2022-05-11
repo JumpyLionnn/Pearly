@@ -26,7 +26,7 @@ namespace Pearly {
 	};
 
 	EditorLayer::EditorLayer()
-		: Layer("EditorLayer"), m_CameraController(1280.0f / 720.0f), m_SpriteSheet("assets/textures/tiles.png", { 12, 12 })
+		: Layer("EditorLayer"), m_ViewportBounds(), m_CameraController(1280.0f / 720.0f), m_SpriteSheet("assets/textures/tiles.png", { 12, 12 })
 	{}
 
 	void EditorLayer::OnAttach()
@@ -247,7 +247,7 @@ namespace Pearly {
 
 		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 		m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
-		ImGui::Image((void*)m_FrameBuffer->GetColorAttachmentRendererID(), { m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+		ImGui::Image((void*)(uint64)m_FrameBuffer->GetColorAttachmentRendererID(), { m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 		
 		Entity selectedEntity = m_SceneHierarchyPanel.GetSelectedEntity();
 		if (selectedEntity)
@@ -314,7 +314,7 @@ namespace Pearly {
 					{
 						NewScene();
 					}
-					break;
+					return true;
 				}
 				case PR_KEY_O:
 				{
@@ -322,7 +322,7 @@ namespace Pearly {
 					{
 						OpenScene();
 					}
-					break;
+					return true;
 				}
 				case PR_KEY_S:
 				{
@@ -334,19 +334,20 @@ namespace Pearly {
 					{
 						SaveAsScene();
 					}
-					break;
+					return true;
 				}
 
 				case PR_KEY_W:
 					m_GizmoType = GizmoOperation::Translation;
-					break;
+					return true;
 				case PR_KEY_E:
 					m_GizmoType = GizmoOperation::Rotation;
-					break;
+					return true;
 				case PR_KEY_R:
 					m_GizmoType = GizmoOperation::Scale;
-					break;
+					return true;
 			}
+			return false;
 		}
 		else
 		{

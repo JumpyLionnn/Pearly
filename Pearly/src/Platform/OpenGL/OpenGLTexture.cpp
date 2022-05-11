@@ -88,6 +88,6 @@ namespace Pearly {
 
 	void* OpenGLTexture2D::GetRendererID() const
 	{
-		return (void*)m_RendererID;
+		return (void*)(uint64)m_RendererID;
 	}
 }

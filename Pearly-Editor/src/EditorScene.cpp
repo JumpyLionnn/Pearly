@@ -2,7 +2,7 @@
 
 namespace Pearly {
 	EditorScene::EditorScene()
-		: m_Camera(1.667, -1.0f, 1.0f)
+		: m_Camera(1.667f, -1.0f, 1.0f)
 	{}
 
 	void EditorScene::OnUpdate(Timestep ts)
@@ -29,7 +29,7 @@ namespace Pearly {
 		m_ViewportWidth = width;
 		m_ViewportHeight = height;
 
-		m_Camera.SetViewportSize(width, height);
+		m_Camera.SetViewportSize((float)width, (float)height);
 	}
 
 }
