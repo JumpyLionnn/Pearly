@@ -338,13 +338,16 @@ namespace Pearly {
 				}
 
 				case PR_KEY_W:
-					m_GizmoType = GizmoOperation::Translation;
+					if (!ImGuizmo::IsUsing())
+						m_GizmoType = GizmoOperation::Translation;
 					return true;
 				case PR_KEY_E:
-					m_GizmoType = GizmoOperation::Rotation;
+					if (!ImGuizmo::IsUsing())
+						m_GizmoType = GizmoOperation::Rotation;
 					return true;
 				case PR_KEY_R:
-					m_GizmoType = GizmoOperation::Scale;
+					if (!ImGuizmo::IsUsing())
+						m_GizmoType = GizmoOperation::Scale;
 					return true;
 			}
 			return false;
