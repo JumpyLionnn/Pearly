@@ -18,9 +18,15 @@ namespace Pearly {
 		openFileName.hwndOwner = glfwGetWin32Window((GLFWwindow*)Application::Get().GetWindow().GetNativeWindow());
 		openFileName.lpstrFile = szFile;
 		openFileName.nMaxFile = sizeof(szFile);
+		
 		openFileName.lpstrFilter = filter;
 		openFileName.nFilterIndex = 1;
 		openFileName.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
+
+		CHAR currentDir[256] = { 0 };
+		if (GetCurrentDirectoryA(256, currentDir))
+			openFileName.lpstrInitialDir = currentDir;
+
 		if (GetOpenFileNameA(&openFileName) == TRUE)
 		{
 			return openFileName.lpstrFile;
@@ -38,7 +44,12 @@ namespace Pearly {
 		openFileName.nMaxFile = sizeof(szFile);
 		openFileName.lpstrFilter = filter;
 		openFileName.nFilterIndex = 1;
-		openFileName.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
+		openFileName.Flags = OFN_PATHMUSTEXIST | OFN_OVERWRITEPROMPT | OFN_NOCHANGEDIR;
+
+		CHAR currentDir[256] = { 0 };
+		if (GetCurrentDirectoryA(256, currentDir))
+			openFileName.lpstrInitialDir = currentDir;
+
 		if (GetSaveFileNameA(&openFileName) == TRUE)
 		{	
 			return openFileName.lpstrFile;
