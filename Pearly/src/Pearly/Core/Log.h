@@ -5,7 +5,7 @@
 #include <spdlog/sinks/stdout_color_sinks.h>
 #pragma warning(pop)
 
-
+#include "glm/gtx/string_cast.hpp"
 
 namespace Pearly {
 	class Log
@@ -19,6 +19,19 @@ namespace Pearly {
 		static std::shared_ptr<spdlog::logger> s_CoreLogger;
 		static std::shared_ptr<spdlog::logger> s_ClientLogger;
 	};
+}
+
+// logging types that are not defined by spglog
+template<glm::length_t L, typename T, glm::qualifier Q>
+inline std::ostream& operator<<(std::ostream& os, const glm::vec<L, T, Q>& vector)
+{
+	return os << glm::to_string(vector);
+}
+
+template<glm::length_t C, glm::length_t R, typename T, glm::qualifier Q>
+inline std::ostream& operator<<(std::ostream& os, const glm::mat<C, R, T, Q>& matrix)
+{
+	return os << glm::to_string(matrix);
 }
 
 // core log
