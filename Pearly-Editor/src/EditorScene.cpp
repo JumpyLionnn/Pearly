@@ -13,8 +13,8 @@ namespace Pearly {
 		for (entt::entity entity : view)
 		{
 			auto [sprite, transform] = view.get<SpriteRendererComponent, TransformComponent>(entity);
-
-			Renderer::DrawQuad(transform.GetTransform(), sprite.Color);
+			
+			Renderer::DrawSprite(transform.GetTransform(), sprite, (int)entity);
 		}
 		Renderer::EndScene();
 	}

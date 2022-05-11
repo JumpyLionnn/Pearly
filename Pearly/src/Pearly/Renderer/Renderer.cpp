@@ -12,6 +12,9 @@ namespace Pearly {
 		glm::vec2 TexCoord;
 		float TexIndex;
 		float TilingFactor;
+
+		// editor only
+		uint32 EntityID;
 	};
 
 	struct RendererData
@@ -57,6 +60,7 @@ namespace Pearly {
 			{ShaderDataType::Vec2f, "a_TexCoord"},
 			{ShaderDataType::Float, "a_TexIndex"},
 			{ShaderDataType::Float, "a_TilingFactor"},
+			{ShaderDataType::Int, "a_EntityID"}
 			});
 		s_Data.QuadVertexArray->AddVertexBuffer(s_Data.QuadVertexBuffer);
 
@@ -208,13 +212,19 @@ namespace Pearly {
 	void Renderer::DrawQuad(const glm::mat4& transform, const glm::vec4& color)
 	{
 		PR_PROFILE_FUNCTION();
-		SubmitQuadVertices(transform, 0, color, 1.0f, defaultTextureCoords);
+		SubmitQuadVertecies(transform, 0, color, 1.0f, defaultTextureCoords);
 	}
 	void Renderer::DrawQuad(const glm::mat4& transform, Ref<Texture2D> texture, const glm::vec4& tint, float tilingFactor)
 	{
 		PR_PROFILE_FUNCTION();
 		float textureIndex = GetTextureIndex(texture);
-		SubmitQuadVertices(transform, textureIndex, tint, tilingFactor, defaultTextureCoords);
+		SubmitQuadVertecies(transform, textureIndex, tint, tilingFactor, defaultTextureCoords);
+	}
+
+	void Renderer::DrawSprite(const glm::mat4& transform, SpriteRendererComponent& spriteRendererComponent, int entityID)
+	{
+		PR_PROFILE_FUNCTION();
+		SubmitQuadVertecies(transform, 0, spriteRendererComponent.Color, 1.0f, defaultTextureCoords, entityID);
 	}
 
 	void Renderer::ResetStats()
@@ -256,16 +266,16 @@ namespace Pearly {
 		return textureIndex;
 	}
 
-	void Renderer::SubmitQuad(const TransformProperties& transformProperties, uint32 textureIndex, const glm::vec4& color, float tilingFactor, const std::array<glm::vec2, 4>& textureCoords)
+	void Renderer::SubmitQuad(const TransformProperties& transformProperties, uint32 textureIndex, const glm::vec4& color, float tilingFactor, const std::array<glm::vec2, 4>& textureCoords, int entityID)
 	{
 		PR_PROFILE_FUNCTION();
 
 		glm::mat4 transform = CanculateTransformMatrix(transformProperties);
 
-		SubmitQuadVertices(transform, textureIndex, color, tilingFactor, textureCoords);
+		SubmitQuadVertecies(transform, textureIndex, color, tilingFactor, textureCoords, entityID);
 	}
 
-	void Renderer::SubmitQuadVertices(const glm::mat4& transform, uint32 textureIndex, const glm::vec4& color, float tilingFactor, const std::array<glm::vec2, 4>& textureCoords)
+	void Renderer::SubmitQuadVertecies(const glm::mat4& transform, uint32 textureIndex, const glm::vec4& color, float tilingFactor, const std::array<glm::vec2, 4>& textureCoords, int entityID)
 	{
 		PR_PROFILE_FUNCTION();
 		if (s_Data.QuadIndexCount >= RendererData::MaxIndices)
@@ -276,6 +286,7 @@ namespace Pearly {
 		s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[0];
 		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
 		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+		s_Data.QuadVertexBufferPtr->EntityID = entityID;
 		s_Data.QuadVertexBufferPtr++;
 
 		s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[1];
@@ -283,6 +294,7 @@ namespace Pearly {
 		s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[1];
 		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
 		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+		s_Data.QuadVertexBufferPtr->EntityID = entityID;
 		s_Data.QuadVertexBufferPtr++;
 
 		s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[2];
@@ -290,6 +302,7 @@ namespace Pearly {
 		s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[2];
 		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
 		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+		s_Data.QuadVertexBufferPtr->EntityID = entityID;
 		s_Data.QuadVertexBufferPtr++;
 
 		s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[3];
@@ -297,6 +310,7 @@ namespace Pearly {
 		s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[3];
 		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
 		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+		s_Data.QuadVertexBufferPtr->EntityID = entityID;
 		s_Data.QuadVertexBufferPtr++;
 
 		s_Data.QuadIndexCount += 6;

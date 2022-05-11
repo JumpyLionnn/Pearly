@@ -55,23 +55,62 @@ namespace Pearly {
 		PR_CORE_ASSERT(vertexBuffer->GetLayout().GetElements().size(), "VertexBuffer has no layout!");
 		glBindVertexArray(m_RendererID);
 		vertexBuffer->Bind();
-		uint32 index = 0;
 		const BufferLayout& layout = vertexBuffer->GetLayout();
 		for (const BufferElement& element : layout)
 		{
-			glEnableVertexAttribArray(index + m_VertexBufferIndexOffset);
-			glVertexAttribPointer(
-				index + m_VertexBufferIndexOffset,
-				element.GetComponentCount(),
-				ShaderDataTypeToOpenGLBaseType(element.Type),
-				element.Normalized ? GL_TRUE : GL_FALSE,
-				layout.GetStride(),
-				(const void*)(intptr_t)element.Offset
-			);
-			index++;
+			glEnableVertexAttribArray(m_VertexBufferIndex);
+			switch (element.Type)
+			{
+				case ShaderDataType::Float:
+				case ShaderDataType::Vec2f:
+				case ShaderDataType::Vec3f:
+				case ShaderDataType::Vec4f:
+				{
+					glVertexAttribPointer(m_VertexBufferIndex,
+						element.GetComponentCount(),
+						ShaderDataTypeToOpenGLBaseType(element.Type),
+						element.Normalized ? GL_TRUE : GL_FALSE,
+						layout.GetStride(),
+						(const void*)element.Offset);
+					m_VertexBufferIndex++;
+					break;
+				}
+				case ShaderDataType::Int:
+				case ShaderDataType::Vec2i:
+				case ShaderDataType::Vec3i:
+				case ShaderDataType::Vec4i:
+				case ShaderDataType::Bool:
+				{
+					glVertexAttribIPointer(m_VertexBufferIndex,
+						element.GetComponentCount(),
+						ShaderDataTypeToOpenGLBaseType(element.Type),
+						layout.GetStride(),
+						(const void*)element.Offset);
+					m_VertexBufferIndex++;
+					break;
+				}
+				case ShaderDataType::Mat3:
+				case ShaderDataType::Mat4:
+				{
+					uint8_t count = element.GetComponentCount();
+					for (uint8_t i = 0; i < count; i++)
+					{
+						glVertexAttribPointer(m_VertexBufferIndex,
+							count,
+							ShaderDataTypeToOpenGLBaseType(element.Type),
+							element.Normalized ? GL_TRUE : GL_FALSE,
+							layout.GetStride(),
+							(const void*)(element.Offset + sizeof(float) * count * i));
+						glVertexAttribDivisor(m_VertexBufferIndex, 1);
+						m_VertexBufferIndex++;
+					}
+					break;
+				}
+				default:
+					PR_CORE_ASSERT(false, "Unknown ShaderDataType!");
+			}
 		}
 		m_VertexBuffers.push_back(vertexBuffer);
-		m_VertexBufferIndexOffset += layout.GetElements().size();
 	}
 
 	void OpenGLVertexArray::SetIndexBuffer(const Ref<IndexBuffer>& indexBuffer)

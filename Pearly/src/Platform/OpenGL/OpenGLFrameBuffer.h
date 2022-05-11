@@ -9,18 +9,26 @@ namespace Pearly {
 		virtual ~OpenGLFrameBuffer();
 
 		virtual void Resize(uint32 width, uint32 height) override;
+		virtual int ReadPixel(uint32 index, int x, int y) override;
+
+		virtual void ClearColorAtachment(uint32 index, int value) override;
 
 		void Invalidate();
 
 		virtual void Bind() override;
 		virtual void Unbind() override;
 
-		virtual uint32 GetColorAttachmentRendererID() const override { return m_ColorAttachment; }
+		virtual uint32 GetColorAttachmentRendererID(uint32 index) const override { PR_CORE_ASSERT(index < m_ColorAttachments.size(), "the color attachment does not exists!");  return m_ColorAttachments[index]; }
 
 		virtual const FrameBufferSpecification& GetSpecification() const override { return m_Specification; }
 	private:
 		FrameBufferSpecification m_Specification;
 		uint32 m_RendererID = 0;
-		uint32 m_ColorAttachment = 0, m_DepthAttachment = 0;
+
+		std::vector<FrameBufferTextureSpecification> m_ColorAttachmentSpecifications;
+		FrameBufferTextureSpecification m_DepthAttachmentSpecification;
+
+		std::vector<uint32> m_ColorAttachments;
+		uint32 m_DepthAttachment = 0;
 	};
 }

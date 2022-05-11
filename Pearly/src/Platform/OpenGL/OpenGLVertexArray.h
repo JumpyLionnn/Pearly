@@ -17,7 +17,7 @@ namespace Pearly {
 		inline virtual const Ref<IndexBuffer>& GetIndexBuffer() const override;
 	private:
 		uint32 m_RendererID;
-		uint32_t m_VertexBufferIndexOffset = 0;
+		uint32 m_VertexBufferIndex = 0;
 		std::vector<Ref<VertexBuffer>> m_VertexBuffers;
 		Ref<IndexBuffer> m_IndexBuffer;
 	};

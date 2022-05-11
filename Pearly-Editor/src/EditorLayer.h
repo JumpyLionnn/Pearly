@@ -8,7 +8,7 @@
 
 namespace Pearly {
 
-	enum GizmoOperation
+	enum class GizmoOperation
 	{
 		Translation = (int)ImGuizmo::OPERATION::TRANSLATE_X | (int)ImGuizmo::OPERATION::TRANSLATE_Y,
 		Rotation = ImGuizmo::OPERATION::ROTATE_Z,
@@ -28,6 +28,7 @@ namespace Pearly {
 		virtual void OnImGuiRender() override;
 	private:
 		bool OnKeyPressed(KeyPressedEvent& event);
+		bool OnMouseButtonPressed(MouseButtonPressedEvent& event);
 
 		void NewScene();
 		void OpenScene();
@@ -48,6 +49,7 @@ namespace Pearly {
 
 		Ref<FrameBuffer> m_FrameBuffer;
 		glm::vec2 m_ViewportSize = { 0, 0 };
+		glm::vec2 m_ViewportBounds[2];
 
 		OrthographicCameraController m_CameraController;
 

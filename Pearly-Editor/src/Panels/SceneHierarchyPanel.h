@@ -13,6 +13,7 @@ namespace Pearly {
 		void SetContext(const Ref<Scene>& scene);
 
 		Entity GetSelectedEntity() const;
+		void SetSelectedEntity(Entity entity);
 
 		void OnRender();
 	private:

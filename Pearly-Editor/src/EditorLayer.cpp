@@ -44,6 +44,7 @@ namespace Pearly {
 		FrameBufferSpecification frameBufferSpec;
 		frameBufferSpec.Width = 1280;
 		frameBufferSpec.Height = 720;
+		frameBufferSpec.Attachments = { FrameBufferTextureFormat::RGBA8, FrameBufferTextureFormat::RED_INTEGER, FrameBufferTextureFormat::Depth };
 		m_FrameBuffer = FrameBuffer::Create(frameBufferSpec);
 
 		NewScene();
@@ -117,14 +118,14 @@ namespace Pearly {
 		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 		RenderCommand::Clear();
 		
-
-		
 		/*
 		Renderer::BeginScene(m_CameraController.GetCamera());
 		Renderer::DrawQuad({ { -1.0f, 1.0f }, { 4.0f, 4.0f } }, m_BigTreeTexture);
 		Renderer::DrawQuad({ { 1.0f, 0.0f, 0.1f }, { 1.0f, 1.0f } }, m_LilyPadTexture);
 		Renderer::EndScene();
 		*/
+
+		m_FrameBuffer->ClearColorAtachment(1, -1);
 		
 		m_ActiveScene->OnUpdate(ts);
 
@@ -233,6 +234,13 @@ namespace Pearly {
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0,0));
 		ImGui::Begin("Viewport");
 
+		auto viewportMinRegion = ImGui::GetWindowContentRegionMin();
+		auto viewportMaxRegion = ImGui::GetWindowContentRegionMax();
+		auto viewportOffset = ImGui::GetWindowPos();
+		m_ViewportBounds[0] = { viewportMinRegion.x + viewportOffset.x, viewportMinRegion.y + viewportOffset.y };
+		m_ViewportBounds[1] = { viewportMaxRegion.x + viewportOffset.x, viewportMaxRegion.y + viewportOffset.y };
+
+
 		m_ViewportFocused = ImGui::IsWindowFocused();
 		m_ViewportHovered = ImGui::IsWindowHovered();
 		Application::Get().GetImGuiLayer()->SetBlockEvents(!m_ViewportFocused && !m_ViewportHovered);
@@ -240,7 +248,6 @@ namespace Pearly {
 		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 		m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
 		ImGui::Image((void*)m_FrameBuffer->GetColorAttachmentRendererID(), { m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
-		
 		
 		Entity selectedEntity = m_SceneHierarchyPanel.GetSelectedEntity();
 		if (selectedEntity)
@@ -250,7 +257,7 @@ namespace Pearly {
 			ImVec2 windowPosition = ImGui::GetWindowPos();
 			float windowWidth = ImGui::GetWindowWidth();
 			float windowHeight = ImGui::GetWindowHeight();
-			ImGuizmo::SetRect(windowPosition.x, windowPosition.y, windowWidth, windowHeight);
+			ImGuizmo::SetRect(m_ViewportBounds[0].x, m_ViewportBounds[0].y, m_ViewportBounds[1].x - m_ViewportBounds[0].x, m_ViewportBounds[1].y - m_ViewportBounds[0].y);
 
 			const EditorCamera& camera = m_ActiveScene->GetCamera();
 			const glm::mat4& cameraProjection = camera.GetProjection();
@@ -260,7 +267,6 @@ namespace Pearly {
 			glm::mat4 transform = entityTransform.GetTransform();
 			float originalRotation = entityTransform.Rotation;
 
-			// TODO: center the gizmos
 			ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection), (ImGuizmo::OPERATION)m_GizmoType, ImGuizmo::MODE::LOCAL, glm::value_ptr(transform));
 			
 			if (ImGuizmo::IsUsing())
@@ -291,6 +297,7 @@ namespace Pearly {
 
 		EventDispacher dispacher(e);
 		dispacher.Dispatch<KeyPressedEvent>(PR_BIND_EVENT_FN(EditorLayer::OnKeyPressed));
+		dispacher.Dispatch<MouseButtonPressedEvent>(PR_BIND_EVENT_FN(EditorLayer::OnMouseButtonPressed));
 	}
 
 	bool EditorLayer::OnKeyPressed(KeyPressedEvent& event)
@@ -345,6 +352,40 @@ namespace Pearly {
 		{
 			return false;
 		}
+	}
+
+	bool EditorLayer::OnMouseButtonPressed(MouseButtonPressedEvent& event)
+	{
+		// mouse picking
+		if (event.GetMouseButton() == PR_MOUSE_BUTTON_LEFT)
+		{
+			if (m_ViewportHovered && !ImGuizmo::IsOver())
+			{
+				auto [mx, my] = ImGui::GetMousePos();
+				mx -= m_ViewportBounds[0].x;
+				my -= m_ViewportBounds[0].y;
+				glm::vec2 viewportSize = m_ViewportBounds[1] - m_ViewportBounds[0];
+				my = viewportSize.y - my;
+
+				int mouseX = (int)mx;
+				int mouseY = (int)my;
+
+				/*
+				if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
+				{
+					int pixelData = m_FrameBuffer->ReadPixel(1, mouseX, mouseY);
+					PR_CORE_INFO("pixel data = {0}", pixelData);
+				}
+				*/
+				m_FrameBuffer->Bind();
+				int pixelData = m_FrameBuffer->ReadPixel(1, mouseX, mouseY);
+				m_FrameBuffer->Unbind();
+				Entity entity = pixelData == -1 ? Entity() : Entity((entt::entity)pixelData, m_ActiveScene.get());
+				m_SceneHierarchyPanel.SetSelectedEntity(entity);
+			}
+			
+		}
+		return false;
 	}
 
 	void EditorLayer::NewScene()
