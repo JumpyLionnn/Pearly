@@ -1,6 +1,6 @@
 #pragma once
 #include <Pearly.h>
-#include "gui/Image.h"
+#include "Gui/Image.h"
 
 namespace Pearly {
 

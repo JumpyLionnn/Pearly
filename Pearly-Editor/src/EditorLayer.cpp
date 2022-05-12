@@ -34,8 +34,8 @@ namespace Pearly {
 		PR_PROFILE_FUNCTION();
 
 		ImGuiIO& io = ImGui::GetIO();
-		io.Fonts->AddFontFromFileTTF("assets/fonts/opensans/static/OpenSans/OpenSans-Bold.ttf", 18.0f);
-		io.FontDefault = io.Fonts->AddFontFromFileTTF("assets/fonts/opensans/static/OpenSans/OpenSans-Regular.ttf", 18.0f);
+		io.Fonts->AddFontFromFileTTF("Resources/Fonts/opensans/static/OpenSans/OpenSans-Bold.ttf", 18.0f);
+		io.FontDefault = io.Fonts->AddFontFromFileTTF("Resources/Fonts/opensans/static/OpenSans/OpenSans-Regular.ttf", 18.0f);
 
 		m_CheckerboardTexture = Texture2D::Create("assets/textures/Checkerboard.png");
 		m_LilyPadTexture = m_SpriteSheet.CreateSubTexture({ 13, 20 });
@@ -248,7 +248,18 @@ namespace Pearly {
 		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 		m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
 		ImGui::Image((void*)(uint64)m_FrameBuffer->GetColorAttachmentRendererID(), { m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
-		
+		if (ImGui::BeginDragDropTarget())
+		{
+			if(const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+			{
+				const wchar_t* path = (const wchar_t*)payload->Data;
+				OpenScene(path);
+			}
+
+			ImGui::EndDragDropTarget();
+		}
+
+
 		Entity selectedEntity = m_SceneHierarchyPanel.GetSelectedEntity();
 		if (selectedEntity)
 		{
@@ -286,6 +297,7 @@ namespace Pearly {
 		ImGui::PopStyleVar();
 
 		m_SceneHierarchyPanel.OnRender();
+		m_ContentBrowserPanel.OnRender();
 
 		ImGui::End();
 	}
@@ -374,13 +386,6 @@ namespace Pearly {
 				int mouseX = (int)mx;
 				int mouseY = (int)my;
 
-				/*
-				if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
-				{
-					int pixelData = m_FrameBuffer->ReadPixel(1, mouseX, mouseY);
-					PR_CORE_INFO("pixel data = {0}", pixelData);
-				}
-				*/
 				m_FrameBuffer->Bind();
 				int pixelData = m_FrameBuffer->ReadPixel(1, mouseX, mouseY);
 				m_FrameBuffer->Unbind();
@@ -404,12 +409,17 @@ namespace Pearly {
 		std::string filepath = FileDialogs::OpenFile("Pearly Scene (*.pearly)\0*.pearly\0");
 		if (!filepath.empty())
 		{
-			NewScene();
-			m_CurrentSceneFilePath = filepath;
-			SceneSerializer serializer(m_ActiveScene);
-			serializer.Deserialize(filepath);
+			OpenScene(filepath);
 		}
 	}
+	void EditorLayer::OpenScene(const std::filesystem::path& path)
+	{
+		NewScene();
+		m_CurrentSceneFilePath = path.string();
+		SceneSerializer serializer(m_ActiveScene);
+		serializer.Deserialize(m_CurrentSceneFilePath);
+	}
+
 	void EditorLayer::SaveScene()
 	{
 		if (m_CurrentSceneFilePath.empty())

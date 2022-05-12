@@ -3,21 +3,21 @@
 #include <imgui/imgui.h>
 #include <glm/gtc/type_ptr.hpp>
 #include <imgui/imgui_internal.h>
-#include "gui/Widgets.h"
-#include "gui/Layout.h"
+#include "Gui/Widgets.h"
+#include "Gui/Layout.h"
 #include <iostream>
 
 namespace Pearly {
 
 	SceneHierarchyPanel::SceneHierarchyPanel()
 	{
-		m_ViewMoreIcon = Image::Load("assets/textures/icons/viewMore.png");
+		m_ViewMoreIcon = Image::Load("Resources/Icons/ViewMore.png");
 	}
 
 	SceneHierarchyPanel::SceneHierarchyPanel(const Ref<Scene>& scene)
 		: m_Context(scene)
 	{
-		m_ViewMoreIcon = Image::Load("assets/textures/icons/viewMore.png");
+		m_ViewMoreIcon = Image::Load("Resources/Icons/ViewMore.png");
 	}
 
 	void SceneHierarchyPanel::SetContext(const Ref<Scene>& scene)

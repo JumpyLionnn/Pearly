@@ -1,6 +1,7 @@
 #pragma once
 #include <Pearly.h>
 #include "Panels/SceneHierarchyPanel.h"
+#include "Panels/ContentBrowserPanel.h"
 #include "EditorScene.h"
 
 #include <imgui/imgui.h>
@@ -36,6 +37,7 @@ namespace Pearly {
 
 		void NewScene();
 		void OpenScene();
+		void OpenScene(const std::filesystem::path& path);
 		void SaveScene();
 		void SaveAsScene();
 	private:
@@ -63,6 +65,7 @@ namespace Pearly {
 		glm::vec4 m_Color = { 0.2f, 0.3f, 0.8f, 1.0f };
 
 		SceneHierarchyPanel m_SceneHierarchyPanel;
+		ContentBrowserPanel m_ContentBrowserPanel;
 
 		GizmoOperation m_GizmoType = GizmoOperation::Translation;
 
