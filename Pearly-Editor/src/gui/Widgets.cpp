@@ -18,13 +18,26 @@ namespace Pearly {
 		return clicked;
 	}
 
-	bool Widgets::Button(const Ref<Image>& image, const glm::vec2& size, bool round)
+	bool Widgets::Button(const Ref<Image>& image, const glm::vec2& size, bool round, bool disabled)
 	{
+		if (disabled)
+		{
+			ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+			ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
+		}
+
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.f, 0.f, 0.f, 0.f));
 		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, s_ItemRounding * round);
 		bool clicked = ImGui::ImageButton(image->GetTextureID(), { size.x, size.y }, { 0.0f, 1.0f }, { 1.0f, 0.0f }, 0);
 		ImGui::PopStyleVar();
 		ImGui::PopStyleColor();
+		
+		if (disabled)
+		{
+			ImGui::PopItemFlag();
+			ImGui::PopStyleVar();
+		}
+		
 		return clicked;
 	}
 
