@@ -224,7 +224,15 @@ namespace Pearly {
 	void Renderer::DrawSprite(const glm::mat4& transform, SpriteRendererComponent& spriteRendererComponent, int entityID)
 	{
 		PR_PROFILE_FUNCTION();
-		SubmitQuadVertecies(transform, 0, spriteRendererComponent.Color, 1.0f, defaultTextureCoords, entityID);
+		if (spriteRendererComponent.Texture)
+		{
+			uint32 textureIndex = GetTextureIndex(spriteRendererComponent.Texture);
+			SubmitQuadVertecies(transform, textureIndex, spriteRendererComponent.Color, spriteRendererComponent.TilingFactor, defaultTextureCoords, entityID);
+		}
+		else
+		{
+			SubmitQuadVertecies(transform, 0, spriteRendererComponent.Color, 1.0f, defaultTextureCoords, entityID);
+		}
 	}
 
 	void Renderer::ResetStats()

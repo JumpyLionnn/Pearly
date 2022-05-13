@@ -9,7 +9,7 @@ namespace Pearly {
 	class Widgets
 	{
 	public:
-		static bool Button(const std::string& label, const glm::vec2& size);
+		static bool Button(const std::string& label, const glm::vec2& size, ImGuiButtonFlags flags = ImGuiButtonFlags_None);
 		static bool Button(const Ref<Image>& image, const glm::vec2& size, bool round = true, bool disabled = false);
 
 		static bool TreeNode(const void* ptr_id, ImGuiTreeNodeFlags flags, const std::string& label);

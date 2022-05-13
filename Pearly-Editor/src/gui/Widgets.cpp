@@ -10,10 +10,10 @@ namespace Pearly {
 	static float s_ItemRounding = 8.0f;
 	static ImGuiTreeNodeFlags s_DefaultTreeNodeFlags = ImGuiTreeNodeFlags_SpanAvailWidth;
 
-	bool Widgets::Button(const std::string& label, const glm::vec2& size)
+	bool Widgets::Button(const std::string& label, const glm::vec2& size, ImGuiButtonFlags flags)
 	{
 		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, s_ItemRounding);
-		bool clicked = ImGui::Button(label.c_str(), { size.x, size.y });
+		bool clicked = ImGui::ButtonEx(label.c_str(), { size.x, size.y }, flags);
 		ImGui::PopStyleVar();
 		return clicked;
 	}

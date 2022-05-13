@@ -6,6 +6,8 @@
 #include "Gui/Widgets.h"
 #include "Gui/Layout.h"
 #include <iostream>
+#include <filesystem>
+#include <stb_image/stb_image.h>
 
 namespace Pearly {
 
@@ -259,6 +261,47 @@ namespace Pearly {
 		DrawComponent<SpriteRendererComponent>("Sprite Renderer", entity, [](SpriteRendererComponent& component) 
 		{
 				Widgets::ColorEdit4("Color", component.Color);
+				
+				std::string filename = "default";
+				if (component.Texture)
+					filename = std::filesystem::path(component.Texture->GetPath()).stem().string();
+				{
+					ImGui::PushID("Texture");
+					float labelWidth = std::max(100.0f, ImGui::GetContentRegionAvail().x / 4.0f);
+					ImGui::Columns(2, "", false);
+
+					ImGui::SetColumnWidth(0, labelWidth);
+					ImGui::Text("Texture");
+					ImGui::NextColumn();
+
+					Widgets::Button(filename, { ImGui::GetContentRegionAvail().x, 0.0f }, ImGuiButtonFlags_MouseButtonRight);
+					if (ImGui::BeginPopupContextItem())
+					{
+						if (ImGui::MenuItem("Use default"))
+							component.Texture = nullptr;
+						ImGui::EndPopup();
+					}
+
+					ImGui::Columns(1);
+					ImGui::PopID();
+				}
+				
+				if (ImGui::BeginDragDropTarget())
+				{
+					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+					{
+						const wchar_t* path = (const wchar_t*)payload->Data;
+						std::string texturePath = std::filesystem::path(path).string();
+						int x, y, comp;
+						if(stbi_info(texturePath.c_str(), &x, &y, &comp))
+							component.Texture = Texture2D::Create(texturePath);
+					}
+
+					ImGui::EndDragDropTarget();
+				}
+
+				Widgets::FloatControls("Tiling Factor", component.TilingFactor, 0.1f);
+				Widgets::FloatControls("Z-Index", component.ZIndex, 0.01f);
 		});
 	}
 }

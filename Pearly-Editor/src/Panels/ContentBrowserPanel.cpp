@@ -31,7 +31,6 @@ namespace Pearly {
 
 	void ContentBrowserPanel::OnRender()
 	{
-		ImGui::ShowDemoWindow();
 		ImGui::Begin("Content Browser");
 
 		ImVec2 startCursor = ImGui::GetCursorPos();

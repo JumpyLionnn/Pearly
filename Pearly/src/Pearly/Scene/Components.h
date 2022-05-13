@@ -3,6 +3,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "Pearly/Renderer/Camera.h"
+#include "Pearly/Renderer/Texture.h"
 #include "Pearly/Core/Timestep.h"
 #include "SceneCamera.h"
 #include "ScriptableEntity.h"
@@ -23,7 +24,6 @@ namespace Pearly {
 
 		glm::mat4 GetTransform() const
 		{
-			// TODO: add z-indexing in the rendering components
 			return glm::translate(glm::mat4(1.0f), { Position.x , Position.y, 0.0f }) * 
 				glm::rotate(glm::mat4(1.0f), glm::radians(Rotation), { 0.0f, 0.0f, 1.0f }) * 
 				glm::scale(glm::mat4(1.0f), { Scale.x , Scale.y, 1.0f });
@@ -44,6 +44,9 @@ namespace Pearly {
 	struct SpriteRendererComponent
 	{
 		glm::vec4 Color = glm::vec4(1.0f);
+		Ref<Texture2D> Texture;
+		float TilingFactor = 1.0f;
+		float ZIndex = 0.0f;
 
 		SpriteRendererComponent() = default;
 		SpriteRendererComponent(const SpriteRendererComponent&) = default;

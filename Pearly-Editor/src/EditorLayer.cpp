@@ -230,7 +230,7 @@ namespace Pearly {
 
 			ImGui::EndMenuBar();
 		}
-		
+
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0,0));
 		ImGui::Begin("Viewport");
 
@@ -414,10 +414,15 @@ namespace Pearly {
 	}
 	void EditorLayer::OpenScene(const std::filesystem::path& path)
 	{
-		NewScene();
-		m_CurrentSceneFilePath = path.string();
-		SceneSerializer serializer(m_ActiveScene);
-		serializer.Deserialize(m_CurrentSceneFilePath);
+		Ref<EditorScene> tempScene = CreateRef<EditorScene>();
+		SceneSerializer serializer(tempScene);
+		if (serializer.Deserialize(path.string()))
+		{
+			m_ActiveScene = tempScene;
+			m_ActiveScene->OnViewportResize((uint32)m_ViewportSize.x, (uint32)m_ViewportSize.y);
+			m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+			m_CurrentSceneFilePath = path.string();
+		}
 	}
 
 	void EditorLayer::SaveScene()

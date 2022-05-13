@@ -1,8 +1,10 @@
 #include "prpch.h"
 #include "SceneSerializer.h"
 
+
 #define YAML_CPP_STATIC_DEFINE
 #include <yaml-cpp/yaml.h>
+#include <stb_image.h>
 #include "Entity.h"
 #include "Components.h"
 
@@ -108,6 +110,12 @@ namespace Pearly {
 
 			SpriteRendererComponent& spriteRenderer = entity.GetComponent<SpriteRendererComponent>();
 			out << YAML::Key << "Color" << YAML::Value << spriteRenderer.Color;
+			std::string path;
+			if (spriteRenderer.Texture)
+				path = spriteRenderer.Texture->GetPath();
+			out << YAML::Key << "TexturePath" << YAML::Value << path;
+			out << YAML::Key << "TilingFactor" << YAML::Value << spriteRenderer.TilingFactor;
+			out << YAML::Key << "ZIndex" << YAML::Value << spriteRenderer.ZIndex;
 			out << YAML::EndMap;
 		}
 		if (entity.HasComponent<CameraComponent>())
@@ -164,6 +172,8 @@ namespace Pearly {
 		sstream << stream.rdbuf();
 
 		YAML::Node data = YAML::Load(sstream.str());
+		if (data.size() == 0)
+			return false;
 		if (!data["Scene"])
 			return false;
 
@@ -198,6 +208,19 @@ namespace Pearly {
 				{
 					SpriteRendererComponent& spriteRenderer = deserializedEntity.AddComponent<SpriteRendererComponent>();
 					spriteRenderer.Color = spriteRendererComponent["Color"].as<glm::vec4>();
+					std::string path = spriteRendererComponent["TexturePath"].as<std::string>();
+					spriteRenderer.Texture = nullptr;
+					int x, y, comp;
+					if (stbi_info(path.c_str(), &x, &y, &comp))
+					{
+						spriteRenderer.Texture = Texture2D::Create(path);
+					}
+					else if (!path.empty())
+					{
+						return false;
+					}
+					spriteRenderer.TilingFactor = spriteRendererComponent["TilingFactor"].as<float>();
+					spriteRenderer.ZIndex = spriteRendererComponent["ZIndex"].as<float>();
 				}
 
 				const YAML::Node& cameraComponent = entity["CameraComponent"];
@@ -218,7 +241,7 @@ namespace Pearly {
 			}
 		}
 
-		return false;
+		return true;
 	}
 	bool SceneSerializer::DeserializeBinary(const std::string& filepath)
 	{

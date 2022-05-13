@@ -13,8 +13,12 @@ namespace Pearly {
 		for (entt::entity entity : view)
 		{
 			auto [sprite, transform] = view.get<SpriteRendererComponent, TransformComponent>(entity);
+
+			glm::mat4 transformMatrix = glm::translate(glm::mat4(1.0f), { transform.Position.x , transform.Position.y, sprite.ZIndex })*
+				glm::rotate(glm::mat4(1.0f), glm::radians(transform.Rotation), { 0.0f, 0.0f, 1.0f })*
+				glm::scale(glm::mat4(1.0f), { transform.Scale.x , transform.Scale.y, 1.0f });
 			
-			Renderer::DrawSprite(transform.GetTransform(), sprite, (int)entity);
+			Renderer::DrawSprite(transformMatrix, sprite, (int)entity);
 		}
 		Renderer::EndScene();
 	}
