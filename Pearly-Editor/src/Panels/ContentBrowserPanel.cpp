@@ -76,15 +76,20 @@ namespace Pearly {
 
 
 		static Widgets::TextFilter filter("##search", "Search...");
-		static constexpr uint32 filterWidth = 300;
+		static constexpr float maxFilterWidth = 200.0f;
+		ImGui::SameLine();
 		float avilWidth = ImGui::GetContentRegionAvail().x;
-		ImGui::SameLine(avilWidth - filterWidth);
+		float filterWidth = std::min(maxFilterWidth, avilWidth);
+		ImGui::Dummy(ImVec2(avilWidth - filterWidth, 0));
+		ImGui::SameLine();
 		ImGui::SetCursorPosY(startCursor.y + paddingY * 0.2f);
 		filter.Update(filterWidth);
 
 		ImGui::SetCursorPosY(startCursor.y + s_HeaderHeight + spacing.y);
 
 		ImGui::Separator();
+
+		ImGui::BeginChild("##filelist");
 
 		float panelWidth = ImGui::GetContentRegionAvail().x;
 		int columnCount = std::max((int)(panelWidth / g_CellSize), s_MinColumnCount);
@@ -115,6 +120,8 @@ namespace Pearly {
 
 		ImGui::PopStyleVar();
 		ImGui::Columns(1);
+
+		ImGui::EndChild();
 
 		ImGui::End();
 	}
