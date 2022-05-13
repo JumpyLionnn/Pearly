@@ -1,6 +1,8 @@
 #include "ContentBrowserPanel.h"
 #include "Gui/Widgets.h"
 
+#include <Pearly.h>
+
 #include <imgui/imgui.h>
 
 namespace Pearly {
@@ -12,6 +14,8 @@ namespace Pearly {
 	float g_Gap = g_ThumbnailSize / 16.0f;
 	float g_CellSize = g_ThumbnailSize + g_Gap;
 
+
+	static const float s_HeaderHeight = 30.0f;
 	static const int s_MinColumnCount = 2;
 	
 
@@ -27,22 +31,47 @@ namespace Pearly {
 
 	void ContentBrowserPanel::OnRender()
 	{
+		ImGui::ShowDemoWindow();
 		ImGui::Begin("Content Browser");
 
-		if (Widgets::Button(m_UndoFileNavgationIcon, { 30.0f, 30.0f }, true, m_DirectoriesHistory.empty()))
+		if (Widgets::Button(m_UndoFileNavgationIcon, { s_HeaderHeight, s_HeaderHeight }, true, m_DirectoriesHistory.empty()))
 		{
 			m_DirectoriesUndoHistory.push(m_CurrentDirectory);
 			m_CurrentDirectory = m_DirectoriesHistory.top();
 			m_DirectoriesHistory.pop();
 		}
 		ImGui::SameLine();
-		if (Widgets::Button(m_RedoFileNavgationIcon, { 30.0f, 30.0f }, true, m_DirectoriesUndoHistory.empty()))
+		if (Widgets::Button(m_RedoFileNavgationIcon, { s_HeaderHeight, s_HeaderHeight }, true, m_DirectoriesUndoHistory.empty()))
 		{
 			m_DirectoriesHistory.push(m_CurrentDirectory);
 			m_CurrentDirectory = m_DirectoriesUndoHistory.top();
 			m_DirectoriesUndoHistory.pop();
 		}
 
+		ImGui::SameLine();
+		
+		
+		ImVec2 spacing = ImGui::GetStyle().ItemSpacing;
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(2.0f, spacing.y));
+		// centering the text verticly
+		float cursorY = ImGui::GetCursorPosY();
+		float paddingTop = (s_HeaderHeight - ImGui::GetFontSize()) * 0.4f;
+		ImGui::SetCursorPosY(cursorY + paddingTop);
+
+		std::filesystem::path base;
+		std::filesystem::path::iterator last = --m_CurrentDirectory.end();
+		for (std::filesystem::path::iterator it = m_CurrentDirectory.begin(); it != m_CurrentDirectory.end(); it++)
+		{
+			if (!it->empty() && it != last)
+			{
+				base /= *it;
+				PathDirectory(base);
+			}
+		}
+		
+		std::string currentDirectoryName = m_CurrentDirectory.filename().string();
+		ImGui::Text(currentDirectoryName.c_str());
+		ImGui::PopStyleVar();
 		
 
 		float panelWidth = ImGui::GetContentRegionAvail().x;
@@ -52,7 +81,6 @@ namespace Pearly {
 		ImGui::Columns(columnCount, 0, false);
 
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0.0f, 0.0f));
-
 		for (const std::filesystem::directory_entry& entry : std::filesystem::directory_iterator(m_CurrentDirectory))
 		{	
 			EntryButton(entry);
@@ -65,6 +93,26 @@ namespace Pearly {
 
 		ImGui::End();
 	}
+
+	void ContentBrowserPanel::PathDirectory(const std::filesystem::path& path)
+	{
+		
+		std::string filename = path.filename().string();
+		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0.0f, 1.0f));
+		ImGui::PushStyleColor(ImGuiCol_Button, { 0.0f, 0.0f, 0.0f, 0.0f });
+		if (ImGui::Button(filename.c_str()))
+		{
+			PR_CORE_INFO("changing path: \"{0}\"", path.string());
+			ChangePath(path);
+		}
+		ImGui::PopStyleColor();
+		ImGui::PopStyleVar();
+		ImGui::SameLine();
+
+		ImGui::Text("\\");
+		ImGui::SameLine();
+	}
+
 
 	void ContentBrowserPanel::EntryButton(const std::filesystem::directory_entry& entry)
 	{
@@ -97,9 +145,7 @@ namespace Pearly {
 		{
 			if (entry.is_directory())
 			{
-				m_CurrentDirectory /= filename;
-				m_DirectoriesHistory.push(path.parent_path());
-				m_DirectoriesUndoHistory = {};
+				ChangePath(path);
 			}
 			else
 			{
@@ -112,6 +158,13 @@ namespace Pearly {
 		ImGui::SetCursorPos({ cursor.x, cursor.y - itemSize.y });
 		ImGui::Image(GetIcon(entry)->GetTextureID(), { itemSize.x, itemSize.x }, { 0, 1 }, { 1, 0 });
 		ImGui::TextWrapped(filenameStr.c_str());
+	}
+
+	void ContentBrowserPanel::ChangePath(const std::filesystem::path& path)
+	{
+		m_DirectoriesHistory.push(m_CurrentDirectory);
+		m_CurrentDirectory = path;
+		m_DirectoriesUndoHistory = {};
 	}
 
 	Ref<Image> ContentBrowserPanel::GetIcon(std::filesystem::directory_entry entry)

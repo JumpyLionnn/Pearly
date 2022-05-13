@@ -14,7 +14,10 @@ namespace Pearly {
 
 		void OnRender();
 	private:
+		void PathDirectory(const std::filesystem::path& path);
 		void EntryButton(const std::filesystem::directory_entry& entry);
+
+		inline void ChangePath(const std::filesystem::path& path);
 
 		Ref<Image> GetIcon(std::filesystem::directory_entry entry);
 	private:
