@@ -44,8 +44,9 @@ namespace Pearly {
 		public:
 			TextFilter(const std::string& label, const std::string& hint);
 
-			bool Draw();
+			bool Update(float width = 0);
 			bool PassFilter(const std::string& str);
+			inline bool Empty() const { return m_Buffer[0] == 0; }
 		private:
 			std::string m_Label;
 			std::string m_Hint;

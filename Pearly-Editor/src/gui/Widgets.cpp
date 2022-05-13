@@ -191,12 +191,20 @@ namespace Pearly {
 		: m_Label(label), m_Hint(hint)
 	{}
 
-	bool Widgets::TextFilter::Draw()
+	bool Widgets::TextFilter::Update(float width)
 	{
-		if (!m_Label.starts_with("##"))
+		bool show = !m_Label.starts_with("##");
+		if (show)
 		{
 			ImGui::Text(m_Label.c_str());
 			ImGui::SameLine();
+		}
+		if (width > 0)
+		{
+			float textWidth = 0.0f;
+			if (!m_Label.empty() && show)
+				textWidth = ImGui::CalcTextSize(m_Label.c_str(), 0, true).y;
+			ImGui::SetNextItemWidth(width - textWidth);
 		}
 		bool changed = ImGui::InputTextWithHint("##Input", m_Hint.c_str(), m_Buffer, sizeof(m_Buffer));
 		return changed;

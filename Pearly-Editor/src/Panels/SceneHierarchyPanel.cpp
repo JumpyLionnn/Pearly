@@ -126,9 +126,7 @@ namespace Pearly {
 			//TODO: improve this system
 			float modalWidth = ImGui::GetContentRegionAvail().x;
 			static Widgets::TextFilter filter("##Filter", "Search...");
-			//filter.
-			//Widgets::TextInput("##Search")
-			filter.Draw();
+			filter.Update();
 			std::vector<std::string> components = { "Camera", "SpriteRenderer" };
 			if (ImGui::BeginListBox("##Components"))
 			{

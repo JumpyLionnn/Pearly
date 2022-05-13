@@ -22,6 +22,7 @@ namespace Pearly {
 		Ref<Image> GetIcon(std::filesystem::directory_entry entry);
 	private:
 		std::filesystem::path m_CurrentDirectory;
+
 		std::stack<std::filesystem::path> m_DirectoriesHistory;
 		std::stack<std::filesystem::path> m_DirectoriesUndoHistory;
 

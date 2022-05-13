@@ -34,6 +34,8 @@ namespace Pearly {
 		ImGui::ShowDemoWindow();
 		ImGui::Begin("Content Browser");
 
+		ImVec2 startCursor = ImGui::GetCursorPos();
+
 		if (Widgets::Button(m_UndoFileNavgationIcon, { s_HeaderHeight, s_HeaderHeight }, true, m_DirectoriesHistory.empty()))
 		{
 			m_DirectoriesUndoHistory.push(m_CurrentDirectory);
@@ -50,13 +52,12 @@ namespace Pearly {
 
 		ImGui::SameLine();
 		
-		
-		ImVec2 spacing = ImGui::GetStyle().ItemSpacing;
+		ImGuiStyle& style = ImGui::GetStyle();
+		ImVec2 spacing = style.ItemSpacing;
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(2.0f, spacing.y));
 		// centering the text verticly
-		float cursorY = ImGui::GetCursorPosY();
-		float paddingTop = (s_HeaderHeight - ImGui::GetFontSize()) * 0.4f;
-		ImGui::SetCursorPosY(cursorY + paddingTop);
+		float paddingY = (s_HeaderHeight - ImGui::GetFontSize());
+		ImGui::SetCursorPosY(startCursor.y + paddingY * 0.35f);
 
 		std::filesystem::path base;
 		std::filesystem::path::iterator last = --m_CurrentDirectory.end();
@@ -72,20 +73,44 @@ namespace Pearly {
 		std::string currentDirectoryName = m_CurrentDirectory.filename().string();
 		ImGui::Text(currentDirectoryName.c_str());
 		ImGui::PopStyleVar();
-		
+
+
+		static Widgets::TextFilter filter("##search", "Search...");
+		static constexpr uint32 filterWidth = 300;
+		float avilWidth = ImGui::GetContentRegionAvail().x;
+		ImGui::SameLine(avilWidth - filterWidth);
+		ImGui::SetCursorPosY(startCursor.y + paddingY * 0.2f);
+		filter.Update(filterWidth);
+
+		ImGui::SetCursorPosY(startCursor.y + s_HeaderHeight + spacing.y);
+
+		ImGui::Separator();
 
 		float panelWidth = ImGui::GetContentRegionAvail().x;
-
 		int columnCount = std::max((int)(panelWidth / g_CellSize), s_MinColumnCount);
-
 		ImGui::Columns(columnCount, 0, false);
 
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0.0f, 0.0f));
-		for (const std::filesystem::directory_entry& entry : std::filesystem::directory_iterator(m_CurrentDirectory))
-		{	
-			EntryButton(entry);
-
-			ImGui::NextColumn();
+		if (filter.Empty())
+		{
+			for (const std::filesystem::directory_entry& entry : std::filesystem::directory_iterator(m_CurrentDirectory))
+			{
+				EntryButton(entry);
+				ImGui::NextColumn();
+			}
+		}
+		else
+		{
+			for (const std::filesystem::directory_entry& entry : std::filesystem::recursive_directory_iterator(m_CurrentDirectory))
+			{
+				std::string name = entry.path().filename().string();
+				if (filter.PassFilter(name))
+				{
+					EntryButton(entry);
+					ImGui::NextColumn();
+				}
+				
+			}
 		}
 
 		ImGui::PopStyleVar();
@@ -98,13 +123,10 @@ namespace Pearly {
 	{
 		
 		std::string filename = path.filename().string();
-		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0.0f, 1.0f));
+		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0.0f, 0.0f));
 		ImGui::PushStyleColor(ImGuiCol_Button, { 0.0f, 0.0f, 0.0f, 0.0f });
-		if (ImGui::Button(filename.c_str()))
-		{
-			PR_CORE_INFO("changing path: \"{0}\"", path.string());
+		if (ImGui::SmallButton(filename.c_str()))
 			ChangePath(path);
-		}
 		ImGui::PopStyleColor();
 		ImGui::PopStyleVar();
 		ImGui::SameLine();
