@@ -14,6 +14,7 @@ namespace Pearly {
 		friend class SceneHierarchyPanel;
 	public:
 		Scene() = default;
+		Scene(const Scene& scene);
 		~Scene();
 
 		Entity CreateEntity(const std::string& name = "Entity");

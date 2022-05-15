@@ -9,9 +9,34 @@
 #include <glm/gtx/string_cast.hpp>
 
 namespace Pearly {
+
+	template<typename T>
+	static void CloneComponentIfExists(const entt::registry& fromRegistry, entt::registry& toRegistry, entt::entity entity)
+	{
+		if (fromRegistry.any_of<T>(entity))
+		{
+			toRegistry.emplace<T>(entity, fromRegistry.get<T>(entity));
+		}
+	}
+
 	Scene::~Scene()
 	{
 
+	}
+
+	Scene::Scene(const Scene& scene)
+	{
+		scene.m_Registry.each([&](entt::entity entity)
+		{
+			m_Registry.create(entity);
+			
+			m_Registry.emplace<TagComponent>(entity, scene.m_Registry.get<TagComponent>(entity));
+			m_Registry.emplace<TransformComponent>(entity, scene.m_Registry.get<TransformComponent>(entity));
+
+			CloneComponentIfExists<SpriteRendererComponent>(scene.m_Registry, m_Registry, entity);
+			CloneComponentIfExists<CameraComponent>(scene.m_Registry, m_Registry, entity);
+		});
+		
 	}
 
 	Entity Scene::CreateEntity(const std::string& name)
@@ -75,7 +100,7 @@ namespace Pearly {
 				glm::mat4 transformMatrix = glm::translate(glm::mat4(1.0f), { transform.Position.x , transform.Position.y, sprite.ZIndex }) *
 					glm::rotate(glm::mat4(1.0f), glm::radians(transform.Rotation), { 0.0f, 0.0f, 1.0f }) *
 					glm::scale(glm::mat4(1.0f), { transform.Scale.x , transform.Scale.y, 1.0f });
-				Renderer::DrawQuad(transformMatrix, sprite.Color);
+				Renderer::DrawSprite(transformMatrix, sprite, (int)entity);
 			}
 			Renderer::EndScene();
 		}

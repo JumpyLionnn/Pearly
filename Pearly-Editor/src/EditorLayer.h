@@ -32,6 +32,8 @@ namespace Pearly {
 		virtual void OnEvent(Event& event) override;
 		virtual void OnImGuiRender() override;
 	private:
+		void ToolbarPanel();
+
 		bool OnKeyPressed(KeyPressedEvent& event);
 		bool OnMouseButtonPressed(MouseButtonPressedEvent& event);
 
@@ -40,6 +42,9 @@ namespace Pearly {
 		void OpenScene(const std::filesystem::path& path);
 		void SaveScene();
 		void SaveAsScene();
+
+		void OnScenePlay();
+		void OnSceneStop();
 	private:
 		SpriteSheet m_SpriteSheet;
 		Ref<Texture2D> m_CheckerboardTexture;
@@ -48,6 +53,7 @@ namespace Pearly {
 		Ref<SubTexture2D> m_BigTreeTexture;
 
 		Ref<EditorScene> m_ActiveScene;
+		Ref<Scene> m_RuntimeScene;
 		std::string m_CurrentSceneFilePath;
 
 		Entity m_SquareEntity;
@@ -69,6 +75,16 @@ namespace Pearly {
 
 		GizmoOperation m_GizmoType = GizmoOperation::Translation;
 
+		Ref<Image> m_PlayIcon;
+		Ref<Image> m_StopIcon;
+
+		enum class SceneState
+		{
+			Edit,
+			Play
+		};
+
+		SceneState m_SceneState = SceneState::Edit;
 	};
 
 }

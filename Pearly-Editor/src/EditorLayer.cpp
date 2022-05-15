@@ -2,6 +2,8 @@
 #include <iostream>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "Gui/Widgets.h"
+
 
 namespace Pearly {
 
@@ -85,6 +87,9 @@ namespace Pearly {
 		style.TabRounding = 6.0f;
 		style.IndentSpacing = 10.0f;
 		style.TabBorderSize = 1.0f;
+
+		m_PlayIcon = Image::Load("Resources/Icons/PlayIcon.png");
+		m_StopIcon = Image::Load("Resources/Icons/StopIcon.png");
 	}
 
 	void EditorLayer::OnDetach()
@@ -127,7 +132,20 @@ namespace Pearly {
 
 		m_FrameBuffer->ClearColorAtachment(1, -1);
 		
-		m_ActiveScene->OnUpdate(ts);
+		switch (m_SceneState)
+		{
+			case Pearly::EditorLayer::SceneState::Edit:
+			{
+				m_ActiveScene->OnUpdate(ts);
+				break;
+			}
+			case Pearly::EditorLayer::SceneState::Play:
+			{
+				m_RuntimeScene->OnUpdate(ts);
+				break;
+			}
+		}
+		
 
 		m_FrameBuffer->Unbind();
 		
@@ -231,7 +249,7 @@ namespace Pearly {
 			ImGui::EndMenuBar();
 		}
 
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0,0));
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
 		ImGui::Begin("Viewport");
 
 		auto viewportMinRegion = ImGui::GetWindowContentRegionMin();
@@ -248,20 +266,23 @@ namespace Pearly {
 		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 		m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
 		ImGui::Image((void*)(uint64)m_FrameBuffer->GetColorAttachmentRendererID(), { m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
-		if (ImGui::BeginDragDropTarget())
+		if (m_SceneState == SceneState::Edit)
 		{
-			if(const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+			if (ImGui::BeginDragDropTarget())
 			{
-				const wchar_t* path = (const wchar_t*)payload->Data;
-				OpenScene(path);
-			}
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+				{
+					const wchar_t* path = (const wchar_t*)payload->Data;
+					OpenScene(path);
+				}
 
-			ImGui::EndDragDropTarget();
+				ImGui::EndDragDropTarget();
+			}
 		}
 
 
 		Entity selectedEntity = m_SceneHierarchyPanel.GetSelectedEntity();
-		if (selectedEntity)
+		if (selectedEntity && m_SceneState == SceneState::Edit)
 		{
 			ImGuizmo::SetOrthographic(true);
 			ImGuizmo::SetDrawlist();
@@ -298,19 +319,42 @@ namespace Pearly {
 
 		m_SceneHierarchyPanel.OnRender();
 		m_ContentBrowserPanel.OnRender();
+		ToolbarPanel();
 
 		ImGui::End();
+	}
+
+	void EditorLayer::ToolbarPanel()
+	{
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 2.0f));
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, ImVec2(0.0f, 0.0f));
+		ImGui::Begin("##toolbar", nullptr, ImGuiWindowFlags_NoNav | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+		
+		float size = ImGui::GetWindowHeight() - 4.0f;
+		Ref<Image> icon = m_SceneState == SceneState::Edit ? m_PlayIcon : m_StopIcon;
+		ImGui::SetCursorPosX((ImGui::GetContentRegionMax().x * 0.5f) - (size * 0.5f));
+		if (Widgets::Button(icon, { size, size }))
+		{
+			if(m_SceneState == SceneState::Edit)
+				OnScenePlay();
+			else if (m_SceneState == SceneState::Play)
+				OnSceneStop();
+		}
+		ImGui::End();	
+		ImGui::PopStyleVar(2);
 	}
 
 	void EditorLayer::OnEvent(Event& e)
 	{
 		m_CameraController.OnEvent(e);
-		m_ActiveScene->OnEvent(e);
+		if(m_SceneState == SceneState::Edit)
+			m_ActiveScene->OnEvent(e);
 
 		EventDispacher dispacher(e);
 		dispacher.Dispatch<KeyPressedEvent>(PR_BIND_EVENT_FN(EditorLayer::OnKeyPressed));
 		dispacher.Dispatch<MouseButtonPressedEvent>(PR_BIND_EVENT_FN(EditorLayer::OnMouseButtonPressed));
 	}
+
 
 	bool EditorLayer::OnKeyPressed(KeyPressedEvent& event)
 	{
@@ -373,26 +417,29 @@ namespace Pearly {
 	bool EditorLayer::OnMouseButtonPressed(MouseButtonPressedEvent& event)
 	{
 		// mouse picking
-		if (event.GetMouseButton() == PR_MOUSE_BUTTON_LEFT)
+		if (m_SceneState == SceneState::Edit)
 		{
-			if (m_ViewportHovered && !ImGuizmo::IsOver())
+			if (event.GetMouseButton() == PR_MOUSE_BUTTON_LEFT)
 			{
-				auto [mx, my] = ImGui::GetMousePos();
-				mx -= m_ViewportBounds[0].x;
-				my -= m_ViewportBounds[0].y;
-				glm::vec2 viewportSize = m_ViewportBounds[1] - m_ViewportBounds[0];
-				my = viewportSize.y - my;
+				if (m_ViewportHovered && !ImGuizmo::IsOver())
+				{
+					auto [mx, my] = ImGui::GetMousePos();
+					mx -= m_ViewportBounds[0].x;
+					my -= m_ViewportBounds[0].y;
+					glm::vec2 viewportSize = m_ViewportBounds[1] - m_ViewportBounds[0];
+					my = viewportSize.y - my;
 
-				int mouseX = (int)mx;
-				int mouseY = (int)my;
+					int mouseX = (int)mx;
+					int mouseY = (int)my;
 
-				m_FrameBuffer->Bind();
-				int pixelData = m_FrameBuffer->ReadPixel(1, mouseX, mouseY);
-				m_FrameBuffer->Unbind();
-				Entity entity = pixelData == -1 ? Entity() : Entity((entt::entity)pixelData, m_ActiveScene.get());
-				m_SceneHierarchyPanel.SetSelectedEntity(entity);
-			}
+					m_FrameBuffer->Bind();
+					int pixelData = m_FrameBuffer->ReadPixel(1, mouseX, mouseY);
+					m_FrameBuffer->Unbind();
+					Entity entity = pixelData == -1 ? Entity() : Entity((entt::entity)pixelData, m_ActiveScene.get());
+					m_SceneHierarchyPanel.SetSelectedEntity(entity);
+				}
 			
+			}
 		}
 		return false;
 	}
@@ -446,5 +493,19 @@ namespace Pearly {
 			SceneSerializer serializer(m_ActiveScene);
 			serializer.Serialize(filepath);
 		}
+	}
+
+	void EditorLayer::OnScenePlay()
+	{
+		m_SceneState = SceneState::Play;
+		m_RuntimeScene = CreateRef<Scene>(*m_ActiveScene);
+		m_RuntimeScene->OnViewportResize((uint32)m_ViewportSize.x, (uint32)m_ViewportSize.y);
+		m_SceneHierarchyPanel.SetContext(m_RuntimeScene);
+	}
+	void EditorLayer::OnSceneStop()
+	{
+		m_SceneState = SceneState::Edit;
+		m_RuntimeScene = nullptr;
+		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
 	}
 }

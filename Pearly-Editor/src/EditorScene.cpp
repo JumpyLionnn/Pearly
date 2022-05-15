@@ -1,6 +1,8 @@
 #include "EditorScene.h"
 
+
 namespace Pearly {
+
 	EditorScene::EditorScene()
 		: m_Camera(1.667f, -1.0f, 1.0f)
 	{}
@@ -35,5 +37,4 @@ namespace Pearly {
 
 		m_Camera.SetViewportSize((float)width, (float)height);
 	}
-
 }
