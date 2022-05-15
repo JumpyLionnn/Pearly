@@ -7,6 +7,7 @@
 
 #include "Pearly/Renderer/Renderer.h"
 #include <GLFW/glfw3.h>
+#include "Platform.h"
 
 namespace Pearly {
 
@@ -33,7 +34,7 @@ namespace Pearly {
 		while (m_Running)
 		{
 			PR_PROFILE_SCOPE("Frame");
-			float time = (float)glfwGetTime(); // TODO: Platform::GetTime();
+			float time = Platform::GetTime();
 			Timestep timestep = time - m_LastFrameTime;
 			m_LastFrameTime = time;
 

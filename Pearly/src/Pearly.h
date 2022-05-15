@@ -5,6 +5,7 @@
 #include "Pearly/Core/Application.h"
 #include "Pearly/Core/Layer.h"
 #include "Pearly/Core/Log.h"
+#include "Pearly/Core/Platform.h"
 
 
 #include "Pearly/Core/Timestep.h"

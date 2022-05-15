@@ -135,6 +135,7 @@ project "Sandbox"
 		"Pearly/vendor/spdlog/include",
 		"Pearly/src",
 		"%{IncludeDirs.glm}",
+		"%{IncludeDirs.entt}",
 		"Pearly/vendor"
 	}
 
