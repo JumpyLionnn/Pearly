@@ -14,13 +14,13 @@ namespace Pearly {
 		{
 			TransformComponent& transformComponent = GetComponent<TransformComponent>();
 
-			if (Input::IsKeyPressed(PR_KEY_A))
+			if (Input::IsKeyPressed(KeyCode::A))
 				transformComponent.Position.x -= m_MovmentSpeed * ts;
-			if (Input::IsKeyPressed(PR_KEY_D))
+			if (Input::IsKeyPressed(KeyCode::D))
 				transformComponent.Position.x += m_MovmentSpeed * ts;
-			if (Input::IsKeyPressed(PR_KEY_W))
+			if (Input::IsKeyPressed(KeyCode::W))
 				transformComponent.Position.y += m_MovmentSpeed * ts;
-			if (Input::IsKeyPressed(PR_KEY_S))
+			if (Input::IsKeyPressed(KeyCode::S))
 				transformComponent.Position.y -= m_MovmentSpeed * ts;
 		}
 	private:
@@ -360,11 +360,11 @@ namespace Pearly {
 	{
 		if (event.GetRepeatCount() == 0)
 		{
-			bool control = Input::IsKeyPressed(PR_KEY_LEFT_CONTROL) || Input::IsKeyPressed(PR_KEY_RIGHT_CONTROL);
-			bool shift = Input::IsKeyPressed(PR_KEY_LEFT_SHIFT) || Input::IsKeyPressed(PR_KEY_RIGHT_SHIFT);
+			bool control = Input::IsKeyPressed(KeyCode::LeftControl) || Input::IsKeyPressed(KeyCode::RightControl);
+			bool shift = Input::IsKeyPressed(KeyCode::LeftShift) || Input::IsKeyPressed(KeyCode::RightShift);
 			switch (event.GetKeyCode())
 			{
-				case PR_KEY_N:
+				case KeyCode::N:
 				{
 					if (control)
 					{
@@ -372,7 +372,7 @@ namespace Pearly {
 					}
 					return true;
 				}
-				case PR_KEY_O:
+				case KeyCode::O:
 				{
 					if (control)
 					{
@@ -380,7 +380,7 @@ namespace Pearly {
 					}
 					return true;
 				}
-				case PR_KEY_S:
+				case KeyCode::S:
 				{
 					if (control)
 					{
@@ -393,15 +393,15 @@ namespace Pearly {
 					return true;
 				}
 
-				case PR_KEY_W:
+				case KeyCode::W:
 					if (!ImGuizmo::IsUsing())
 						m_GizmoType = GizmoOperation::Translation;
 					return true;
-				case PR_KEY_E:
+				case KeyCode::E:
 					if (!ImGuizmo::IsUsing())
 						m_GizmoType = GizmoOperation::Rotation;
 					return true;
-				case PR_KEY_R:
+				case KeyCode::R:
 					if (!ImGuizmo::IsUsing())
 						m_GizmoType = GizmoOperation::Scale;
 					return true;
@@ -419,7 +419,7 @@ namespace Pearly {
 		// mouse picking
 		if (m_SceneState == SceneState::Edit)
 		{
-			if (event.GetMouseButton() == PR_MOUSE_BUTTON_LEFT)
+			if (event.GetMouseButton() == MouseCode::ButtonLeft)
 			{
 				if (m_ViewportHovered && !ImGuizmo::IsOver())
 				{

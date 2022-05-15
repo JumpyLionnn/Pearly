@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Event.h"
+#include "Pearly/Core/MouseCodes.h"
 
 namespace Pearly {
 	class MouseMovedEvent : public Event
@@ -54,21 +55,21 @@ namespace Pearly {
 	class MouseButtonEvent : public Event
 	{
 	public:
-		inline int GetMouseButton() const { return m_Button; }
+		inline MouseCode GetMouseButton() const { return m_Button; }
 
 		EVENT_CLASS_CATEGORY((int)EventCategory::Input | (int)EventCategory::Mouse | (int)EventCategory::MouseButton)
 	protected:
-		MouseButtonEvent(int button)
+		MouseButtonEvent(MouseCode button)
 			: m_Button(button)
 		{}
 
-		int m_Button;
+		MouseCode m_Button;
 	};
 
 	class MouseButtonPressedEvent : public MouseButtonEvent
 	{
 	public:
-		MouseButtonPressedEvent(int button)
+		MouseButtonPressedEvent(MouseCode button)
 			: MouseButtonEvent(button)
 		{}
 
@@ -85,7 +86,7 @@ namespace Pearly {
 	class MouseButtonReleasedEvent : public MouseButtonEvent
 	{
 	public:
-		MouseButtonReleasedEvent(int button)
+		MouseButtonReleasedEvent(MouseCode button)
 			: MouseButtonEvent(button)
 		{}
 

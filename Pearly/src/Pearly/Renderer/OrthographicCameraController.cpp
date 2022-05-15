@@ -12,20 +12,20 @@ namespace Pearly {
 	void OrthographicCameraController::OnUpdate(Timestep ts)
 	{
 		PR_PROFILE_FUNCTION();
-		if (Input::IsKeyPressed(PR_KEY_A))
+		if (Input::IsKeyPressed(Pearly::KeyCode::A))
 			m_CameraPosition.x -= CameraMovementSpeed * m_ZoomLevel * ts;
-		if (Input::IsKeyPressed(PR_KEY_D))
+		if (Input::IsKeyPressed(Pearly::KeyCode::D))
 			m_CameraPosition.x += CameraMovementSpeed * m_ZoomLevel * ts;
-		if (Input::IsKeyPressed(PR_KEY_W))
+		if (Input::IsKeyPressed(Pearly::KeyCode::W))
 			m_CameraPosition.y += CameraMovementSpeed * m_ZoomLevel * ts;
-		if (Input::IsKeyPressed(PR_KEY_S))
+		if (Input::IsKeyPressed(Pearly::KeyCode::S))
 			m_CameraPosition.y -= CameraMovementSpeed * m_ZoomLevel * ts;
 
 		if (m_RotationEnabled)
 		{
-			if (Pearly::Input::IsKeyPressed(PR_KEY_Q))
+			if (Pearly::Input::IsKeyPressed(Pearly::KeyCode::Q))
 				m_CameraRotation += CameraRotationSpeed * ts;
-			if (Pearly::Input::IsKeyPressed(PR_KEY_E))
+			if (Pearly::Input::IsKeyPressed(Pearly::KeyCode::E))
 				m_CameraRotation -= CameraRotationSpeed * ts;
 			m_Camera.SetRotation(m_CameraRotation);
 		}

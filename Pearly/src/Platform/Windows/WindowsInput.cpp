@@ -6,19 +6,19 @@
 
 namespace Pearly {
 
-	bool Input::IsKeyPressed(int keycode)
+	bool Input::IsKeyPressed(KeyCode keycode)
 	{
 		PR_PROFILE_FUNCTION();
 		GLFWwindow* window = (GLFWwindow*)Application::Get().GetWindow().GetNativeWindow();
-		int state = glfwGetKey(window, keycode);
+		int state = glfwGetKey(window, (int)keycode);
 		return state == GLFW_PRESS || state == GLFW_REPEAT;
 	}
 
-	bool Input::IsMouseButtonPressed(int button)
+	bool Input::IsMouseButtonPressed(MouseCode button)
 	{
 		PR_PROFILE_FUNCTION();
 		GLFWwindow* window = (GLFWwindow*)Application::Get().GetWindow().GetNativeWindow();
-		int state = glfwGetMouseButton(window, button);
+		int state = glfwGetMouseButton(window, (int)button);
 		return state == GLFW_PRESS;
 	}
 

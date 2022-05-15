@@ -12,7 +12,7 @@
 
 #include "Pearly/Core/Input.h"
 #include "Pearly/Core/KeyCodes.h"
-#include "Pearly/Core/MouseButtonCodes.h"
+#include "Pearly/Core/MouseCodes.h"
 #include "Pearly/Events/KeyEvents.h"
 #include "Pearly/Events/MouseEvents.h"
 #include "Pearly/Events/WindowEvents.h"

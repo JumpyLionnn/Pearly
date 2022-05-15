@@ -18,7 +18,7 @@ namespace Pearly {
 
 	void EditorCamera::OnUpdate(Timestep ts)
 	{
-		if (Input::IsMouseButtonPressed(PR_MOUSE_BUTTON_RIGHT))
+		if (Input::IsMouseButtonPressed(MouseCode::ButtonRight))
 		{
 			glm::vec2 mousePosition{ Input::GetMouseX(), Input::GetMouseY() };
 			glm::vec2 delta = (mousePosition - m_InitialMousePosition);
